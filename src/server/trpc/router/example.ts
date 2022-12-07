@@ -11,14 +11,13 @@ export const exampleRouter = router({
       };
     }),
   getAll: publicProcedure.query(({ ctx }) => {
-      let x=ctx.prisma.example.create({
+      ctx.prisma.example.create({
         data: {
             id:'2',
         }
       }).finally(() => {
         console.log("xxxx");
       });
-      console.log(x);
       console.log(ctx.prisma.example.findMany());
     return ctx.prisma.example.findMany();
   }),
