@@ -67,9 +67,8 @@ model Product {
   productDeletedBy Int
   productCreatedBy Int
   productUpdatedBy Int
-
-  @@index([productDeletedBy], map: "Product_User_id_fk_2")
-  @@index([productCreatedBy], map: "Product_productCreatedBy_fkey")
+  productCategory  Int
+  productCategorys  ProductCategory @relation(fields: [productCategory], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Product_ProductCategory_id_fk")
 }
 
 model ProductCategory {
@@ -85,7 +84,7 @@ model ProductCategory {
   productCategoryCrtdBy Int
   productCategoryUpdtBy Int
   User                  User     @relation(fields: [productCategoryCrtdBy], references: [id], onDelete: Cascade)
-
+  Product               Product[]
   @@index([productCategoryCrtdBy], map: "ProductCategory_productCategoryCrtdBy_fkey")
 }
 
@@ -100,7 +99,7 @@ model Session {
   sessionToken String   @unique
   userId       Int
   expires      DateTime
-  User         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId], map: "Session_userId_fkey")
 }
@@ -151,9 +150,9 @@ model User {
   userFirstName   String?
   userLastName    String?
   userPhone       String?
-  userStatus      Int
-  userUpdated     DateTime
-  userRole        Int
+  userStatus      Int             @default(1)
+  userUpdated     DateTime         @updatedAt
+  userRole        Int              @default(1)
   Account         Account[]
   Discount        Discount[]
   ProductCategory ProductCategory[]

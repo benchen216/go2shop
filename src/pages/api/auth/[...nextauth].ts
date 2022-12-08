@@ -19,6 +19,12 @@ export const authOptions: NextAuthOptions = {
       }
       return session;
     },
+    jwt({ token, user }) {
+      if (user) {
+        token.id = user.id;
+      }
+      return token;
+    }
   },
   // Configure one or more authentication providers
   adapter: PrismaAdapter(prisma),
@@ -31,17 +37,17 @@ export const authOptions: NextAuthOptions = {
         clientId: env.FACEBOOK_CLIENT_ID,
         clientSecret: env.FACEBOOK_CLIENT_SECRET,
     }),
-    // EmailProvider({
-    //     server: {
-    //       host: env.EMAIL_SERVER_HOST,
-    //       port: env.EMAIL_SERVER_PORT,
-    //       auth: {
-    //         user: env.EMAIL_SERVER_USER,
-    //         pass: env.EMAIL_SERVER_PASSWORD
-    //       }
-    //
-    // }),
-    // ...add more providers here
+    EmailProvider({
+        server: {
+          host: env.EMAIL_SERVER_HOST,
+          port: env.EMAIL_SERVER_PORT,
+          auth: {
+            user: env.EMAIL_SERVER_USER,
+            pass: env.EMAIL_SERVER_PASSWORD
+          }
+        }
+    }),
+    //...add more providers here
   ],
 };
 
