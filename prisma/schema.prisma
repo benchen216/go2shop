@@ -7,16 +7,9 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Example {
-  id        String   @id @default(cuid())
-  name     String  @default("example")
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
 model Account {
-  id                String  @id @default(cuid())
-  userId            String
+  id                Int     @id @default(autoincrement())
+  userId            Int
   type              String
   provider          String
   providerAccountId String
@@ -25,29 +18,151 @@ model Account {
   expires_at        Int?
   token_type        String?
   scope             String?
-  id_token          String?
+  id_token          String? @db.Text
   session_state     String?
-  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  User              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
+  @@index([userId], map: "Account_userId_fkey")
+}
+
+model Discount {
+  id                  Int      @id @default(autoincrement())
+  discountType        Int
+  discountValue       Int
+  discountName        String
+  discountDescription String
+  discountCode        String
+  discountStartDate   DateTime
+  discountEndDate     DateTime
+  discountStatus      Int
+  discountCreated     DateTime @default(now())
+  discountUpdated     DateTime
+  discountDeleted     DateTime
+  discountDeletedBy   Int
+  discountCreatedBy   Int
+  discountUpdatedBy   Int
+  User                User     @relation(fields: [discountDeletedBy], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Discount_User_id_fk")
+
+  @@index([discountDeletedBy], map: "Discount_User_id_fk")
+  @@index([discountCreatedBy], map: "Discount_discountCreatedBy_fkey")
+}
+
+model Example {
+  id        String   @id
+  name      String   @default("example")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Product {
+  id               Int      @id @default(autoincrement())
+  productName      String
+  productPrice     Int
+  productImage     String
+  productStatus    Int
+  productCreated   DateTime @default(now())
+  productUpdated   DateTime
+  productDeleted   DateTime
+  productDeletedBy Int
+  productCreatedBy Int
+  productUpdatedBy Int
+
+  @@index([productDeletedBy], map: "Product_User_id_fk_2")
+  @@index([productCreatedBy], map: "Product_productCreatedBy_fkey")
+}
+
+model ProductCategory {
+  id                    Int      @id @default(autoincrement())
+  productCategoryName   String
+  productCategoryDesc   String
+  productCategoryImg    String
+  productCategoryStat   Int
+  productCategoryCrtd   DateTime @default(now())
+  productCategoryUpdt   DateTime
+  productCategoryDelt   DateTime
+  productCategoryDeltBy Int
+  productCategoryCrtdBy Int
+  productCategoryUpdtBy Int
+  User                  User     @relation(fields: [productCategoryCrtdBy], references: [id], onDelete: Cascade)
+
+  @@index([productCategoryCrtdBy], map: "ProductCategory_productCategoryCrtdBy_fkey")
+}
+
+model Role {
+  id       Int    @id @default(autoincrement())
+  roleName String
+  User     User[]
 }
 
 model Session {
-  id           String   @id @default(cuid())
+  id           Int      @id @default(autoincrement())
   sessionToken String   @unique
-  userId       String
+  userId       Int
   expires      DateTime
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  User         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId], map: "Session_userId_fkey")
+}
+
+model SiteSetting {
+  id                Int      @id @default(autoincrement())
+  siteSettingName   String
+  siteSettingDesc   String
+  siteSettingImg    String
+  siteSettingStatus Int
+  siteSettingCrtd   DateTime @default(now())
+  siteSettingUpdt   DateTime
+  siteSettingDelt   DateTime
+  siteSettingDeltBy Int
+  siteSettingCrtdBy Int
+  siteSettingUpdtBy Int
+  User              User     @relation(fields: [siteSettingCrtdBy], references: [id], onDelete: Cascade)
+
+  @@index([siteSettingCrtdBy], map: "SiteSetting_siteSettingCrtdBy_fkey")
+}
+
+model SiteStyle {
+  id              Int      @id @default(autoincrement())
+  siteStyleName   String
+  siteStyleDesc   String
+  siteStyleImg    String
+  siteStyleStatus Int
+  siteStyleCrtd   DateTime @default(now())
+  siteStyleUpdt   DateTime
+  siteStyleDelt   DateTime
+  siteStyleDeltBy Int
+  siteStyleCrtdBy Int
+  siteStyleUpdtBy Int
+  User            User     @relation(fields: [siteStyleCrtdBy], references: [id], onDelete: Cascade)
+
+  @@index([siteStyleCrtdBy], map: "SiteStyle_siteStyleCrtdBy_fkey")
 }
 
 model User {
-  id            String    @id @default(cuid())
-  name          String?
-  email         String?   @unique
-  emailVerified DateTime?
-  image         String?
-  accounts      Account[]
-  sessions      Session[]
+  id              Int               @id @default(autoincrement())
+  name            String?
+  email           String?           @unique
+  emailVerified   DateTime?
+  image           String?
+  userAddress     String?
+  userCreated     DateTime          @default(now())
+  userDeleted     DateTime?
+  userFirstName   String?
+  userLastName    String?
+  userPhone       String?
+  userStatus      Int
+  userUpdated     DateTime
+  userRole        Int
+  Account         Account[]
+  Discount        Discount[]
+  ProductCategory ProductCategory[]
+  Session         Session[]
+  SiteSetting     SiteSetting[]
+  SiteStyle       SiteStyle[]
+  Role            Role              @relation(fields: [userRole], references: [id], onDelete: Cascade)
+
+  @@index([userRole], map: "User_userRole_fkey")
 }
 
 model VerificationToken {

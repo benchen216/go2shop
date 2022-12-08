@@ -1,6 +1,9 @@
 import NextAuth, { type NextAuthOptions } from "next-auth";
 import DiscordProvider from "next-auth/providers/discord";
 import FacebookProvider from "next-auth/providers/facebook";
+import GoogleProvider from "next-auth/providers/google";
+import  EmailProvider  from "next-auth/providers/email";
+import LineProvider from "next-auth/providers/line";
 // Prisma adapter for NextAuth, optional and can be removed
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 
@@ -28,6 +31,16 @@ export const authOptions: NextAuthOptions = {
         clientId: env.FACEBOOK_CLIENT_ID,
         clientSecret: env.FACEBOOK_CLIENT_SECRET,
     }),
+    // EmailProvider({
+    //     server: {
+    //       host: env.EMAIL_SERVER_HOST,
+    //       port: env.EMAIL_SERVER_PORT,
+    //       auth: {
+    //         user: env.EMAIL_SERVER_USER,
+    //         pass: env.EMAIL_SERVER_PASSWORD
+    //       }
+    //
+    // }),
     // ...add more providers here
   ],
 };
