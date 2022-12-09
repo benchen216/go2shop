@@ -1,16 +1,13 @@
 import { type NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";
-import { signIn, signOut, useSession } from "next-auth/react";
+//import { signIn, signOut, useSession } from "next-auth/react";
+//import {serverSideTranslations} from "next-i18next/serverSideTranslations";
 
-import { trpc } from "../utils/trpc";
+import { trpc } from "../../utils/trpc";
 
-const Home: NextPage = () => {
+const Profile: NextPage = () => {
   const hello = trpc.example.hello.useQuery({ text: "from tRPC" });
-  //const haha2 = trpc.product.getOne.useQuery(1);
-  //const haha3 = trpc.product.getOnePage.useQuery({ cursor: null, limit: 10 });
-  //const haha4 = trpc.product.search.useQuery({ cursor: null, limit: 10 ,keyword: "s"});
-  //console.log(haha4);
   return (
     <>
       <Head>
@@ -51,40 +48,33 @@ const Home: NextPage = () => {
             <p className="text-2xl text-white">
               {hello.data ? hello.data.greeting : "Loading tRPC query..."}
             </p>
-            <AuthShowcase />
+
           </div>
+          <h1 className="text-5xl font-extrabold tracking-tight text-white sm:text-[5rem]"> Profile </h1>
+          <div className="flex flex-col items-center gap-2">
+            <p className="text-2xl text-white">
+              {hello.data ? hello.data.greeting : "Loading tRPC query..."}
+            </p>
+          </div>
+
+          <form className="flex flex-col items-center gap-2">
+            <label className="text-2xl text-white">Name</label>
+            <input className="rounded-xl bg-white/10 p-4 text-white" type="text" placeholder="Name" defaultValue={hello.data ? hello.data.greeting : "Loading"} />
+            <label className="text-2xl text-white">Upload Image</label>
+            <input className="rounded-xl bg-white/10 p-4 text-white" type="file" />
+            <label className="text-2xl text-white">Email</label>
+            <input className="rounded-xl bg-white/10 p-4 text-white" type="text" placeholder="Email" defaultValue={hello.data ? hello.data.greeting : "Loading"} />
+            <label className="text-2xl text-white">Phone</label>
+            <input className="rounded-xl bg-white/10 p-4 text-white" type="text" placeholder="Phone" defaultValue={hello.data ? hello.data.greeting : "Loading"} />
+            <label className="text-2xl text-white">Address</label>
+            <input className="rounded-xl bg-white/10 p-4 text-white" type="text" placeholder="Address" name={"Address"} defaultValue={hello.data ? hello.data.greeting : "Loading"} />
+          </form>
+
         </div>
       </main>
     </>
   );
 };
 
-export default Home;
+export default Profile;
 
-const AuthShowcase: React.FC = () => {
-  const { data: sessionData } = useSession();
-  const { data: test } = trpc.user.userDetail.useQuery();
-  //const ss= trpc.user.userDetails.useMutation().mutate({name: "sadfas"});
-  console.log(test);
-  console.log(sessionData?.user);
-
-  const { data: secretMessage } = trpc.auth.getSecretMessage.useQuery(
-    undefined, // no input
-    { enabled: sessionData?.user !== undefined },
-  );
-
-  return (
-    <div className="flex flex-col items-center justify-center gap-4">
-      <p className="text-center text-2xl text-white">
-        {sessionData && <span>Logged in as {sessionData.user?.name}</span>}
-        {secretMessage && <span> - {secretMessage}</span>}
-      </p>
-      <button
-        className="rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20"
-        onClick={sessionData ? () => signOut() : () => signIn()}
-      >
-        {sessionData ? "Sign out" : "Sign in"}
-      </button>
-    </div>
-  );
-};
