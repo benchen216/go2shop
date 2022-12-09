@@ -1,9 +1,6 @@
 import { signIn, signOut, useSession } from "next-auth/react";
 import { Dropdown,Navbar } from "flowbite-react";
 import Link from "next/link";
-
-
-
 const Navbar2: React.FC = () => {
   const { data: sessionData } = useSession();
   return (
@@ -25,7 +22,7 @@ const Navbar2: React.FC = () => {
       <Navbar.Toggle />
       <Navbar.Collapse>
         <Navbar.Link
-          href="/navbars"
+          href="/"
           active={true}
         >
           Home
@@ -53,7 +50,9 @@ const Navbar2: React.FC = () => {
           </Link>
         </Dropdown.Item>
         <Dropdown.Item>
-          Earnings
+          <Link href={"/shop"}>
+            Shop
+          </Link>
         </Dropdown.Item>
         <Dropdown.Item>
           <button
