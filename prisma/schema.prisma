@@ -9,7 +9,7 @@ datasource db {
 
 model Account {
   id                Int     @id @default(autoincrement())
-  userId            Int
+  userId            BigInt  @db.UnsignedBigInt
   type              String
   provider          String
   providerAccountId String
@@ -20,72 +20,72 @@ model Account {
   scope             String?
   id_token          String? @db.Text
   session_state     String?
-  User              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  User              User    @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Account_User_id_fk")
 
   @@unique([provider, providerAccountId])
   @@index([userId], map: "Account_userId_fkey")
 }
 
 model Discount {
-  id                  Int      @id @default(autoincrement())
+  id                  BigInt   @id @default(autoincrement()) @db.UnsignedBigInt
+  discountStatus      Int
   discountType        Int
   discountValue       Int
-  discountName        String
-  discountDescription String
+  discountLimit       Int?
   discountCode        String
-  discountStartDate   DateTime
-  discountEndDate     DateTime
-  discountStatus      Int
+  discountAmount      Int?
+  discountCoverage    Int?     @default(0)
   discountCreated     DateTime @default(now())
-  discountUpdated     DateTime
+  discountCreatedBy   BigInt   @db.UnsignedBigInt
   discountDeleted     DateTime
-  discountDeletedBy   Int
-  discountCreatedBy   Int
-  discountUpdatedBy   Int
-  User                User     @relation(fields: [discountDeletedBy], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Discount_User_id_fk")
-
-  @@index([discountDeletedBy], map: "Discount_User_id_fk")
-  @@index([discountCreatedBy], map: "Discount_discountCreatedBy_fkey")
+  discountDeletedBy   BigInt   @db.UnsignedBigInt
+  discountDescription String
+  discountEndDate     DateTime
+  discountName        String
+  discountStartDate   DateTime
+  discountUpdated     DateTime
+  discountUpdatedBy   BigInt   @db.UnsignedBigInt
 }
 
 model Example {
-  id        String   @id
+  id        String   @id @default(cuid())
   name      String   @default("example")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
 model Product {
-  id               Int      @id @default(autoincrement())
-  productName      String
-  productPrice     Int
-  productImage     String
-  productStatus    Int
-  productCreated   DateTime @default(now())
-  productUpdated   DateTime
-  productDeleted   DateTime
-  productDeletedBy Int
-  productCreatedBy Int
-  productUpdatedBy Int
-  productCategory  Int
-  productCategorys  ProductCategory @relation(fields: [productCategory], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Product_ProductCategory_id_fk")
+  id                  BigInt          @id @default(autoincrement()) @db.UnsignedBigInt
+  productName         String
+  productPrice        Int
+  productImage        String
+  productStatus       Int
+  productCreated      DateTime        @default(now())
+  productUpdated      DateTime
+  productDeleted      DateTime
+  productDeletedBy    Int
+  productCreatedBy    Int
+  productUpdatedBy    Int
+  productCategory     Int
+  productSuggestPrice Int?
+  productCategorys    ProductCategory @relation(fields: [productCategory], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Product_ProductCategory_id_fk")
+
+  @@index([productCategory], map: "Product_ProductCategory_id_fk")
 }
 
 model ProductCategory {
-  id                    Int      @id @default(autoincrement())
+  id                    Int       @id @default(autoincrement())
   productCategoryName   String
   productCategoryDesc   String
   productCategoryImg    String
   productCategoryStat   Int
-  productCategoryCrtd   DateTime @default(now())
+  productCategoryCrtd   DateTime  @default(now())
   productCategoryUpdt   DateTime
   productCategoryDelt   DateTime
   productCategoryDeltBy Int
   productCategoryCrtdBy Int
   productCategoryUpdtBy Int
-  User                  User     @relation(fields: [productCategoryCrtdBy], references: [id], onDelete: Cascade)
   Product               Product[]
-  @@index([productCategoryCrtdBy], map: "ProductCategory_productCategoryCrtdBy_fkey")
 }
 
 model Role {
@@ -95,11 +95,10 @@ model Role {
 }
 
 model Session {
-  id           Int      @id @default(autoincrement())
+  id           BigInt   @id @default(autoincrement()) @db.UnsignedBigInt
   sessionToken String   @unique
-  userId       Int
+  userId       BigInt
   expires      DateTime
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId], map: "Session_userId_fkey")
 }
@@ -110,13 +109,13 @@ model SiteSetting {
   siteSettingDesc   String
   siteSettingImg    String
   siteSettingStatus Int
+  moneyAPIType      Int?
   siteSettingCrtd   DateTime @default(now())
   siteSettingUpdt   DateTime
   siteSettingDelt   DateTime
-  siteSettingDeltBy Int
-  siteSettingCrtdBy Int
-  siteSettingUpdtBy Int
-  User              User     @relation(fields: [siteSettingCrtdBy], references: [id], onDelete: Cascade)
+  siteSettingDeltBy BigInt   @db.UnsignedBigInt
+  siteSettingCrtdBy BigInt   @db.UnsignedBigInt
+  siteSettingUpdtBy BigInt   @db.UnsignedBigInt
 
   @@index([siteSettingCrtdBy], map: "SiteSetting_siteSettingCrtdBy_fkey")
 }
@@ -133,35 +132,32 @@ model SiteStyle {
   siteStyleDeltBy Int
   siteStyleCrtdBy Int
   siteStyleUpdtBy Int
-  User            User     @relation(fields: [siteStyleCrtdBy], references: [id], onDelete: Cascade)
-
-  @@index([siteStyleCrtdBy], map: "SiteStyle_siteStyleCrtdBy_fkey")
 }
 
 model User {
-  id              Int               @id @default(autoincrement())
-  name            String?
-  email           String?           @unique
-  emailVerified   DateTime?
-  image           String?
-  userAddress     String?
-  userCreated     DateTime          @default(now())
-  userDeleted     DateTime?
-  userFirstName   String?
-  userLastName    String?
-  userPhone       String?
-  userStatus      Int             @default(1)
-  userUpdated     DateTime         @updatedAt
-  userRole        Int              @default(1)
-  Account         Account[]
-  Discount        Discount[]
-  ProductCategory ProductCategory[]
-  Session         Session[]
-  SiteSetting     SiteSetting[]
-  SiteStyle       SiteStyle[]
-  Role            Role              @relation(fields: [userRole], references: [id], onDelete: Cascade)
+  /// This comment will get attached to the `id` node in the AST
+  id            BigInt    @id @default(autoincrement()) @db.UnsignedBigInt
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  userAddress   String?
+  userCreated   DateTime  @default(now())
+  userDeleted   DateTime?
+  userFirstName String?
+  userLastName  String?
+  userPhone     String?
+  userBirthday  DateTime? @db.Date
+  userStatus    Int       @default(1)
+  userUpdated   DateTime  @updatedAt
+  userRole      Int       @default(1)
+  businessId    BigInt?   @db.UnsignedBigInt
+  Account       Account[]
+  Business      Business? @relation(fields: [businessId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "User_Business_id_fk")
+  Role          Role      @relation(fields: [userRole], references: [id], onDelete: Cascade)
 
   @@index([userRole], map: "User_userRole_fkey")
+  @@index([businessId], map: "User_Business_id_fk")
 }
 
 model VerificationToken {
@@ -170,4 +166,32 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+model Business {
+  id   BigInt  @id @default(autoincrement()) @db.UnsignedBigInt
+  name String?
+  User User[]
+}
+
+model Order {
+  id      BigInt    @id @default(autoincrement()) @db.UnsignedBigInt
+  Detail  Json?
+  time    DateTime? @db.Timestamp(0)
+  total   Int?
+  user_id Int?
+  status  Int?
+}
+
+model ProductVariant {
+  id          Int  @id @default(autoincrement())
+  productId   Int?
+  column_name Int?
+}
+
+model ProductColor {
+  id        BigInt  @id @default(autoincrement()) @db.UnsignedBigInt
+  name      String?
+  colorCode Int?
+  image     String?
 }
