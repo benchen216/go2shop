@@ -69,4 +69,18 @@ export const productRouter = router({
         });
       }
     }),
+  create: publicProcedure.input(z.object({
+    productName: z.string(),
+    productDescription: z.string(),
+    productPrice: z.number(),
+    productImage: z.string(),
+    productCategory: z.number(),
+    productStock: z.number(),
+  })).mutation(async ({ ctx, input }) => {
+    // const product = await ctx.prisma.product.create({
+    //   data: input,
+    // });
+    return "product";
+
+  }),
 });
