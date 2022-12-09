@@ -64,6 +64,8 @@ export default Home;
 const AuthShowcase: React.FC = () => {
   const { data: sessionData } = useSession();
   const { data: test } = trpc.user.userDetail.useQuery();
+  //trpc.user.userById.useQuery();
+  //trpc.user.userDetails.useMutation().mutate({name: "陳睿瑜"});
   //const ss= trpc.user.userDetails.useMutation().mutate({name: "sadfas"});
   console.log(test);
   console.log(sessionData?.user);

@@ -9,7 +9,7 @@ datasource db {
 
 model Account {
   id                Int     @id @default(autoincrement())
-  userId            BigInt  @db.UnsignedBigInt
+  userId            Int
   type              String
   provider          String
   providerAccountId String
@@ -97,8 +97,9 @@ model Role {
 model Session {
   id           BigInt   @id @default(autoincrement()) @db.UnsignedBigInt
   sessionToken String   @unique
-  userId       BigInt
+  userId       Int
   expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId], map: "Session_userId_fkey")
 }
@@ -136,7 +137,7 @@ model SiteStyle {
 
 model User {
   /// This comment will get attached to the `id` node in the AST
-  id            BigInt    @id @default(autoincrement()) @db.UnsignedBigInt
+  id            Int    @id @default(autoincrement())
   name          String?
   email         String?   @unique
   emailVerified DateTime?
@@ -155,6 +156,7 @@ model User {
   Account       Account[]
   Business      Business? @relation(fields: [businessId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "User_Business_id_fk")
   Role          Role      @relation(fields: [userRole], references: [id], onDelete: Cascade)
+  Session       Session[]
 
   @@index([userRole], map: "User_userRole_fkey")
   @@index([businessId], map: "User_Business_id_fk")
