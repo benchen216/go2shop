@@ -8,7 +8,7 @@ import { trpc } from "../../utils/trpc";
 import Navbar2 from "../../components/navbar";
 
 
-const Profile: NextPage = () => {
+const EditProduct: NextPage = () => {
   const  {data:userData} = trpc.user.userDetail.useQuery();
   const updateUser = trpc.user.updateData.useMutation({
     async onSuccess() {
@@ -69,5 +69,5 @@ const Profile: NextPage = () => {
   );
 };
 
-export default Profile;
+export default EditProduct;
 
