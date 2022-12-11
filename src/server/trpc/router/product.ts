@@ -70,6 +70,27 @@ export const productRouter = router({
       }
     }),
   create: publicProcedure.input(z.object({
+    productName:z.string(),
+    productPrice:z.number(),
+    productImage:z.string(),
+    productCreatedBy:z.number(),
+    productCategory:z.number(),
+    productUpdatedBy:z.number().nullish(),
+    productDeletedBy:z.number().nullish(),
+    productSuggestPrice:z.number().nullish()
+  })).mutation(
+    async ({ ctx, input }) => {
+    const product = await ctx.prisma.product.create({
+      data: {
+        ...input,
+        productStatus:1
+      },
+    });
+    return "product";
+
+  }),
+  update: publicProcedure.input(z.object({
+    id: z.number(),
     productName: z.string(),
     productDescription: z.string(),
     productPrice: z.number(),
@@ -77,10 +98,25 @@ export const productRouter = router({
     productCategory: z.number(),
     productStock: z.number(),
   })).mutation(async ({ ctx, input }) => {
-    // const product = await ctx.prisma.product.create({
-    //   data: input,
-    // });
-    return "product";
-
+    const product = await ctx.prisma.product.update({
+      where: {
+        id: input.id,
+      },
+      data: input,
+    });
+    return product;
+  }),
+  delete : publicProcedure.input(z.object({
+    id: z.number(),
+  })).mutation(async ({ ctx, input }) => {
+    const product = await ctx.prisma.product.update({
+      where: {
+        id: input.id,
+      },
+      data: {
+        productStatus:0
+      },
+    });
+    return product;
   }),
 });

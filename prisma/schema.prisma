@@ -61,11 +61,11 @@ model Product {
   productImage        String
   productStatus       Int
   productCreated      DateTime        @default(now())
-  productUpdated      DateTime
-  productDeleted      DateTime
-  productDeletedBy    Int
-  productCreatedBy    Int
-  productUpdatedBy    Int
+  productUpdated      DateTime       @updatedAt
+  productDeleted      DateTime?
+  productDeletedBy    Int?
+  productCreatedBy    Int?
+  productUpdatedBy    Int?
   productCategory     Int
   productSuggestPrice Int?
   productCategorys    ProductCategory @relation(fields: [productCategory], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Product_ProductCategory_id_fk")
@@ -128,16 +128,16 @@ model SiteStyle {
   siteStyleImg    String
   siteStyleStatus Int
   siteStyleCrtd   DateTime @default(now())
-  siteStyleUpdt   DateTime
-  siteStyleDelt   DateTime
-  siteStyleDeltBy Int
-  siteStyleCrtdBy Int
-  siteStyleUpdtBy Int
+  siteStyleUpdt   DateTime @updatedAt
+  siteStyleDelt   DateTime?
+  siteStyleDeltBy Int?
+  siteStyleCrtdBy Int?
+  siteStyleUpdtBy Int?
 }
 
 model User {
   /// This comment will get attached to the `id` node in the AST
-  id            Int    @id @default(autoincrement())
+  id            Int       @id @default(autoincrement())
   name          String?
   email         String?   @unique
   emailVerified DateTime?
@@ -154,9 +154,9 @@ model User {
   userRole      Int       @default(1)
   businessId    BigInt?   @db.UnsignedBigInt
   Account       Account[]
+  Session       Session[]
   Business      Business? @relation(fields: [businessId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "User_Business_id_fk")
   Role          Role      @relation(fields: [userRole], references: [id], onDelete: Cascade)
-  Session       Session[]
 
   @@index([userRole], map: "User_userRole_fkey")
   @@index([businessId], map: "User_Business_id_fk")

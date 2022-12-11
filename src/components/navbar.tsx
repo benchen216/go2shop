@@ -20,7 +20,7 @@ const Navbar2: React.FC = () => {
     </span>
       </Navbar.Brand>
       <Navbar.Toggle />
-      <Navbar.Collapse>
+      <Navbar.Collapse >
         <Navbar.Link
           href="/"
           active={true}
