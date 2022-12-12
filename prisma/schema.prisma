@@ -20,7 +20,7 @@ model Account {
   scope             String?
   id_token          String? @db.Text
   session_state     String?
-  User              User    @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Account_User_id_fk")
+  user              User    @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Account_User_id_fk")
 
   @@unique([provider, providerAccountId])
   @@index([userId], map: "Account_userId_fkey")

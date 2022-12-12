@@ -9,7 +9,7 @@ import Navbar2 from "../../components/navbar";
 import { z } from "zod";
 
 
-const AddProduct: NextPage = () => {
+const EditProduct: NextPage = () => {
   const createProduct = trpc.product.create.useMutation({
     async onSuccess() {
       console.log("onSuccess");
@@ -32,25 +32,25 @@ const AddProduct: NextPage = () => {
           <form className="flex flex-col items-center gap-2"
                 onSubmit={async (e) => {
 
-            e.preventDefault();
-            const $form = e.currentTarget;
-            const values = Object.fromEntries(new FormData($form));
-            //type Input = inferProcedureInput<AppRouter['user']['updateData']>;
-            const input= {
-              productName:values.productName as string,
-              productImage:values.productImage as string,
-              productPrice:Number(values.productPrice) as number,
-              productCreatedBy:1,
-              productCategory:1
-            };
-            try {
-              await createProduct.mutateAsync(input);
+                  e.preventDefault();
+                  const $form = e.currentTarget;
+                  const values = Object.fromEntries(new FormData($form));
+                  //type Input = inferProcedureInput<AppRouter['user']['updateData']>;
+                  const input= {
+                    productName:values.productName as string,
+                    productImage:values.productImage as string,
+                    productPrice:Number(values.productPrice) as number,
+                    productCreatedBy:1,
+                    productCategory:1
+                  };
+                  try {
+                    await createProduct.mutateAsync(input);
 
-              //$form.reset();
-            } catch (cause) {
-              console.error({ cause }, 'Failed to add post');
-            }
-          }}
+                    //$form.reset();
+                  } catch (cause) {
+                    console.error({ cause }, 'Failed to add post');
+                  }
+                }}
           >
             <label className="text-2xl text-white">Product Name</label>
             <input className="rounded-xl bg-white/10 p-4 text-white" type="text" placeholder="Name" name={"productName"} />
@@ -66,5 +66,5 @@ const AddProduct: NextPage = () => {
   );
 };
 
-export default AddProduct;
+export default EditProduct;
 
