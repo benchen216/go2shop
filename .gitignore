@@ -40,3 +40,10 @@ yarn-error.log*
 
 # typescript
 *.tsbuildinfo
+
+# webstorm
+/.idea
+
+#lockfile
+package-lock.json
+yarn.lock
