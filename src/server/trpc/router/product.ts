@@ -45,7 +45,9 @@ export const productRouter = router({
     { cursor: z.number().nullish(),keyword: z.string().nullish(),
       limit: z.number().nullish()}).nullish())
     .query(({ ctx, input }) => {
-      if (input?.cursor) {
+      console.log(input?.cursor);
+      if (input?.cursor===undefined) {
+        console.log("no cursor");
         return ctx.prisma.product.findMany({
           take: input?.limit ?? 6,
           where: {
@@ -55,6 +57,7 @@ export const productRouter = router({
           },
         });
       }else {
+        console.log("cursor");
         return ctx.prisma.product.findMany({
           take: input?.limit ?? 6,
           skip: 1,

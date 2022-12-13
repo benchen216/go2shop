@@ -4,6 +4,8 @@ import Link from "next/link";
 import { signIn, signOut, useSession } from "next-auth/react";
 import Navbar2 from "../components/navbar";
 import { trpc } from "../utils/trpc";
+import Product from "../components/product";
+import Products from "../components/products";
 
 const Home: NextPage = () => {
   const hello = trpc.example.hello.useQuery({ text: "from tRPC" });
@@ -49,6 +51,10 @@ const Home: NextPage = () => {
               </div>
             </Link>
           </div>
+          <div className="flex flex-col items-center gap-4">
+            <Products search={""}/>
+          </div>
+
           <div className="flex flex-col items-center gap-2">
             <p className="text-2xl text-white">
               {hello.data ? hello.data.greeting : "Loading tRPC query..."}
@@ -65,12 +71,13 @@ export default Home;
 
 const AuthShowcase: React.FC = () => {
   const { data: sessionData } = useSession();
-  const { data: test } = trpc.user.userDetail.useQuery();
+
+  if(sessionData){
+    const { data: test } = trpc.user.userDetail.useQuery();
+  }
   //trpc.user.userById.useQuery();
   //trpc.user.userDetails.useMutation().mutate({name: "陳睿瑜"});
   //const ss= trpc.user.userDetails.useMutation().mutate({name: "sadfas"});
-  console.log(test);
-  console.log(sessionData?.user);
 
   const { data: secretMessage } = trpc.auth.getSecretMessage.useQuery(
     undefined, // no input

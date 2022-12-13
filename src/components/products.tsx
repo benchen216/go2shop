@@ -1,44 +1,38 @@
 import Product from "./product";
 import { useState} from "react";
+import {trpc} from "../utils/trpc";
 
 import InfiniteScroll from "react-infinite-scroll-component";
+import {z} from "zod";
 
-function Products({ search=null}) {
-  const [data,setData]=useState([]);
+function Products({ search= ""}) {
+  const {data: productsDx} = trpc.product.search.useQuery({keyword:"測試", limit:6});
+  const {data: productsD2} = trpc.product.search.useQuery({keyword:"測試", limit:6});
+  const [data,setData]=useState([productsD2]);
   const [pagingD,setPaging] = useState(0);
   const [nextPaging,setNextPaging] = useState(true);
+  const [cursor,setCursor] = useState();
 
+  //console.dir(productsD);
   const fetchMoreData = () => {
-    console.log("xx:"+pagingD);
-    if(search===null){
-      fetch(process.env.REACT_APP_API_BASE_PATH+'/products/'+""+"?paging="+pagingD, {})
-        .then(async (response) => {
-          const res = await response.json();
-          console.log(res['next_paging'])
-          if(!res['next_paging']){
-            setNextPaging(false)
-          }
-          setData(data.concat(res['products']));
-          setPaging(pagingD+1);
-          console.log(data);
-        })
+    if(search===""){
+     const {data:dataP} = trpc.product.search.useQuery({cursor: pagingD, limit: 6})
+      console.log(dataP);
+     if(dataP?.length===0){
+       setNextPaging(false);
+       setData(data.concat(dataP));
+     }
     }else {
-      fetch(process.env.REACT_APP_API_BASE_PATH+'/products/search?keyword='+search+"&paging="+pagingD, {})
-        .then(async (response) => {
-          const res = await response.json();
-          if(!res['next_paging']){
-            setNextPaging(false)
-          }
-          setData(data.concat(res['products']));
-          setPaging(pagingD+1);
-          console.log(data);
-        })
+      const {data:dataP} = trpc.product.search.useQuery({cursor: pagingD, limit: 6})
+      console.log(dataP);
+      if(dataP?.length===0){
+        setNextPaging(false);
+        setData(data.concat(dataP));
+      }
     }
   };
   return (
     <div className="row-auto">
-
-
       <InfiniteScroll
         dataLength={data.length}
         next={fetchMoreData}
@@ -48,11 +42,18 @@ function Products({ search=null}) {
         <div className={"row"}>
           {data.length && (
             data.map((productD, i) => (
-              <Product product_img_url={productD['product_img_url']} product_colors={productD['color']} product_name={productD['product_name']} product_price={productD['product_price']} p_id={productD['p_id']} key={i} />
+              <></>
+             // <Product product_img_url={productD?.productImage ?? ""} product_colors={productD['color']} product_name={productD['productName']} product_price={productD['productPrice']} p_id={productD['id']} key={i} />
             ))
           )}{!data.length && (
           <p>No products found!</p>
-        )}</div>
+        )}
+        </div>
+        {(productsDx!==undefined)?
+        <Product  product_img_url={productsDx?productsDx[0]?.productImage : " " } product_colors={productsDx?productsDx[0]?.productImage : " "} product_name={productsDx?productsDx[0]?.productImage : " "} product_price={productsDx?productsDx[0]?.productPrice : 1} p_id={productsDx?productsDx[0]?.productImage : " "} />
+        :<></>}
+
+
 
       </InfiniteScroll>
 

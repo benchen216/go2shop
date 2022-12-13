@@ -1,4 +1,4 @@
-import Color from "./Color";
+import Color from "./color";
 
 
 function Product({product_colors='', product_img_url="", product_name="", product_price=1, p_id='1'}) {
