@@ -54,12 +54,36 @@ const Home: NextPage = () => {
           <div className="flex flex-col items-center gap-4">
             <Products search={""}/>
           </div>
+          <div className={"flex-row"}>
+            <div className={"columns-6"}>
+              <p>1</p>
+            </div>
+            <div className={"columns-6"}>
+              <p>2</p>
+            </div>
+          </div>
+          <div className={"flex-auto"}>
+            <div className={"flex-col"}>
+              <p>1</p>
+            </div>
+            <div className={"flex-col"}>
+              <p>2</p>
+            </div>
+          </div>
+          <div className="row-span-3 hover:row-span-4">
+                <p>1</p>
+          </div>
+          <div className="grid grid-rows-3 grid-flow-col gap-4">
+            <div className="row-span-3 ...">01</div>
+            <div className="col-span-2 ...">02</div>
+            <div className="row-span-2 col-span-2 ...">03</div>
+          </div>
 
           <div className="flex flex-col items-center gap-2">
             <p className="text-2xl text-white">
               {hello.data ? hello.data.greeting : "Loading tRPC query..."}
             </p>
-            <AuthShowcase />
+            {/*<AuthShowcase />*/}
           </div>
         </div>
       </main>

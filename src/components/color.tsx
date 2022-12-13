@@ -6,7 +6,8 @@ function Color({color_bg="",status=1, colorFunc=()=>{return 0}}) {
     ()=>{return},[status]
   )
   return (
-    <span className={"col-1 box m-1 border "+status_color[status]} style={{
+    //"col box m-1 border "+status_color[status]
+    <span className={"columns-1 box-border m-1"} style={{
     background: color_bg
   }} id={'color-'+color_bg} onClick={colorFunc}></span>
 );

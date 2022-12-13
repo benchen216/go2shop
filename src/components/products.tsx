@@ -33,7 +33,7 @@ function Products({ search= ""}) {
   };
   return (
     <div className="row-auto">
-      <InfiniteScroll
+      {/*<InfiniteScroll
         dataLength={data.length}
         next={fetchMoreData}
         hasMore={nextPaging}
@@ -49,14 +49,10 @@ function Products({ search= ""}) {
           <p>No products found!</p>
         )}
         </div>
-        {(productsDx!==undefined)?
-        <Product  product_img_url={productsDx?productsDx[0]?.productImage : " " } product_colors={productsDx?productsDx[0]?.productImage : " "} product_name={productsDx?productsDx[0]?.productImage : " "} product_price={productsDx?productsDx[0]?.productPrice : 1} p_id={productsDx?productsDx[0]?.productImage : " "} />
+      </InfiniteScroll>*/}
+      {(productsDx!==undefined)?
+        <Product  product_img_url={productsDx?productsDx[0]?.productImage : " " } product_colors={"#FFFFFF"} product_name={productsDx?productsDx[0]?.productName : " "} product_price={productsDx?productsDx[0]?.productPrice : 1} p_id={productsDx?productsDx[0]?.id : 1} />
         :<></>}
-
-
-
-      </InfiniteScroll>
-
 
 
     </div>
