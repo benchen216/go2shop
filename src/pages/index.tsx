@@ -6,6 +6,7 @@ import { signIn, signOut, useSession } from "next-auth/react";
 import { trpc } from "../utils/trpc";
 import Navbar,{MobileMenu} from "../components/Navbar";
 import Hero from "../components/Hero";
+import Refund from "../components/Refund";
 
 const navigation = {
   categories: [
@@ -427,6 +428,7 @@ export default function FrontStore() {
             </div>
           </div>
         </section>
+        <Refund/>
       </main>
       <Footer />
     </div>

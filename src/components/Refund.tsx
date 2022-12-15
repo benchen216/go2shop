@@ -1,4 +1,3 @@
-import Image from 'next/image'
 const perks = [
   {
     name: 'Free returns',
@@ -38,7 +37,7 @@ const Refund: React.FC = () => {
             >
               <div className="md:flex-shrink-0">
                 <div className="flow-root">
-                  <Image className="-my-1 mx-auto h-24 w-auto" src={perk.imageUrl} alt="" />
+                  <img className="-my-1 mx-auto h-24 w-auto" src={perk.imageUrl} alt="" />
                 </div>
               </div>
               <div className="mt-6 md:mt-0 md:ml-4 lg:mt-6 lg:ml-0">
