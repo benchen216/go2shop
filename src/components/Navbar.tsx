@@ -4,6 +4,7 @@ import { Fragment, useState } from "react";
 import { signIn, signOut, useSession } from "next-auth/react";
 import { trpc } from "../utils/trpc";
 import React, { useCallback } from 'react'
+import Link from "next/link";
 function classNames(...classes:string[]) {
   return classes.filter(Boolean).join(' ')
 }
@@ -147,14 +148,14 @@ const Navbar: React.FC = () =>  {
 
           {/* Logo */}
           <div className="ml-4 flex lg:ml-0">
-            <a href="#">
+            <Link href="#">
               <span className="sr-only">Your Company</span>
               <img
                 className="h-8 w-auto"
                 src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
                 alt=""
               />
-            </a>
+            </Link>
           </div>
 
           {/* Flyout menus */}
@@ -212,10 +213,10 @@ const Navbar: React.FC = () =>  {
                                           className="object-cover object-center"
                                         />
                                       </div>
-                                      <a href={item.href} className="mt-6 block font-medium text-gray-900">
+                                      <Link href={item.href} className="mt-6 block font-medium text-gray-900">
                                         <span className="absolute inset-0 z-10" aria-hidden="true" />
                                         {item.name}
-                                      </a>
+                                      </Link>
                                       <p aria-hidden="true" className="mt-1">
                                         Shop now
                                       </p>
@@ -235,9 +236,9 @@ const Navbar: React.FC = () =>  {
                                       >
                                         {section.items.map((item) => (
                                           <li key={item.name} className="flex">
-                                            <a href={item.href} className="hover:text-gray-800">
+                                            <Link href={item.href} className="hover:text-gray-800">
                                               {item.name}
-                                            </a>
+                                            </Link>
                                           </li>
                                         ))}
                                       </ul>
@@ -255,36 +256,49 @@ const Navbar: React.FC = () =>  {
               ))}
 
               {navigation.pages.map((page) => (
-                <a
+                <Link
                   key={page.name}
                   href={page.href}
                   className="flex items-center text-sm font-medium text-gray-700 hover:text-gray-800"
                 >
                   {page.name}
-                </a>
+                </Link>
               ))}
             </div>
           </Popover.Group>
 
           <div className="ml-auto flex items-center">
+            <div className="flex flex-shrink-0 border-t border-gray-200 p-4">
+              <Link href="#" className="group block w-full flex-shrink-0">
+                <div className="flex items-center">
+                  <div>
+                    <img
+                      className="inline-block h-9 w-9 rounded-full"
+                      src="https://images.unsplash.com/photo-1517365830460-955ce3ccd263?ixlib=rb-=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=256&h=256&q=80"
+                      alt=""
+                    />
+                  </div>
+                </div>
+              </Link>
+            </div>
             <AuthShowcase/>
             {/* Search */}
             <div className="flex lg:ml-6">
-              <a href="#" className="p-2 text-gray-400 hover:text-gray-500">
+              <Link href="#" className="p-2 text-gray-400 hover:text-gray-500">
                 <span className="sr-only">Search</span>
                 <MagnifyingGlassIcon className="h-6 w-6" aria-hidden="true" />
-              </a>
+              </Link>
             </div>
             {/* Cart */}
             <div className="ml-4 flow-root lg:ml-6">
-              <a href="/cart" className="group -m-2 flex items-center p-2">
+              <Link href="/cart" className="group -m-2 flex items-center p-2">
                 <ShoppingBagIcon
                   className="h-6 w-6 flex-shrink-0 text-gray-400 group-hover:text-gray-500"
                   aria-hidden="true"
                 />
                 <span className="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">0</span>
                 <span className="sr-only">items in cart, view bag</span>
-              </a>
+              </Link>
             </div>
           </div>
         </div>
@@ -371,10 +385,10 @@ export const MobileMenu: React.FC = () => {
                             <div className="aspect-w-1 aspect-h-1 overflow-hidden rounded-lg bg-gray-100 group-hover:opacity-75">
                               <img src={item.imageSrc} alt={item.imageAlt} className="object-cover object-center" />
                             </div>
-                            <a href={item.href} className="mt-6 block font-medium text-gray-900">
+                            <Link href={item.href} className="mt-6 block font-medium text-gray-900">
                               <span className="absolute inset-0 z-10" aria-hidden="true" />
                               {item.name}
-                            </a>
+                            </Link>
                             <p aria-hidden="true" className="mt-1">
                               Shop now
                             </p>
@@ -393,9 +407,9 @@ export const MobileMenu: React.FC = () => {
                           >
                             {section.items.map((item) => (
                               <li key={item.name} className="flow-root">
-                                <a href={item.href} className="-m-2 block p-2 text-gray-500">
+                                <Link href={item.href} className="-m-2 block p-2 text-gray-500">
                                   {item.name}
-                                </a>
+                                </Link>
                               </li>
                             ))}
                           </ul>
@@ -409,23 +423,23 @@ export const MobileMenu: React.FC = () => {
               <div className="space-y-6 border-t border-gray-200 py-6 px-4">
                 {navigation.pages.map((page) => (
                   <div key={page.name} className="flow-root">
-                    <a href={page.href} className="-m-2 block p-2 font-medium text-gray-900">
+                    <Link href={page.href} className="-m-2 block p-2 font-medium text-gray-900">
                       {page.name}
-                    </a>
+                    </Link>
                   </div>
                 ))}
               </div>
 
               <div className="space-y-6 border-t border-gray-200 py-6 px-4">
                 <div className="flow-root">
-                  <a href="#" className="-m-2 block p-2 font-medium text-gray-900">
+                  <Link href="#" className="-m-2 block p-2 font-medium text-gray-900">
                     Sign in
-                  </a>
+                  </Link>
                 </div>
                 <div className="flow-root">
-                  <a href="#" className="-m-2 block p-2 font-medium text-gray-900">
+                  <Link href="#" className="-m-2 block p-2 font-medium text-gray-900">
                     Create account
-                  </a>
+                  </Link>
                 </div>
               </div>
 
