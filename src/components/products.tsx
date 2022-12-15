@@ -11,28 +11,25 @@ function Products({ search= ""}) {
   const [data,setData]=useState([productsD2]);
   const [pagingD,setPaging] = useState(0);
   const [nextPaging,setNextPaging] = useState(true);
-  const [cursor,setCursor] = useState();
+  const [cursor,setCursor] = useState(null);
 
   //console.dir(productsD);
   const fetchMoreData = () => {
-    if(search===""){
-     const {data:dataP} = trpc.product.search.useQuery({cursor: pagingD, limit: 6})
-      console.log(dataP);
-     if(dataP?.length===0){
-       setNextPaging(false);
-       setData(data.concat(dataP));
-     }
-    }else {
-      const {data:dataP} = trpc.product.search.useQuery({cursor: pagingD, limit: 6})
-      console.log(dataP);
-      if(dataP?.length===0){
-        setNextPaging(false);
-        setData(data.concat(dataP));
-      }
-    }
+    // if (nextPaging) {
+    //   //setPaging(pagingD+1);
+    //   const {data: productsD} = trpc.product.search.useQuery({keyword:"測試", limit:6, cursor:cursor});
+    //   if (productsD===undefined) {
+    //     setData(data.concat(productsD));
+    //     setCursor(productsD.cursor);
+    //   }
+    //   setData(data.concat(productsD));
+    //   setCursor(productsD?.slice(-1)?.id??null);
+    //   setNextPaging(productsD.nextPaging);
+    // }
   };
   return (
     <div className="row-auto">
+
       {/*<InfiniteScroll
         dataLength={data.length}
         next={fetchMoreData}
@@ -50,9 +47,32 @@ function Products({ search= ""}) {
         )}
         </div>
       </InfiniteScroll>*/}
+      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 sm:gap-6 md:grid-cols-3">
       {(productsDx!==undefined)?
         <Product  product_img_url={productsDx?productsDx[0]?.productImage : " " } product_colors={"#FFFFFF"} product_name={productsDx?productsDx[0]?.productName : " "} product_price={productsDx?productsDx[0]?.productPrice : 1} p_id={productsDx?productsDx[0]?.id : 1} />
         :<></>}
+        {(productsDx!==undefined)?
+          <Product  product_img_url={productsDx?productsDx[1]?.productImage : " " } product_colors={"#FFFFFF"} product_name={productsDx?productsDx[0]?.productName : " "} product_price={productsDx?productsDx[0]?.productPrice : 1} p_id={productsDx?productsDx[0]?.id : 1} />
+          :<></>}
+        {(productsDx!==undefined)?
+          <Product  product_img_url={productsDx?productsDx[0]?.productImage : " " } product_colors={"#FFFFFF"} product_name={productsDx?productsDx[0]?.productName : " "} product_price={productsDx?productsDx[0]?.productPrice : 1} p_id={productsDx?productsDx[0]?.id : 1} />
+          :<></>}
+        {(productsDx!==undefined)?
+          <Product  product_img_url={productsDx?productsDx[0]?.productImage : " " } product_colors={"#FFFFFF"} product_name={productsDx?productsDx[0]?.productName : " "} product_price={productsDx?productsDx[0]?.productPrice : 1} p_id={productsDx?productsDx[0]?.id : 1} />
+          :<></>}
+        {(productsDx!==undefined)?
+          <Product  product_img_url={productsDx?productsDx[0]?.productImage : " " } product_colors={"#FFFFFF"} product_name={productsDx?productsDx[0]?.productName : " "} product_price={productsDx?productsDx[0]?.productPrice : 1} p_id={productsDx?productsDx[0]?.id : 1} />
+          :<></>}
+        {(productsDx!==undefined)?
+          <Product  product_img_url={productsDx?productsDx[0]?.productImage : " " } product_colors={"#FFFFFF"} product_name={productsDx?productsDx[0]?.productName : " "} product_price={productsDx?productsDx[0]?.productPrice : 1} p_id={productsDx?productsDx[0]?.id : 1} />
+          :<></>}
+        {(productsDx!==undefined)?
+          <Product  product_img_url={productsDx?productsDx[0]?.productImage : " " } product_colors={"#FFFFFF"} product_name={productsDx?productsDx[0]?.productName : " "} product_price={productsDx?productsDx[0]?.productPrice : 1} p_id={productsDx?productsDx[0]?.id : 1} />
+          :<></>}
+        {(productsDx!==undefined)?
+          <Product  product_img_url={productsDx?productsDx[0]?.productImage : " " } product_colors={"#FFFFFF"} product_name={productsDx?productsDx[0]?.productName : " "} product_price={productsDx?productsDx[0]?.productPrice : 1} p_id={productsDx?productsDx[0]?.id : 1} />
+          :<></>}
+      </div>
 
 
     </div>

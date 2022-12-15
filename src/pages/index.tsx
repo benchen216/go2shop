@@ -6,7 +6,42 @@ import Navbar2 from "../components/navbar";
 import { trpc } from "../utils/trpc";
 import Product from "../components/product";
 import Products from "../components/products";
-
+//import {  } from "flowbite-react";
+const products = [
+  {
+    id: 1,
+    name: 'Earthen Bottle',
+    href: '#',
+    price: '$48',
+    imageSrc: 'https://tailwindui.com/img/ecommerce-images/category-page-04-image-card-01.jpg',
+    imageAlt: 'Tall slender porcelain bottle with natural clay textured body and cork stopper.',
+  },
+  {
+    id: 2,
+    name: 'Nomad Tumbler',
+    href: '#',
+    price: '$35',
+    imageSrc: 'https://tailwindui.com/img/ecommerce-images/category-page-04-image-card-02.jpg',
+    imageAlt: 'Olive drab green insulated bottle with flared screw lid and flat top.',
+  },
+  {
+    id: 3,
+    name: 'Focus Paper Refill',
+    href: '#',
+    price: '$89',
+    imageSrc: 'https://tailwindui.com/img/ecommerce-images/category-page-04-image-card-03.jpg',
+    imageAlt: 'Person using a pen to cross a task off a productivity paper card.',
+  },
+  {
+    id: 4,
+    name: 'Machined Mechanical Pencil',
+    href: '#',
+    price: '$35',
+    imageSrc: 'https://tailwindui.com/img/ecommerce-images/category-page-04-image-card-04.jpg',
+    imageAlt: 'Hand holding black machined steel mechanical pencil with brass tip and top.',
+  },
+  // More products...
+]
 const Home: NextPage = () => {
   const hello = trpc.example.hello.useQuery({ text: "from tRPC" });
   //const haha2 = trpc.product.getOne.useQuery(1);
@@ -22,68 +57,31 @@ const Home: NextPage = () => {
       </Head>
       <Navbar2/>
       <main
-        className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c]">
-        <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
-          <h1 className="text-5xl font-extrabold tracking-tight text-white sm:text-[5rem]">
-            Create <span className="text-[hsl(280,100%,70%)]">T4</span> App
-          </h1>
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-8">
-            <Link
-              className="flex max-w-xs flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20"
-              href="https://create.t3.gg/en/usage/first-steps"
-              target="_blank"
-            >
-              <h3 className="text-2xl font-bold">First Steps →</h3>
-              <div className="text-lg">
-                Just the basics - Everything you need to know to set up your
-                database and authentication.
-              </div>
-            </Link>
-            <Link
-              className="flex max-w-xs flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20"
-              href="https://create.t3.gg/en/introduction"
-              target="_blank"
-            >
-              <h3 className="text-2xl font-bold">Documentation →</h3>
-              <div className="text-lg">
-                Learn more about Create T3 App, the libraries it uses, and how
-                to deploy it.
-              </div>
-            </Link>
-          </div>
+        className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b ">
+        <div className="container flex flex-col items-center justify-center gap-12 px-6 py-16 ">
           <div className="flex flex-col items-center gap-4">
             <Products search={""}/>
           </div>
-          <div className={"flex-row"}>
-            <div className={"columns-6"}>
-              <p>1</p>
-            </div>
-            <div className={"columns-6"}>
-              <p>2</p>
-            </div>
-          </div>
-          <div className={"flex-auto"}>
-            <div className={"flex-col"}>
-              <p>1</p>
-            </div>
-            <div className={"flex-col"}>
-              <p>2</p>
-            </div>
-          </div>
-          <div className="row-span-3 hover:row-span-4">
-                <p>1</p>
-          </div>
-          <div className="grid grid-rows-3 grid-flow-col gap-4">
-            <div className="row-span-3 ...">01</div>
-            <div className="col-span-2 ...">02</div>
-            <div className="row-span-2 col-span-2 ...">03</div>
-          </div>
+        </div>
+        <div className="bg-white">
+          <div className="mx-auto max-w-2xl py-16 px-4 sm:py-24 sm:px-6 lg:max-w-7xl lg:px-8">
+            <h2 className="sr-only">Products</h2>
 
-          <div className="flex flex-col items-center gap-2">
-            <p className="text-2xl text-white">
-              {hello.data ? hello.data.greeting : "Loading tRPC query..."}
-            </p>
-            {/*<AuthShowcase />*/}
+            <div className="grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
+              {products.map((product) => (
+                <a key={product.id} href={product.href} className="group">
+                  <div className="aspect-w-1 aspect-h-1 w-full overflow-hidden rounded-lg bg-gray-200 xl:aspect-w-7 xl:aspect-h-8">
+                    <img
+                      src={product.imageSrc}
+                      alt={product.imageAlt}
+                      className="h-full w-full object-cover object-center group-hover:opacity-75"
+                    />
+                  </div>
+                  <h3 className="mt-4 text-sm text-gray-700">{product.name}</h3>
+                  <p className="mt-1 text-lg font-medium text-gray-900">{product.price}</p>
+                </a>
+              ))}
+            </div>
           </div>
         </div>
       </main>

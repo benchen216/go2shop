@@ -47,9 +47,28 @@ export const productRouter = router({
     .query(({ ctx, input }) => {
       console.log(input?.cursor);
       if (input?.cursor===undefined) {
+        ctx.prisma.product.count({
+          where: {
+            productName: {
+              contains: input?.keyword ?? "test",
+            }
+          }
+        }).then((count) => {
+          console.log(count);
+        })
+        ctx.prisma.product.findMany({
+          take: input?.limit ?? 6,
+          skip:10,
+          where: {
+            productName: {
+              contains: input?.keyword ?? "test",
+            }
+          },
+        }).then((res)=>{console.log({data:res})});
         console.log("no cursor");
         return ctx.prisma.product.findMany({
           take: input?.limit ?? 6,
+          skip:0,
           where: {
             productName: {
               contains: input?.keyword ?? "test",
@@ -71,6 +90,22 @@ export const productRouter = router({
           },
         });
       }
+    }),
+  searchp: publicProcedure.input(z.object(
+    { paging: z.number().nullish(),keyword: z.string().nullish(),
+      limit: z.number().nullish()}).nullish())
+    .query(({ ctx, input }) => {
+      const xxx = {d:1};
+      xxx.d=1;
+      return ctx.prisma.product.findMany({
+        take: input?.limit ?? 6,
+        skip: input?.paging ?? 0,
+        where: {
+          productName: {
+            contains: input?.keyword ?? "test",
+          }
+        },
+      });
     }),
   create: publicProcedure.input(z.object({
     productName:z.string(),
