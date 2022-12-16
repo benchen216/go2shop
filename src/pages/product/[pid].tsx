@@ -22,7 +22,7 @@ import {
   PlusIcon
 } from '@heroicons/react/24/outline'
 import { StarIcon } from '@heroicons/react/20/solid'
-import Navbar, { MobileMenu } from "../../components/Navbar";
+import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import { useRouter } from 'next/router'
 const product = {
@@ -85,10 +85,7 @@ export default function Product() {
   console.log(pid);
   return (
     <div className="bg-white">
-      <MobileMenu/>
-      <header className="relative bg-white">
-        <Navbar/>
-      </header>
+      <Navbar />
       <main className="mx-auto max-w-7xl sm:px-6 sm:pt-16 lg:px-8">
         <div className="mx-auto max-w-2xl lg:max-w-none">
           {/* Product */}
