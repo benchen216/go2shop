@@ -1,6 +1,7 @@
 import { CheckIcon, ClockIcon, QuestionMarkCircleIcon, XMarkIcon as XMarkIconMini } from '@heroicons/react/20/solid'
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import Link from "next/link";
 
 const products = [
   {
@@ -54,7 +55,7 @@ function classNames(...classes:string[]) {
   return classes.filter(Boolean).join(' ')
 }
 
-export default function Example() {
+export default function Cart() {
   return (
     <div className="bg-white">
       <Navbar />
@@ -182,12 +183,14 @@ export default function Example() {
             </dl>
 
             <div className="mt-6">
+              <Link href={"/checkout"}>
               <button
                 type="submit"
                 className="w-full rounded-md border border-transparent bg-indigo-600 py-3 px-4 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50"
               >
                 Checkout
               </button>
+              </Link>
             </div>
           </section>
         </form>

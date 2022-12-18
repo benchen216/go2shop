@@ -37,22 +37,19 @@ export const userRouter = router({
     }),
   updateData: protectedProcedure
     .input(z.object({
-      name: z.string(),
-      //email: z.string(),
-      userPhone: z.string(),
-      userAddress: z.string()
+      name: z.string().nullish(),
+      userPhone: z.string().nullish(),
+      userAddress: z.string().nullish(),
     }))
     .mutation(async ({ ctx ,input}) => {
-      console.log("xxxx");
       const user = await ctx.prisma.user.update({
         where: {
           id: Number(ctx.session.user.id),
         },
         data: {
-          name: input.name,
-          //email: input.email,
-          userPhone: input.userPhone,
-          userAddress: input.userAddress
+          name: input.name||undefined,
+          userPhone: input.userPhone||undefined,
+          userAddress: input.userAddress||undefined,
         }
       });
       return user;

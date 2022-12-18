@@ -6,6 +6,7 @@ import React, { Fragment, useEffect, useState } from "react";
 import { signIn, useSession } from "next-auth/react";
 import { trpc } from "../../utils/trpc";
 
+
 const tabs = [
   { name: 'Settings', href: '/user', current: true },
   { name: 'History', href: '/user/history', current: false },
@@ -14,10 +15,42 @@ function classNames(...classes:string[]) {
   return classes.filter(Boolean).join(' ')
 }
 
-export default function Profile() {
-  //const  {data:userData} = trpc.user.userDetail.useQuery();
+const Profile:React.FC= ()=> {
   const [isOpen, setIsOpen] = useState(false)
   const { data: sessionData } = useSession();
+  const [mod,setMod] = useState();
+  //const [userData, setUserData] = useState();
+  // {
+  //   name:null,
+  //     userPhone: "0800000123",
+  //   userAddress: "test",
+  // }
+  const updateu = trpc.user.updateData.useMutation();
+
+  const {data:userData} = trpc.user.userDetail.useQuery();
+  function closeModal(e:any) {
+    setIsOpen(false)
+    if(e.target.name==="save"){
+
+      // TODO: fix this
+      updateu.mutateAsync(
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        {[mod]: "d"}
+      );
+    }
+  }
+  function openModal(e: any) {
+    console.log(e.target.id);
+    console.log(typeof e);
+    setIsOpen(true)
+    setMod(e.target.id);
+  }
+
+  // useEffect(() => {
+  //   const {data:data} = trpc.user.userDetail.useQuery();
+  //   setUserData(data);
+  // },[])
   if (!sessionData) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen py-2">
@@ -26,16 +59,10 @@ export default function Profile() {
       </div>
     )
   }
-  const {data:userData} = trpc.user.userDetail.useQuery();
 
-  function closeModal() {
-    setIsOpen(false)
-  }
-  function openModal(e: any) {
-    console.log(e.target.id);
-    console.log(typeof e);
-    setIsOpen(true)
-  }
+
+
+
   return (
     <div className="bg-white">
       <Navbar />
@@ -81,11 +108,20 @@ export default function Profile() {
 
                   <div className="mt-4">
                     <button
+                      name={"discard"}
                       type="button"
-                      className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                      className="inline-flex justify-center rounded-md border border-transparent bg-red-100 px-4 py-2 text-sm font-medium text-red-900 hover:bg-red-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2"
                       onClick={closeModal}
                     >
-                      Got it, thanks!
+                      Discard
+                    </button>
+                    <button
+                      name={"save"}
+                      type="button"
+                      className="inline-flex justify-center rounded-md border border-transparent bg-green-100 px-4 py-2 text-sm font-medium text-green-900 hover:bg-green-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-green-500 focus-visible:ring-offset-2 ml-2"
+                      onClick={closeModal}
+                    >
+                      Save
                     </button>
                   </div>
                 </Dialog.Panel>
@@ -179,7 +215,7 @@ export default function Profile() {
                                   >
                                     Update
                                   </button>
-                                  <span className="text-gray-300" aria-hidden="true">
+                                  {/*<span className="text-gray-300" aria-hidden="true">
                                     |
                                   </span>
                                   <button
@@ -187,7 +223,7 @@ export default function Profile() {
                                     className="rounded-md bg-white font-medium text-purple-600 hover:text-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2"
                                   >
                                     Remove
-                                  </button>
+                                  </button>*/}
                                 </span>
                         </dd>
                       </div>
@@ -224,3 +260,4 @@ export default function Profile() {
     </div>
   )
 }
+export default Profile;
