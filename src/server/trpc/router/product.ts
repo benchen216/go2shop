@@ -1,7 +1,25 @@
 import { z } from "zod";
 
 import { router, publicProcedure } from "../trpc";
-
+type Image = {
+  id: number
+  src: string
+  alt: string
+  name: string
+}
+type Detail = {
+  items: string[]
+  name: string
+}
+type Product = {
+  id: number
+  name: string
+  price: number
+  description: string
+  image: Image[]
+  rating: number
+  details: Detail
+}
 export const productRouter = router({
   getAll: publicProcedure.query(({ ctx }) => {
     return ctx.prisma.product.findMany(
@@ -22,6 +40,20 @@ export const productRouter = router({
         id: input ?? 1,
       },
     });
+  }),
+  getOneImage: publicProcedure.input(z.number()).query(({ ctx, input }) => {
+    return ctx.prisma.product.findUnique({
+      where: {
+        id: input ?? 1,
+      },
+    }).ProductImages();
+  }),
+  getOneDetail: publicProcedure.input(z.number()).query(({ ctx, input }) => {
+    return ctx.prisma.product.findUnique({
+      where: {
+        id: input ?? 1,
+      },
+    }).ProductDetails();
   }),
   getOnePage: publicProcedure.input(z.object(
     { cursor: z.number().nullish(),

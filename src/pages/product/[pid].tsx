@@ -25,6 +25,26 @@ import { StarIcon } from '@heroicons/react/20/solid'
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import { useRouter } from 'next/router'
+import { trpc } from "../../utils/trpc";
+type Image = {
+  id: number
+  src: string
+  alt: string
+  name: string
+}
+type Detail = {
+  items: string[]
+  name: string
+}
+type Product = {
+  id: number
+  name: string
+  price: number
+  description: string
+  image: Image[]
+  rating: number
+  details: Detail
+}
 const product = {
   name: 'Zip Tote Basket',
   price: '$140',
@@ -35,6 +55,12 @@ const product = {
       name: 'Angled view',
       src: 'https://tailwindui.com/img/ecommerce-images/product-page-03-product-01.jpg',
       alt: 'Angled front view with bag zipped and handles upright.',
+    },
+    {
+      id: 2,
+      name: 'Angled2 view',
+      src: 'https://tailwindui.com/img/ecommerce-images/product-page-03-related-product-01.jpg',
+      alt: 'Angled front view with bag zipped and handles upright2.',
     },
     // More images...
   ],
@@ -82,7 +108,15 @@ export default function Product() {
   const [selectedColor, setSelectedColor] = useState(product.colors[0])
   const router = useRouter()
   const { pid } = router.query
-  console.log(pid);
+  const {data: product2} = trpc.product.getOne.useQuery( Number(pid??2))
+  const {data: productImage} = trpc.product.getOneImage.useQuery( Number(pid??2))
+  const [productDetail, setProductDetail] = useState(product)
+
+
+
+
+  //setProductDetail()
+  //console.log("222",productDetail);
   return (
     <div className="bg-white">
       <Navbar />

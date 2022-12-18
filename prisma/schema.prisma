@@ -55,22 +55,44 @@ model Example {
 }
 
 model Product {
-  id                  BigInt          @id @default(autoincrement()) @db.UnsignedBigInt
+  id                  BigInt           @id @default(autoincrement()) @db.UnsignedBigInt
   productName         String
   productPrice        Int
   productImage        String
   productStatus       Int
-  productCreated      DateTime        @default(now())
-  productUpdated      DateTime       @updatedAt
+  productCreated      DateTime         @default(now())
+  productUpdated      DateTime         @updatedAt
   productDeleted      DateTime?
   productDeletedBy    Int?
   productCreatedBy    Int?
   productUpdatedBy    Int?
   productCategory     Int
   productSuggestPrice Int?
-  productCategorys    ProductCategory @relation(fields: [productCategory], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Product_ProductCategory_id_fk")
+  rating              Int?
+  productDescription  Json?
+  productDetails      Json?
+  productCategorys    ProductCategory  @relation(fields: [productCategory], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Product_ProductCategory_id_fk")
+  ProductImages       ProductImages[]
+  ProductDetails      ProductDetails[]
 
   @@index([productCategory], map: "Product_ProductCategory_id_fk")
+}
+
+model ProductImages {
+  id        BigInt  @id @default(autoincrement()) @db.UnsignedBigInt
+  productId BigInt  @db.UnsignedBigInt
+  name      String?
+  src       String?
+  alt       String?
+  product   Product @relation(fields: [productId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "ProductImage_Product_id_fk")
+}
+
+model ProductDetails {
+  id        BigInt  @id @default(autoincrement()) @db.UnsignedBigInt
+  productId BigInt  @db.UnsignedBigInt
+  name      String?
+  detail    Json?
+  product   Product @relation(fields: [productId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "ProductDetails_Product_id_fk")
 }
 
 model ProductCategory {
@@ -122,13 +144,13 @@ model SiteSetting {
 }
 
 model SiteStyle {
-  id              Int      @id @default(autoincrement())
+  id              Int       @id @default(autoincrement())
   siteStyleName   String
   siteStyleDesc   String
   siteStyleImg    String
   siteStyleStatus Int
-  siteStyleCrtd   DateTime @default(now())
-  siteStyleUpdt   DateTime @updatedAt
+  siteStyleCrtd   DateTime  @default(now())
+  siteStyleUpdt   DateTime  @updatedAt
   siteStyleDelt   DateTime?
   siteStyleDeltBy Int?
   siteStyleCrtdBy Int?
