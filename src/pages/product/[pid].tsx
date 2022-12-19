@@ -1,19 +1,3 @@
-/*
-  This example requires some changes to your config:
-
-  ```
-  // tailwind.config.js
-  module.exports = {
-    // ...
-    plugins: [
-      // ...
-      require('@tailwindcss/forms'),
-      require('@tailwindcss/typography'),
-      require('@tailwindcss/aspect-ratio'),
-    ],
-  }
-  ```
-*/
 import { useState } from 'react'
 import { Disclosure, RadioGroup, Tab } from '@headlessui/react'
 import {
@@ -26,6 +10,11 @@ import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import { useRouter } from 'next/router'
 import { trpc } from "../../utils/trpc";
+import { bigint } from "zod";
+type Colors = {
+  name: string
+
+}
 type Image = {
   id: number
   src: string
@@ -105,18 +94,55 @@ function classNames(...classes:string[]) {
 }
 
 export default function Product() {
-  const [selectedColor, setSelectedColor] = useState(product.colors[0])
+
   const router = useRouter()
   const { pid } = router.query
   const {data: product2} = trpc.product.getOne.useQuery( Number(pid??2))
-  const {data: productImage} = trpc.product.getOneImage.useQuery( Number(pid??2))
-  const [productDetail, setProductDetail] = useState(product)
+  const {data: productImages} = trpc.product.getOneImage.useQuery( Number(pid??2))
+  const {data: productDetails} = trpc.product.getOneDetail.useQuery( Number(pid??2))
+  const {data: productColor} = trpc.product.getOneColor.useQuery( Number(pid??2))
+  console.log(productImages)
+  const product3 = {
+    productId: product2?.id,
+    productImage: product2?.productImage,
+    name: product2?.productName,
+    price: product2?.productPrice,
+    rating: product2?.rating,
+    images: productImages??[{
+      id: 1,
+      name: 'Angled view',
+      src: 'https://tailwindui.com/img/ecommerce-images/product-page-03-product-01.jpg',
+      alt: 'Angled front view with bag zipped and handles upright.',
+    }],
+    colors: productColor??[
+      { name: 'Washed Black', bgColor: 'bg-gray-700', selectedColor: 'ring-gray-700' },
+    ],
+    description: product2?.productDescription,
+    details:productDetails
+      ??[
+      {
+        name: 'Features',
+        items: [
+          'Multiple strap configurations',
+        ],
+      },
+    ]
+  }
+  const [selectedColor, setSelectedColor] = useState(product3.colors[0])
+  function addToCart(e:any) {
+    e.preventDefault()
+    console.log('add to cart')
+    const cart = JSON.parse(localStorage.getItem('cart')??'[]')
+    let isExist = false;
+    const cartItem = cart.forEach((item: any) => {isExist=item.productId=== Number(product3.productId);})
+    console.log(isExist)
+    if (isExist) {
+      console.log("+1")
+    }else{
+    localStorage.setItem("cart", JSON.stringify([...cart, {productId:Number(product3.productId), quantity:1, price:product3.price,productImage:product3.productImage, productName:product3.name,productColor:selectedColor }]))
+    }
+  }
 
-
-
-
-  //setProductDetail()
-  //console.log("222",productDetail);
   return (
     <div className="bg-white">
       <Navbar />
@@ -129,16 +155,16 @@ export default function Product() {
               {/* Image selector */}
               <div className="mx-auto mt-6 hidden w-full max-w-2xl sm:block lg:max-w-none">
                 <Tab.List className="grid grid-cols-4 gap-6">
-                  {product.images.map((image) => (
+                  {product3.images.map((image) => (
                     <Tab
-                      key={image.id}
+                      key={String(image.id)}
                       className="relative flex h-24 cursor-pointer items-center justify-center rounded-md bg-white text-sm font-medium uppercase text-gray-900 hover:bg-gray-50 focus:outline-none focus:ring focus:ring-opacity-50 focus:ring-offset-4"
                     >
                       {({ selected }) => (
                         <>
                           <span className="sr-only"> {image.name} </span>
                           <span className="absolute inset-0 overflow-hidden rounded-md">
-                            <img src={image.src} alt="" className="h-full w-full object-cover object-center" />
+                            <img src={String(image.src)} alt="" className="h-full w-full object-cover object-center" />
                           </span>
                           <span
                             className={classNames(
@@ -155,11 +181,11 @@ export default function Product() {
               </div>
 
               <Tab.Panels className="aspect-w-1 aspect-h-1 w-full">
-                {product.images.map((image) => (
-                  <Tab.Panel key={image.id}>
+                {product3.images.map((image) => (
+                  <Tab.Panel key={String(image.id)}>
                     <img
-                      src={image.src}
-                      alt={image.alt}
+                      src={String(image.src)}
+                      alt={String(image.alt)}
                       className="h-full w-full object-cover object-center sm:rounded-lg"
                     />
                   </Tab.Panel>
@@ -169,11 +195,11 @@ export default function Product() {
 
             {/* Product info */}
             <div className="mt-10 px-4 sm:mt-16 sm:px-0 lg:mt-0">
-              <h1 className="text-3xl font-bold tracking-tight text-gray-900">{product.name}</h1>
+              <h1 className="text-3xl font-bold tracking-tight text-gray-900">{product3.name}</h1>
 
               <div className="mt-3">
                 <h2 className="sr-only">Product information</h2>
-                <p className="text-3xl tracking-tight text-gray-900">{product.price}</p>
+                <p className="text-3xl tracking-tight text-gray-900">{"$"+product3.price}</p>
               </div>
 
               {/* Reviews */}
@@ -185,14 +211,14 @@ export default function Product() {
                       <StarIcon
                         key={rating}
                         className={classNames(
-                          product.rating > rating ? 'text-indigo-500' : 'text-gray-300',
+                          Number(product3.rating) > rating ? 'text-indigo-500' : 'text-gray-300',
                           'h-5 w-5 flex-shrink-0'
                         )}
                         aria-hidden="true"
                       />
                     ))}
                   </div>
-                  <p className="sr-only">{product.rating} out of 5 stars</p>
+                  <p className="sr-only">{product3.rating} out of 5 stars</p>
                 </div>
               </div>
 
@@ -201,7 +227,7 @@ export default function Product() {
 
                 <div
                   className="space-y-6 text-base text-gray-700"
-                  dangerouslySetInnerHTML={{ __html: product.description }}
+                  dangerouslySetInnerHTML={{ __html: String(product3.description)}}
                 />
               </div>
 
@@ -213,13 +239,13 @@ export default function Product() {
                   <RadioGroup value={selectedColor} onChange={setSelectedColor} className="mt-2">
                     <RadioGroup.Label className="sr-only"> Choose a color </RadioGroup.Label>
                     <div className="flex items-center space-x-3">
-                      {product.colors.map((color) => (
+                      {product3.colors.map((color) => (
                         <RadioGroup.Option
                           key={color.name}
                           value={color}
                           className={({ active, checked }) =>
                             classNames(
-                              color.selectedColor,
+                              String(color.selectedColor),
                               active && checked ? 'ring ring-offset-1' : '',
                               !active && checked ? 'ring-2' : '',
                               '-m-0.5 relative p-0.5 rounded-full flex items-center justify-center cursor-pointer focus:outline-none'
@@ -233,7 +259,7 @@ export default function Product() {
                           <span
                             aria-hidden="true"
                             className={classNames(
-                              color.bgColor,
+                              String(color.bgColor),
                               'h-8 w-8 border border-black border-opacity-10 rounded-full'
                             )}
                           />
@@ -245,6 +271,7 @@ export default function Product() {
 
                 <div className="mt-10 flex">
                   <button
+                    onClick={addToCart}
                     type="submit"
                     className="flex max-w-xs flex-1 items-center justify-center rounded-md border border-transparent bg-indigo-600 py-3 px-8 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50 sm:w-full"
                   >
@@ -267,7 +294,7 @@ export default function Product() {
                 </h2>
 
                 <div className="divide-y divide-gray-200 border-t">
-                  {product.details.map((detail) => (
+                  {product3.details.map((detail) => (
                     <Disclosure as="div" key={detail.name}>
                       {({ open }) => (
                         <>
@@ -298,7 +325,9 @@ export default function Product() {
                           </h3>
                           <Disclosure.Panel as="div" className="prose prose-sm pb-6">
                             <ul role="list">
-                              {detail.items.map((item) => (
+                              {// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                // @ts-ignore
+                                detail.items.map((item) => (
                                 <li key={item}>{item}</li>
                               ))}
                             </ul>

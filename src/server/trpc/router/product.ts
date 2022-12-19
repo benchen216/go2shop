@@ -55,6 +55,13 @@ export const productRouter = router({
       },
     }).ProductDetails();
   }),
+  getOneColor: publicProcedure.input(z.number()).query(({ ctx, input }) => {
+    return ctx.prisma.product.findUnique({
+      where: {
+        id: input ?? 1,
+      },
+    }).ProductColor();
+  }),
   getOnePage: publicProcedure.input(z.object(
     { cursor: z.number().nullish(),
       limit: z.number().nullish()}).nullish())

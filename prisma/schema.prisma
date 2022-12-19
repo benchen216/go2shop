@@ -69,11 +69,12 @@ model Product {
   productCategory     Int
   productSuggestPrice Int?
   rating              Int?
-  productDescription  Json?
+  productDescription  String?          @db.Text
   productDetails      Json?
   productCategorys    ProductCategory  @relation(fields: [productCategory], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Product_ProductCategory_id_fk")
   ProductImages       ProductImages[]
   ProductDetails      ProductDetails[]
+  ProductColor        ProductColor[]
 
   @@index([productCategory], map: "Product_ProductCategory_id_fk")
 }
@@ -91,7 +92,7 @@ model ProductDetails {
   id        BigInt  @id @default(autoincrement()) @db.UnsignedBigInt
   productId BigInt  @db.UnsignedBigInt
   name      String?
-  detail    Json?
+  items     Json?
   product   Product @relation(fields: [productId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "ProductDetails_Product_id_fk")
 }
 
@@ -214,8 +215,11 @@ model ProductVariant {
 }
 
 model ProductColor {
-  id        BigInt  @id @default(autoincrement()) @db.UnsignedBigInt
-  name      String?
-  colorCode Int?
-  image     String?
+  id            BigInt  @id @default(autoincrement()) @db.UnsignedBigInt
+  name          String?
+  bgColor      String?
+  selectedColor String?
+  image         String?
+  productId     BigInt  @db.UnsignedBigInt
+  product       Product @relation(fields: [productId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "ProductColor_Product_id_fk")
 }

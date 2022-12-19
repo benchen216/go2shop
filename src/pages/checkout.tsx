@@ -3,6 +3,7 @@ import {  RadioGroup } from '@headlessui/react'
 import { CheckCircleIcon, TrashIcon } from '@heroicons/react/20/solid'
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import Script from 'next/script'
 
 const deliveryMethods = [
   { id: 1, title: 'Standard', turnaround: '4–10 business days', price: '$5.00' },
@@ -30,13 +31,13 @@ function classNames(...classes:string[]) {
   return classes.filter(Boolean).join(' ')
 }
 
-export default function Example() {
-  const [open, setOpen] = useState(false)
+export default function Checkout() {
   const [selectedDeliveryMethod, setSelectedDeliveryMethod] = useState(deliveryMethods[0])
 
   return (
     <div className="bg-gray-50">
       <Navbar/>
+      <Script src="https://js.tappaysdk.com/sdk/tpdirect/v5.14.0"/>
       <main className="mx-auto max-w-7xl px-4 pt-16 pb-24 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-2xl lg:max-w-none">
           <h1 className="sr-only">Checkout</h1>
