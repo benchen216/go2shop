@@ -2,7 +2,7 @@ import  Footer from '../../components/Footer'
 import Navbar from "../../components/Navbar";
 import Link from "next/link";
 import { Dialog, Transition } from '@headlessui/react'
-import React, { Fragment, useEffect, useState } from "react";
+import React, { Fragment, useState } from "react";
 import { signIn, useSession } from "next-auth/react";
 import { trpc } from "../../utils/trpc";
 
