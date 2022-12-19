@@ -62,6 +62,12 @@ export default function Cart() {
   const [shipping, setShipping] = useState(5);
   const [tax, setTax] = useState(0);
   const [grandTotal, setGrandTotal] = useState(0);
+  const handleRemoveProduct = (e:any) => {
+    e.preventDefault()
+    const id = e.target.id.split('-')[2];
+    setCart(cart.filter((item) => item.id !== Number(id)));
+    localStorage.setItem("cart", JSON.stringify(cart.filter((item) => item.id !== Number(id))));
+  }
   useEffect(() => {
     if(localStorage.getItem("cart")){
       // 取得購物車資料 json 要存到const變數在使用
@@ -150,7 +156,8 @@ export default function Cart() {
                         <div className="absolute top-0 right-0">
                           <button type="button" className="-m-2 inline-flex p-2 text-gray-400 hover:text-gray-500">
                             <span className="sr-only">Remove</span>
-                            <XMarkIconMini className="h-5 w-5" aria-hidden="true" />
+                            <XMarkIconMini id={"remove-product-"+product.id}
+                                           onClick={handleRemoveProduct} className="h-5 w-5" aria-hidden="true" />
                           </button>
                         </div>
                       </div>

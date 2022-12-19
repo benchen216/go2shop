@@ -4,6 +4,7 @@ import { CheckCircleIcon, TrashIcon } from '@heroicons/react/20/solid'
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import Script from 'next/script'
+import { trpc } from "../utils/trpc";
 
 const deliveryMethods = [
   { id: 1, title: 'Standard', turnaround: '4–10 business days', price: '$5.00' },
@@ -24,6 +25,7 @@ const products = [
     size: 'Large',
     imageSrc: 'https://tailwindui.com/img/ecommerce-images/checkout-page-02-product-01.jpg',
     imageAlt: "Front of men's Basic Tee in black.",
+    quantity: 1,
   },
   // More products...
 ]
@@ -38,6 +40,14 @@ export default function Checkout() {
   const [shipping, setShipping] = useState(5);
   const [tax, setTax] = useState(0);
   const [grandTotal, setGrandTotal] = useState(0);
+  const trpcCheckout = trpc.order.checkout.useMutation();
+  const handleRemoveProduct = (e:any) => {
+    e.preventDefault()
+    const id = e.target.id.split('-')[2];
+    setCart(cart.filter((item) => item.id !== Number(id)));
+    localStorage.setItem("cart", JSON.stringify(cart.filter((item) => item.id !== Number(id))));
+  }
+
   useEffect(() => {
     if(localStorage.getItem("cart")){
       // 取得購物車資料 json 要存到const變數在使用
@@ -59,6 +69,59 @@ export default function Checkout() {
     console.log(cart)
 
   },[])
+  function handleCheckout(e: any) {
+    e.preventDefault()
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    //@ts-ignore
+    TPDirect.card.getPrime((result) => {
+      if (result.status !== 0) {
+        window.alert('付款資料輸入有誤');
+        return;
+      }
+      const prime = result.card.prime;
+      trpcCheckout.mutateAsync({
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        //@ts-ignore
+        name: document?.getElementById("first-name")?.value ??""+" "+document?.getElementById("last-name")?.value ??"",
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        //@ts-ignore
+        phone: document?.getElementById("phone")?.value ?? "",
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        //@ts-ignore
+        email: document?.getElementById("email")?.value ?? "",
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        //@ts-ignore
+        address: document?.getElementById("address")?.value ?? "",
+        prime: prime,
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        //@ts-ignore
+        total: total,
+        shipping: shipping,
+        payment:"credit-card",
+        cart:
+          cart.map(
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            //@ts-ignore
+            (item: { id: number; name: string; price: number; color: string; size: string; quantity: number;imageSrc:string; }) => ({
+              id: item.id,
+              name: item.name,
+              price: item.price,
+              color: item.color,
+              size: item.size,
+              image: item.imageSrc,
+              quantity: item.quantity
+            })
+          )
+      }).then(
+         (res) => {
+          console.log(res);
+          //localStorage.removeItem("cart");
+          alert("訂單已送出");
+          //window.location.href = "/";
+        }
+      );
+    });
+  }
   return (
     <div className="bg-gray-50">
       <Navbar/>
@@ -480,13 +543,14 @@ export default function Checkout() {
                             <p className="mt-1 text-sm text-gray-500">{product.size}</p>
                           </div>
 
-                          <div className="ml-4 flow-root flex-shrink-0">
+                          <div  className="ml-4 flow-root flex-shrink-0">
                             <button
                               type="button"
                               className="-m-2.5 flex items-center justify-center bg-white p-2.5 text-gray-400 hover:text-gray-500"
                             >
-                              <span className="sr-only">Remove</span>
-                              <TrashIcon className="h-5 w-5" aria-hidden="true" />
+                              <span   className="sr-only">Remove</span>
+                              <TrashIcon id={"remove-product-"+product.id}
+                                         onClick={handleRemoveProduct} className="h-5 w-5" aria-hidden="true" />
                             </button>
                           </div>
                         </div>
@@ -539,6 +603,7 @@ export default function Checkout() {
 
                 <div className="border-t border-gray-200 py-6 px-4 sm:px-6">
                   <button
+                    onClick={handleCheckout}
                     type="submit"
                     className="w-full rounded-md border border-transparent bg-indigo-600 py-3 px-4 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50"
                   >
