@@ -36,13 +36,13 @@ const Profile:React.FC= ()=> {
       updateu.mutateAsync(
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        {[mod]: "d"}
+        {[mod]: document.getElementById("input-form")?.value}
       );
+      window.location.reload();
     }
   }
   function openModal(e: any) {
     console.log(e.target.id);
-    console.log(typeof e);
     setIsOpen(true)
     setMod(e.target.id);
   }
@@ -104,7 +104,14 @@ const Profile:React.FC= ()=> {
                       Your payment has been successfully submitted. We’ve sent
                       you an email with all of the details of your order.
                     </p>
+                    <input
+                      type="text"
+                      name="input-form"
+                      id="input-form"
+                      className="mt-4 p-2 border-2 border-gray-400 rounded-md"
+                    />
                   </div>
+
 
                   <div className="mt-4">
                     <button
@@ -188,6 +195,8 @@ const Profile:React.FC= ()=> {
                           <span className="flex-grow">{userData?.name}</span>
                           <span className="ml-4 flex-shrink-0">
                                   <button
+                                    id={"name"}
+                                    onClick={openModal}
                                     type="button"
                                     className="rounded-md bg-white font-medium text-purple-600 hover:text-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2"
                                   >
@@ -211,7 +220,7 @@ const Profile:React.FC= ()=> {
                                     type="button"
                                     className="rounded-md bg-white font-medium text-purple-600 hover:text-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2"
                                     onClick={openModal}
-                                    id={"11111"}
+                                    id={"image"}
                                   >
                                     Update
                                   </button>
@@ -240,6 +249,8 @@ const Profile:React.FC= ()=> {
                           <span className="flex-grow">{userData?.userPhone}</span>
                           <span className="ml-4 flex-shrink-0">
                                   <button
+                                    id={"userPhone"}
+                                    onClick={openModal}
                                     type="button"
                                     className="rounded-md bg-white font-medium text-purple-600 hover:text-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2"
                                   >

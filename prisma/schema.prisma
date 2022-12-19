@@ -204,7 +204,7 @@ model Order {
   id       BigInt    @id @default(autoincrement()) @db.UnsignedBigInt
   orderId  String    @unique
   detail   Json?
-  time     DateTime? @db.Timestamp(0)
+  time     DateTime  @default(now())
   total    Int       @default(0)
   shipping Int       @default(0)
   userId   Int

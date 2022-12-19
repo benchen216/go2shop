@@ -133,6 +133,7 @@ const navigation = {
 }
 
 const Navbar2: React.FC = () =>  {
+  const { data: sessionData } = useSession();
   const [open, setOpen] = useState(false)
   const [isHome, setHome] = useState(false)
   const [cartTotal, setCartTotal] = useState(0)
@@ -414,7 +415,7 @@ const Navbar2: React.FC = () =>  {
                   <div>
                     <img
                       className="inline-block h-9 w-9 rounded-full"
-                      src="https://images.unsplash.com/photo-1517365830460-955ce3ccd263?ixlib=rb-=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=256&h=256&q=80"
+                      src={sessionData?.user?.image||"/img/avatar.svg"}
                       alt=""
                     />
                   </div>

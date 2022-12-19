@@ -38,6 +38,7 @@ export const userRouter = router({
   updateData: protectedProcedure
     .input(z.object({
       name: z.string().nullish(),
+      image: z.string().nullish(),
       userPhone: z.string().nullish(),
       userAddress: z.string().nullish(),
     }))
