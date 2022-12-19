@@ -3,7 +3,7 @@ import { Dialog, Popover, Tab, Transition } from "@headlessui/react";
 import { Fragment, useEffect, useState } from "react";
 import { signIn, signOut, useSession } from "next-auth/react";
 import { trpc } from "../utils/trpc";
-import React, { useCallback } from 'react'
+import React from 'react'
 import Link from "next/link";
 import Hero from "./Hero";
 function classNames(...classes:string[]) {
@@ -33,8 +33,8 @@ const navigation = {
           id: 'clothing',
           name: 'Clothing',
           items: [
-            { name: 'Tops', href: '#' },
-            { name: 'Dresses', href: '#' },
+            { name: 'Tops', href: '/products/top' },
+            { name: 'Dresses', href: '/products/dresses' },
             { name: 'Pants', href: '#' },
             { name: 'Denim', href: '#' },
             { name: 'Sweaters', href: '#' },
@@ -139,7 +139,7 @@ const Navbar2: React.FC = () =>  {
   const [cartTotal, setCartTotal] = useState(0)
   useEffect(() => {
     // window is accessible here.
-    setHome(window.location.pathname.replace("/en", "").split("?")[0]===""?true:false);
+    setHome(window.location.pathname.replace("/en", "").split("?")[0] === "");
     setCartTotal(JSON.parse(localStorage.getItem("cart")??"[]").length)
   }, []);
 
