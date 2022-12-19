@@ -135,9 +135,11 @@ const navigation = {
 const Navbar2: React.FC = () =>  {
   const [open, setOpen] = useState(false)
   const [isHome, setHome] = useState(false)
+  const [cartTotal, setCartTotal] = useState(0)
   useEffect(() => {
     // window is accessible here.
     setHome(window.location.pathname.replace("/en", "").split("?")[0]===""?true:false);
+    setCartTotal(JSON.parse(localStorage.getItem("cart")??"[]").length)
   }, []);
 
 
@@ -434,7 +436,7 @@ const Navbar2: React.FC = () =>  {
                   className="h-6 w-6 flex-shrink-0 text-gray-400 group-hover:text-gray-500"
                   aria-hidden="true"
                 />
-                <span className="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">0</span>
+                <span className="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">{cartTotal}</span>
                 <span className="sr-only">items in cart, view bag</span>
               </Link>
             </div>

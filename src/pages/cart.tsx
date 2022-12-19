@@ -2,13 +2,14 @@ import { CheckIcon, ClockIcon, QuestionMarkCircleIcon, XMarkIcon as XMarkIconMin
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import Link from "next/link";
+import  { useEffect,useState } from "react";
 
 const products = [
   {
     id: 1,
     name: 'Basic Tee',
     href: '#',
-    price: '$32.00',
+    price: 32.00,
     color: 'Sienna',
     inStock: true,
     size: 'Large',
@@ -19,7 +20,7 @@ const products = [
     id: 2,
     name: 'Basic Tee',
     href: '#',
-    price: '$32.00',
+    price: 32.00,
     color: 'Black',
     inStock: false,
     leadTime: '3–4 weeks',
@@ -27,7 +28,7 @@ const products = [
     imageSrc: 'https://tailwindui.com/img/ecommerce-images/shopping-cart-page-01-product-02.jpg',
     imageAlt: "Front of men's Basic Tee in black.",
   },
-  {
+  /*{
     id: 3,
     name: 'Nomad Tumbler',
     href: '#',
@@ -36,7 +37,7 @@ const products = [
     inStock: true,
     imageSrc: 'https://tailwindui.com/img/ecommerce-images/shopping-cart-page-01-product-03.jpg',
     imageAlt: 'Insulated bottle with white base and black snap lid.',
-  },
+  },*/
 ]
 const relatedProducts = [
   {
@@ -56,6 +57,32 @@ function classNames(...classes:string[]) {
 }
 
 export default function Cart() {
+  const [cart, setCart] = useState(products);
+  const [total, setTotal] = useState(0);
+  const [shipping, setShipping] = useState(5);
+  const [tax, setTax] = useState(0);
+  const [grandTotal, setGrandTotal] = useState(0);
+  useEffect(() => {
+    if(localStorage.getItem("cart")){
+      // 取得購物車資料 json 要存到const變數在使用
+      const cart2 = JSON.parse(localStorage.getItem("cart") || "");
+      console.log(cart2);
+      setCart( cart2)
+      setTotal(0);
+      let total2 = 0;
+      //記得set 不能放在foreach裡面不然會少東西
+      cart2.forEach((item: { price: number; }) => {
+        total2+= item.price;
+      });
+      setTotal(total2);
+      setGrandTotal(total2+shipping+tax);
+      console.log(cart2)
+    }else{
+
+    }
+    console.log(cart)
+
+  },[])
   return (
     <div className="bg-white">
       <Navbar />
@@ -70,7 +97,9 @@ export default function Cart() {
             </h2>
 
             <ul role="list" className="divide-y divide-gray-200 border-t border-b border-gray-200">
-              {products.map((product, productIdx) => (
+              {// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                cart.map((product, productIdx) => (
                 <li key={product.id} className="flex py-6 sm:py-10">
                   <div className="flex-shrink-0">
                     <img
@@ -85,9 +114,9 @@ export default function Cart() {
                       <div>
                         <div className="flex justify-between">
                           <h3 className="text-sm">
-                            <a href={product.href} className="font-medium text-gray-700 hover:text-gray-800">
+                            <Link href={product.href} className="font-medium text-gray-700 hover:text-gray-800">
                               {product.name}
-                            </a>
+                            </Link>
                           </h3>
                         </div>
                         <div className="mt-1 flex text-sm">
@@ -96,7 +125,7 @@ export default function Cart() {
                             <p className="ml-4 border-l border-gray-200 pl-4 text-gray-500">{product.size}</p>
                           ) : null}
                         </div>
-                        <p className="mt-1 text-sm font-medium text-gray-900">{product.price}</p>
+                        <p className="mt-1 text-sm font-medium text-gray-900">{"$"+product.price}</p>
                       </div>
 
                       <div className="mt-4 sm:mt-0 sm:pr-9">
@@ -154,7 +183,7 @@ export default function Cart() {
             <dl className="mt-6 space-y-4">
               <div className="flex items-center justify-between">
                 <dt className="text-sm text-gray-600">Subtotal</dt>
-                <dd className="text-sm font-medium text-gray-900">$99.00</dd>
+                <dd className="text-sm font-medium text-gray-900">{"$"+total}</dd>
               </div>
               <div className="flex items-center justify-between border-t border-gray-200 pt-4">
                 <dt className="flex items-center text-sm text-gray-600">
@@ -164,9 +193,9 @@ export default function Cart() {
                     <QuestionMarkCircleIcon className="h-5 w-5" aria-hidden="true" />
                   </a>
                 </dt>
-                <dd className="text-sm font-medium text-gray-900">$5.00</dd>
+                <dd className="text-sm font-medium text-gray-900">{"$"+shipping}</dd>
               </div>
-              <div className="flex items-center justify-between border-t border-gray-200 pt-4">
+              {/*<div className="flex items-center justify-between border-t border-gray-200 pt-4">
                 <dt className="flex text-sm text-gray-600">
                   <span>Tax estimate</span>
                   <a href="#" className="ml-2 flex-shrink-0 text-gray-400 hover:text-gray-500">
@@ -175,10 +204,10 @@ export default function Cart() {
                   </a>
                 </dt>
                 <dd className="text-sm font-medium text-gray-900">$8.32</dd>
-              </div>
+              </div>*/}
               <div className="flex items-center justify-between border-t border-gray-200 pt-4">
                 <dt className="text-base font-medium text-gray-900">Order total</dt>
-                <dd className="text-base font-medium text-gray-900">$112.32</dd>
+                <dd className="text-base font-medium text-gray-900">{"$"+grandTotal}</dd>
               </div>
             </dl>
 

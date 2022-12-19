@@ -94,7 +94,6 @@ function classNames(...classes:string[]) {
 }
 
 export default function Product() {
-
   const router = useRouter()
   const { pid } = router.query
   const {data: product2} = trpc.product.getOne.useQuery( Number(pid??2))
@@ -134,12 +133,12 @@ export default function Product() {
     console.log('add to cart')
     const cart = JSON.parse(localStorage.getItem('cart')??'[]')
     let isExist = false;
-    const cartItem = cart.forEach((item: any) => {isExist=item.productId=== Number(product3.productId);})
+    const cartItem = cart.forEach((item: any) => {isExist=item.id=== Number(product3.productId);})
     console.log(isExist)
     if (isExist) {
       console.log("+1")
     }else{
-    localStorage.setItem("cart", JSON.stringify([...cart, {productId:Number(product3.productId), quantity:1, price:product3.price,productImage:product3.productImage, productName:product3.name,productColor:selectedColor }]))
+    localStorage.setItem("cart", JSON.stringify([...cart, {id:Number(product3.productId), quantity:1, price:product3.price,imageSrc:product3.productImage, name:product3.name,color:selectedColor?.name,size: 'Large',imageAlt:product3.name,inStock: true ,href:"/product/"+product3.productId}]))
     }
   }
 

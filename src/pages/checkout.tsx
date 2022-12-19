@@ -1,4 +1,4 @@
-import {  useState } from 'react'
+import { useEffect, useState } from "react";
 import {  RadioGroup } from '@headlessui/react'
 import { CheckCircleIcon, TrashIcon } from '@heroicons/react/20/solid'
 import Navbar from "../components/Navbar";
@@ -33,11 +33,75 @@ function classNames(...classes:string[]) {
 
 export default function Checkout() {
   const [selectedDeliveryMethod, setSelectedDeliveryMethod] = useState(deliveryMethods[0])
+  const [cart, setCart] = useState(products);
+  const [total, setTotal] = useState(0);
+  const [shipping, setShipping] = useState(5);
+  const [tax, setTax] = useState(0);
+  const [grandTotal, setGrandTotal] = useState(0);
+  useEffect(() => {
+    if(localStorage.getItem("cart")){
+      // 取得購物車資料 json 要存到const變數在使用
+      const cart2 = JSON.parse(localStorage.getItem("cart") || "");
+      console.log(cart2);
+      setCart( cart2)
+      setTotal(0);
+      let total2 = 0;
+      //記得set 不能放在foreach裡面不然會少東西
+      cart2.forEach((item: { price: number; }) => {
+        total2+= item.price;
+      });
+      setTotal(total2);
+      setGrandTotal(total2+shipping+tax);
+      console.log(cart2)
+    }else{
 
+    }
+    console.log(cart)
+
+  },[])
   return (
     <div className="bg-gray-50">
       <Navbar/>
-      <Script src="https://js.tappaysdk.com/sdk/tpdirect/v5.14.0"/>
+      <Script src="https://js.tappaysdk.com/sdk/tpdirect/v5.14.0" onLoad={() => {
+        // Tappay Fields SDK is ready to be used.
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        //@ts-ignore
+        TPDirect.setupSDK(
+          '12348',
+          'app_pa1pQcKoY22IlnSXq5m5WP5jFKzoRG58VEXpT7wU62ud7mMbDOGzCYIlzzLF',
+          'sandbox'
+        );
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        //@ts-ignore
+        TPDirect.card.setup({
+          fields: {
+            number: {
+              element: '#card-number',
+              placeholder: '**** **** **** ****',
+            },
+            expirationDate: {
+              element: '#card-expiration-date',
+              placeholder: 'MM / YY',
+            },
+            ccv: {
+              element: '#card-ccv',
+              placeholder: 'CCV',
+            },
+          },
+          styles: {
+            '.valid': {
+              color: 'green',
+            },
+            '.invalid': {
+              color: 'red',
+            },
+            'input': {
+              'color': 'gray',
+              'background-color': 'white',
+            },
+          },
+        });
+      }}/>
       <main className="mx-auto max-w-7xl px-4 pt-16 pb-24 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-2xl lg:max-w-none">
           <h1 className="sr-only">Checkout</h1>
@@ -97,7 +161,7 @@ export default function Checkout() {
                     </div>
                   </div>
 
-                  <div className="sm:col-span-2">
+                  {/*<div className="sm:col-span-2">
                     <label htmlFor="company" className="block text-sm font-medium text-gray-700">
                       Company
                     </label>
@@ -109,7 +173,7 @@ export default function Checkout() {
                         className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                       />
                     </div>
-                  </div>
+                  </div>*/}
 
                   <div className="sm:col-span-2">
                     <label htmlFor="address" className="block text-sm font-medium text-gray-700">
@@ -166,6 +230,7 @@ export default function Checkout() {
                         autoComplete="country-name"
                         className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                       >
+                        <option>Taiwan</option>
                         <option>United States</option>
                         <option>Canada</option>
                         <option>Mexico</option>
@@ -309,18 +374,32 @@ export default function Checkout() {
                 </fieldset>
 
                 <div className="mt-6 grid grid-cols-4 gap-y-6 gap-x-4">
+                  <style global jsx>{`
+        .tpfield {
+        height: 40px;
+        //width: 300px;
+        border: 1px solid #D1D5DB;
+        margin: 5px 0;
+        padding: 5px;
+        background: white;
+    }
+      `}</style>
                   <div className="col-span-4">
                     <label htmlFor="card-number" className="block text-sm font-medium text-gray-700">
                       Card number
                     </label>
-                    <div className="mt-1">
-                      <input
+                    <div className="mt-1" >
+                      <div id="card-number"
+                           className="tpfield block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+
+                      </div>
+                     {/* <input
                         type="text"
-                        id="card-number"
+                        //id="card-number"
                         name="card-number"
                         autoComplete="cc-number"
                         className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                      />
+                      />*/}
                     </div>
                   </div>
 
@@ -340,32 +419,36 @@ export default function Checkout() {
                   </div>
 
                   <div className="col-span-3">
-                    <label htmlFor="expiration-date" className="block text-sm font-medium text-gray-700">
+                    <label htmlFor="card-expiration-date" className="block text-sm font-medium text-gray-700">
                       Expiration date (MM/YY)
                     </label>
                     <div className="mt-1">
-                      <input
+                      <div id="card-expiration-date" className={"tpfield block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"}></div>
+                      {/*<input
                         type="text"
-                        name="expiration-date"
-                        id="expiration-date"
+                        name="card-expiration-date"
+                        id="card-expiration-date"
                         autoComplete="cc-exp"
                         className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                      />
+                      />*/}
                     </div>
                   </div>
 
                   <div>
-                    <label htmlFor="cvc" className="block text-sm font-medium text-gray-700">
+                    <label htmlFor="card-ccv" className="block text-sm font-medium text-gray-700">
                       CVC
                     </label>
                     <div className="mt-1">
-                      <input
+                      <div id={"card-ccv"} className={"tpfield block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"}>
+
+                      </div>
+                      {/*<input
                         type="text"
-                        name="cvc"
-                        id="cvc"
-                        autoComplete="csc"
+                        name="card-ccv"
+                        id="card-ccv"
+                        autoComplete="card-ccv"
                         className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                      />
+                      />*/}
                     </div>
                   </div>
                 </div>
@@ -379,7 +462,7 @@ export default function Checkout() {
               <div className="mt-4 rounded-lg border border-gray-200 bg-white shadow-sm">
                 <h3 className="sr-only">Items in your cart</h3>
                 <ul role="list" className="divide-y divide-gray-200">
-                  {products.map((product) => (
+                  {cart.map((product) => (
                     <li key={product.id} className="flex py-6 px-4 sm:px-6">
                       <div className="flex-shrink-0">
                         <img src={product.imageSrc} alt={product.imageAlt} className="w-20 rounded-md" />
@@ -438,19 +521,19 @@ export default function Checkout() {
                 <dl className="space-y-6 border-t border-gray-200 py-6 px-4 sm:px-6">
                   <div className="flex items-center justify-between">
                     <dt className="text-sm">Subtotal</dt>
-                    <dd className="text-sm font-medium text-gray-900">$64.00</dd>
+                    <dd className="text-sm font-medium text-gray-900">{"$"+total}</dd>
                   </div>
                   <div className="flex items-center justify-between">
                     <dt className="text-sm">Shipping</dt>
-                    <dd className="text-sm font-medium text-gray-900">$5.00</dd>
+                    <dd className="text-sm font-medium text-gray-900">{"$"+shipping}</dd>
                   </div>
-                  <div className="flex items-center justify-between">
+                  {/*<div className="flex items-center justify-between">
                     <dt className="text-sm">Taxes</dt>
                     <dd className="text-sm font-medium text-gray-900">$5.52</dd>
-                  </div>
+                  </div>*/}
                   <div className="flex items-center justify-between border-t border-gray-200 pt-6">
                     <dt className="text-base font-medium">Total</dt>
-                    <dd className="text-base font-medium text-gray-900">$75.52</dd>
+                    <dd className="text-base font-medium text-gray-900">{"$"+grandTotal}</dd>
                   </div>
                 </dl>
 
