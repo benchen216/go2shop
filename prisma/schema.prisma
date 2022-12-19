@@ -99,15 +99,16 @@ model ProductDetails {
 model ProductCategory {
   id                    Int       @id @default(autoincrement())
   productCategoryName   String
-  productCategoryDesc   String
-  productCategoryImg    String
-  productCategoryStat   Int
+  productCategoryLabel  String?
+  productCategoryDesc   String?
+  productCategoryImg    String?
+  productCategoryStat   Int?
   productCategoryCrtd   DateTime  @default(now())
-  productCategoryUpdt   DateTime
-  productCategoryDelt   DateTime
-  productCategoryDeltBy Int
-  productCategoryCrtdBy Int
-  productCategoryUpdtBy Int
+  productCategoryUpdt   DateTime  @updatedAt
+  productCategoryDelt   DateTime?
+  productCategoryDeltBy Int?
+  productCategoryCrtdBy Int?
+  productCategoryUpdtBy Int?
   Product               Product[]
 }
 

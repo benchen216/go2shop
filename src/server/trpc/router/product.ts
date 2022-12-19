@@ -196,4 +196,15 @@ export const productRouter = router({
     });
     return product;
   }),
+  getCategory: publicProcedure.input(z.number()).query(({ ctx, input }) => {
+    return ctx.prisma.product.findMany({
+      where: {
+        productCategory: input ?? 1,
+      },
+    });
+  }),
+  getAllCategory: publicProcedure.query(({ ctx, input }) => {
+    return ctx.prisma.productCategory.findMany({
+    });
+  }),
 });
