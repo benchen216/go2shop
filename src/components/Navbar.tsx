@@ -132,7 +132,7 @@ const navigation = {
   ],
 }
 
-const Navbar2: React.FC = () =>  {
+const Navbar: React.FC = () =>  {
   const { data: sessionData } = useSession();
   const [open, setOpen] = useState(false)
   const [isHome, setHome] = useState(false)
@@ -461,4 +461,4 @@ const AuthShowcase: React.FC = () => {
     </button>
   );
 };
-export default Navbar2;
+export default Navbar;
