@@ -25,11 +25,17 @@ export const productRouter = router({
     return ctx.prisma.product.findMany(
       {
         where: {
-          id: 1,
+          productStatus: {
+            gt: -1,
+          },
         },
         select: {
           id: true,
           productName: true,
+          productPrice: true,
+          productCategory:true,
+          productStatus: true,
+          productCreated: true,
         },
       }
     );
@@ -147,21 +153,27 @@ export const productRouter = router({
       });
     }),
   create: publicProcedure.input(z.object({
-    productName:z.string(),
-    productPrice:z.number(),
-    productImage:z.string(),
-    productCreatedBy:z.number(),
-    productCategory:z.number(),
-    productUpdatedBy:z.number().nullish(),
-    productDeletedBy:z.number().nullish(),
-    productSuggestPrice:z.number().nullish()
+    productName: z.string(),
+    productDescription: z.string(),
+    productPrice: z.number(),
+    productImage: z.string(),
+    productCategory: z.number(),
+    productStatus: z.number(),
+    //productUpdatedBy:z.number().nullish(),
+    //productDeletedBy:z.number().nullish(),
+    //productSuggestPrice:z.number().nullish()
   })).mutation(
     async ({ ctx, input }) => {
     const product = await ctx.prisma.product.create({
+      data:
+        input,
+    });
+    const productImage = await ctx.prisma.productImages.create({
       data: {
-        ...input,
-        productStatus:1
-      },
+        src: input.productImage,
+        alt:"default",
+        productId: product.id
+      }
     });
     return "product";
 
@@ -173,8 +185,9 @@ export const productRouter = router({
     productPrice: z.number(),
     productImage: z.string(),
     productCategory: z.number(),
-    productStock: z.number(),
+    productStatus: z.number(),
   })).mutation(async ({ ctx, input }) => {
+    console.log(input);
     const product = await ctx.prisma.product.update({
       where: {
         id: input.id,

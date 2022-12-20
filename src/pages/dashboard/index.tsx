@@ -7,7 +7,7 @@ import {
 import { ChevronLeftIcon } from '@heroicons/react/20/solid'
 import { trpc } from "../../utils/trpc";
 import { useSession } from "next-auth/react";
-import ProductTable from "./ProductTable";
+import ProductTable from "../../components/ProductTable";
 import SubnavDashboard from "../../components/SubnavDashboard";
 import NavbarDashboard from "../../components/NavbarDashboard";
 import {navigationDashboard} from "../../components/SiteConfig";
