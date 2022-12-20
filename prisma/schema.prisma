@@ -215,6 +215,7 @@ model Order {
   email    String
   address  String
   payment  String
+  invoiceHref String @default("#")
   user     User      @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Order_User_id_fk")
   status   Int?
 }

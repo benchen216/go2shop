@@ -12,6 +12,7 @@ import SubnavDashboard from "../../components/SubnavDashboard";
 import NavbarDashboard from "../../components/NavbarDashboard";
 import {navigationDashboard} from "../../components/SiteConfig";
 import CategoryTable from "../../components/CategoryTable";
+import OrderTable from "../../components/OrderTable";
 
 export default function Dashboard() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
@@ -184,6 +185,9 @@ export default function Dashboard() {
                         </div>
                         <div className="sm:col-span-6">
                           <CategoryTable />
+                        </div>
+                        <div className="sm:col-span-6">
+                          <OrderTable />
                         </div>
 
                         <div className="sm:col-span-6">

@@ -20,14 +20,14 @@ export const subNavigationDashboard = [
   {
     name: 'Account',
     description: 'Ullamcorper id at suspendisse nec id volutpat vestibulum enim. Interdum blandit.',
-    href: '#',
+    href: '/dashboard/account',
     icon: CogIcon,
     current: true,
   },
   {
     name: 'Notifications',
     description: 'Enim, nullam mi vel et libero urna lectus enim. Et sed in maecenas tellus.',
-    href: '#',
+    href: '/dashboard/notifications',
     icon: BellIcon,
     current: false,
   },

@@ -1,10 +1,19 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
 }
 import { subNavigationDashboard } from "./SiteConfig";
+import Link from "next/link";
 export default function SubnavDashboard() {
+  const [TabOpen, setTab] = React.useState()
+  useEffect(
+    () => {
+      //setTab(window.location.pathname.replace("/en", "").split("?")[0] === "");
+      //(window.location.pathname.includes(item.href)??false)
+      console.log("")
+    },[]
+  )
   return (
     <nav
       aria-label="Sections"
@@ -15,11 +24,11 @@ export default function SubnavDashboard() {
       </div>
       <div className="min-h-0 flex-1 overflow-y-auto">
         {subNavigationDashboard.map((item) => (
-          <a
+          <Link
             key={item.name}
             href={item.href}
             className={classNames(
-              item.current ? 'bg-blue-50 bg-opacity-50' : 'hover:bg-blue-50 hover:bg-opacity-50',
+                item.current? 'bg-blue-50 bg-opacity-50' : 'hover:bg-blue-50 hover:bg-opacity-50',
               'flex p-6 border-b border-blue-gray-200'
             )}
             aria-current={item.current ? 'page' : undefined}
@@ -29,7 +38,7 @@ export default function SubnavDashboard() {
               <p className="font-medium text-blue-gray-900">{item.name}</p>
               <p className="mt-1 text-blue-gray-500">{item.description}</p>
             </div>
-          </a>
+          </Link>
         ))}
       </div>
     </nav>);

@@ -91,4 +91,34 @@ export const  orderRouter  = router({
       });
       //Todo: check cart items fit the product
     }),
+  getAll: protectedProcedure.query(async ({ctx, input}) => {
+    return await ctx.prisma.order.findMany({})
+  }),
+  getOne: protectedProcedure.input(z.number()).query(async ({ctx, input}) => {
+    return await ctx.prisma.order.findUnique({
+      where: {
+        id: input
+      }
+    })
+  }),
+  update: protectedProcedure.input(z.object({
+    id: z.number(),
+    status: z.number()
+  })).mutation(async ({ctx, input}) => {
+    return await ctx.prisma.order.update({
+      where: {
+        id: input.id
+      },
+      data: {
+        status: input.status
+      }
+    })
+  }),
+  getHistory: protectedProcedure.query(async ({ctx, input}) => {
+    return await ctx.prisma.order.findMany({
+      where: {
+        userId: Number(ctx.session.user.id)
+      }
+    })
+  })
 });

@@ -82,16 +82,16 @@ export default function Checkout() {
       trpcCheckout.mutateAsync({
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         //@ts-ignore
-        name: document?.getElementById("first-name")?.value ??""+" "+document?.getElementById("last-name")?.value ??"",
+        name: (document.getElementById("first-name") as HTMLInputElement).value ??""+" "+(document.getElementById("last-name") as HTMLInputElement).value ??"",
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         //@ts-ignore
-        phone: document?.getElementById("phone")?.value ?? "",
+        phone: (document.getElementById("phone") as HTMLInputElement).value ?? "",
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         //@ts-ignore
-        email: document?.getElementById("email")?.value ?? "",
+        email: (document.getElementById("email-address") as HTMLInputElement).value ?? "",
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         //@ts-ignore
-        address: document?.getElementById("address")?.value ?? "",
+        address: (document.getElementById("address") as HTMLInputElement).value ?? "",
         prime: prime,
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         //@ts-ignore
