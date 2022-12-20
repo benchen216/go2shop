@@ -6,6 +6,7 @@ import { trpc } from "../utils/trpc";
 import React from 'react'
 import Link from "next/link";
 import Hero from "./Hero";
+import Image from "next/image";
 function classNames(...classes:string[]) {
   return classes.filter(Boolean).join(' ')
 }
@@ -291,6 +292,13 @@ const Navbar: React.FC = () =>  {
           <div className="ml-4 flex lg:ml-0">
             <Link href="/">
               <span className="sr-only">Your Company</span>
+              {/*<div className={"h-8 w-auto"}>
+                <Image src={"/img/mark.svg"} alt={""} className={"h-8 w-auto"}
+                       sizes="50vw"
+                       fill
+                />
+              </div>*/}
+
               <img
                 className="h-8 w-auto"
                 src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"

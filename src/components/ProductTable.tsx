@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { trpc } from "../utils/trpc";
 
@@ -190,6 +190,11 @@ export default function ProductTable() {
 const ProductDetail: React.FC<{ pid:number }> = ({pid}) => {
   const {data:productData }= trpc.product.getOne.useQuery(pid?pid:2);
   const [imageURL,setImageURL] = useState(productData?.productImage??"/img/placeholders/592x592.png");
+  useEffect(
+    () => {
+      setImageURL(productData?.productImage??"/img/placeholders/592x592.png");
+    }
+  )
   return (
     <div className="grid grid-cols-1 gap-y-6 pt-8 sm:grid-cols-6 sm:gap-x-6">
       <div className="sm:col-span-6">

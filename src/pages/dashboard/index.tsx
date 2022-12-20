@@ -13,6 +13,7 @@ import NavbarDashboard from "../../components/NavbarDashboard";
 import {navigationDashboard} from "../../components/SiteConfig";
 import CategoryTable from "../../components/CategoryTable";
 import OrderTable from "../../components/OrderTable";
+import SiteSettingTable from "../../components/SiteSettingTable";
 
 export default function Dashboard() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
@@ -344,6 +345,7 @@ export default function Dashboard() {
                           <time dateTime="2017-01-05T20:35:40">January 5, 2017, 8:35:40 PM</time>.
                         </p>
                       </div>
+                      <SiteSettingTable />
 
                       <div className="flex justify-end pt-8">
                         <button
