@@ -1,122 +1,21 @@
-/*
-  This example requires some changes to your config:
-
-  ```
-  // tailwind.config.js
-  const colors = require('tailwindcss/colors')
-
-  module.exports = {
-    // ...
-    theme: {
-      extend: {
-        colors: {
-          'blue-gray': colors.blueGray,
-        },
-      },
-    },
-    plugins: [
-      // ...
-      require('@tailwindcss/forms'),
-    ],
-  }
-  ```
-*/
 import React, { Fragment, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import {
-  BanknotesIcon,
   Bars3Icon,
-  BellIcon,
-  BookmarkSquareIcon,
-  CogIcon,
-  FireIcon,
-  HomeIcon,
-  InboxIcon,
-  KeyIcon,
-  MagnifyingGlassCircleIcon,
-  PhotoIcon,
-  SquaresPlusIcon,
-  UserIcon,
-  XMarkIcon,
-} from '@heroicons/react/24/outline'
+  XMarkIcon
+} from "@heroicons/react/24/outline";
 import { ChevronLeftIcon } from '@heroicons/react/20/solid'
-
-const navigation = [
-  { name: 'Home', href: '#', icon: HomeIcon },
-  { name: 'Trending', href: '#', icon: FireIcon },
-  { name: 'Bookmarks', href: '#', icon: BookmarkSquareIcon },
-  { name: 'Messages', href: '#', icon: InboxIcon },
-  { name: 'Profile', href: '#', icon: UserIcon },
-]
-const subNavigation = [
-  {
-    name: 'Account',
-    description: 'Ullamcorper id at suspendisse nec id volutpat vestibulum enim. Interdum blandit.',
-    href: '#',
-    icon: CogIcon,
-    current: true,
-  },
-  {
-    name: 'Notifications',
-    description: 'Enim, nullam mi vel et libero urna lectus enim. Et sed in maecenas tellus.',
-    href: '#',
-    icon: BellIcon,
-    current: false,
-  },
-  {
-    name: 'Security',
-    description: 'Semper accumsan massa vel volutpat massa. Non turpis ut nulla aliquet turpis.',
-    href: '#',
-    icon: KeyIcon,
-    current: false,
-  },
-  {
-    name: 'Appearance',
-    description: 'Magna nulla id sed ornare ipsum eget. Massa eget porttitor suscipit consequat.',
-    href: '#',
-    icon: PhotoIcon,
-    current: false,
-  },
-  {
-    name: 'Billing',
-    description: 'Orci aliquam arcu egestas turpis cursus. Lectus faucibus netus dui auctor mauris.',
-    href: '#',
-    icon: BanknotesIcon,
-    current: false,
-  },
-  {
-    name: 'Integrations',
-    description: 'Nisi, elit volutpat odio urna quis arcu faucibus dui. Mauris adipiscing pellentesque.',
-    href: '#',
-    icon: SquaresPlusIcon,
-    current: false,
-  },
-  {
-    name: 'Additional Resources',
-    description: 'Quis viverra netus donec ut auctor fringilla facilisis. Nunc sit donec cursus sit quis et.',
-    href: '#',
-    icon: MagnifyingGlassCircleIcon,
-    current: false,
-  },
-]
-
-function classNames(...classes: string[]) {
-  return classes.filter(Boolean).join(' ')
-}
+import { trpc } from "../../utils/trpc";
+import { useSession } from "next-auth/react";
+import ProductTable from "./ProductTable";
+import SubnavDashboard from "../../components/SubnavDashboard";
+import NavbarDashboard from "../../components/NavbarDashboard";
+import {navigationDashboard} from "../../components/SiteConfig";
 
 export default function Dashboard() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-
   return (
     <>
-      {/*
-        This example requires updating your template:
-
-        ```
-        <html class="h-full bg-blue-gray-50">
-        <body class="h-full overflow-hidden">
-        ```
-      */}
       <div className="flex h-full">
         <style global jsx>{`
       html,
@@ -182,7 +81,7 @@ export default function Dashboard() {
                     </div>
                     <nav aria-label="Sidebar" className="mt-5">
                       <div className="space-y-1 px-2">
-                        {navigation.map((item) => (
+                        {navigationDashboard.map((item) => (
                           <a
                             key={item.name}
                             href={item.href}
@@ -227,49 +126,8 @@ export default function Dashboard() {
             </div>
           </Dialog>
         </Transition.Root>
-
         {/* Static sidebar for desktop */}
-        <div className="hidden lg:flex lg:flex-shrink-0">
-          <div className="flex w-20 flex-col">
-            <div className="flex min-h-0 flex-1 flex-col overflow-y-auto bg-blue-600">
-              <div className="flex-1">
-                <div className="flex items-center justify-center bg-blue-700 py-4">
-                  <img
-                    className="h-8 w-auto"
-                    src="https://tailwindui.com/img/logos/mark.svg?color=white"
-                    alt="Your Company"
-                  />
-                </div>
-                <nav aria-label="Sidebar" className="flex flex-col items-center space-y-3 py-6">
-                  {navigation.map((item) => (
-                    <a
-                      key={item.name}
-                      href={item.href}
-                      className="flex items-center rounded-lg p-4 text-blue-200 hover:bg-blue-700"
-                    >
-                      <item.icon className="h-6 w-6" aria-hidden="true" />
-                      <span className="sr-only">{item.name}</span>
-                    </a>
-                  ))}
-                </nav>
-              </div>
-              <div className="flex flex-shrink-0 pb-5">
-                <a href="#" className="w-full flex-shrink-0">
-                  <img
-                    className="mx-auto block h-10 w-10 rounded-full"
-                    src="https://images.unsplash.com/photo-1550525811-e5869dd03032?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2.5&w=256&h=256&q=80"
-                    alt=""
-                  />
-                  <div className="sr-only">
-                    <p>Lisa Marie</p>
-                    <p>Account settings</p>
-                  </div>
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-
+        <NavbarDashboard />
         <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
           {/* Mobile top navigation */}
           <div className="lg:hidden">
@@ -311,33 +169,7 @@ export default function Dashboard() {
 
               <div className="flex flex-1 xl:overflow-hidden">
                 {/* Secondary sidebar */}
-                <nav
-                  aria-label="Sections"
-                  className="hidden w-96 flex-shrink-0 border-r border-blue-gray-200 bg-white xl:flex xl:flex-col"
-                >
-                  <div className="flex h-16 flex-shrink-0 items-center border-b border-blue-gray-200 px-6">
-                    <p className="text-lg font-medium text-blue-gray-900">Settings</p>
-                  </div>
-                  <div className="min-h-0 flex-1 overflow-y-auto">
-                    {subNavigation.map((item) => (
-                      <a
-                        key={item.name}
-                        href={item.href}
-                        className={classNames(
-                          item.current ? 'bg-blue-50 bg-opacity-50' : 'hover:bg-blue-50 hover:bg-opacity-50',
-                          'flex p-6 border-b border-blue-gray-200'
-                        )}
-                        aria-current={item.current ? 'page' : undefined}
-                      >
-                        <item.icon className="-mt-0.5 h-6 w-6 flex-shrink-0 text-blue-gray-400" aria-hidden="true" />
-                        <div className="ml-3 text-sm">
-                          <p className="font-medium text-blue-gray-900">{item.name}</p>
-                          <p className="mt-1 text-blue-gray-500">{item.description}</p>
-                        </div>
-                      </a>
-                    ))}
-                  </div>
-                </nav>
+                <SubnavDashboard />
 
                 {/* Main content */}
                 <div className="flex-1 xl:overflow-y-auto">
@@ -347,36 +179,7 @@ export default function Dashboard() {
                     <form className="divide-y-blue-gray-200 mt-6 space-y-8 divide-y">
                       <div className="grid grid-cols-1 gap-y-6 sm:grid-cols-6 sm:gap-x-6">
                         <div className="sm:col-span-6">
-                          <h2 className="text-xl font-medium text-blue-gray-900">Add or Update product</h2>
-                          <p className="mt-1 text-sm text-blue-gray-500">
-                            Add a new product to your store. You can add a product manually or import products from a CSV.
-                          </p>
-                        </div>
-
-                        <div className="sm:col-span-3">
-                          <label htmlFor="first-name" className="block text-sm font-medium text-blue-gray-900">
-                            First name
-                          </label>
-                          <input
-                            type="text"
-                            name="first-name"
-                            id="first-name"
-                            autoComplete="given-name"
-                            className="mt-1 block w-full rounded-md border-blue-gray-300 text-blue-gray-900 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-                          />
-                        </div>
-
-                        <div className="sm:col-span-3">
-                          <label htmlFor="last-name" className="block text-sm font-medium text-blue-gray-900">
-                            Last name
-                          </label>
-                          <input
-                            type="text"
-                            name="last-name"
-                            id="last-name"
-                            autoComplete="family-name"
-                            className="mt-1 block w-full rounded-md border-blue-gray-300 text-blue-gray-900 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-                          />
+                        <ProductTable  />
                         </div>
 
                         <div className="sm:col-span-6">

@@ -207,4 +207,27 @@ export const productRouter = router({
     return ctx.prisma.productCategory.findMany({
     });
   }),
+  getOnetest: publicProcedure.input(z.number()).query(({ ctx, input }) => {
+    return ctx.prisma.product.findUnique({
+      where: {
+        id: input ?? 1,
+      },
+      include: {
+        ProductImages: true,
+      }
+    });
+  }),
+  getOneAll: publicProcedure.input(z.number()).query(({ ctx, input }) => {
+    return ctx.prisma.product.findUnique({
+      where: {
+        id: input ?? 1,
+      },
+      include: {
+        ProductImages: true,
+        ProductColor: true,
+        ProductDetails: true,
+        productCategorys: true,
+      }
+    });
+  }),
 });
