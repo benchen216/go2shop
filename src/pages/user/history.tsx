@@ -33,6 +33,7 @@ function classNames(...classes:string[]) {
 export default function History() {
   const {data: history} = trpc.order.getHistory.useQuery()
   console.log(history)
+
   return (
     <div className="bg-white">
       <Navbar />
@@ -143,7 +144,9 @@ export default function History() {
                                 </tr>
                                 </thead>
                                 <tbody className="divide-y divide-gray-200 border-b border-gray-200 text-sm sm:border-t">
-                                {order.detail.map((product) => (
+                                { // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                  // @ts-ignore
+                                  order.detail.map((product) => (
                                   <tr key={product.id}>
                                     <td className="py-6 pr-8">
                                       <div className="flex items-center">
