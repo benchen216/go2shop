@@ -30,7 +30,7 @@ const Profile:React.FC= ()=> {
   const {data:userData} = trpc.user.userDetail.useQuery();
   function closeModal(e:any) {
     setIsOpen(false)
-    if(e.target.name==="save"){
+    if(e?.target?.name==="save"){
 
       // TODO: fix this
       updateu.mutateAsync(
@@ -66,7 +66,7 @@ const Profile:React.FC= ()=> {
   return (
     <div className="bg-white">
       <Navbar />
-
+      {/* Modal content */}
       <Transition appear show={isOpen} as={Fragment}>
         <Dialog as="div" className="relative z-10" onClose={closeModal}>
           <Transition.Child
@@ -97,17 +97,17 @@ const Profile:React.FC= ()=> {
                     as="h3"
                     className="text-lg font-medium leading-6 text-gray-900"
                   >
-                    Payment successful
+                    Edit
                   </Dialog.Title>
                   <div className="mt-2">
                     <p className="text-sm text-gray-500">
-                      Your payment has been successfully submitted. We’ve sent
-                      you an email with all of the details of your order.
+                      Update your {mod}
                     </p>
                     <input
                       type="text"
                       name="input-form"
                       id="input-form"
+                      placeholder={mod}
                       className="mt-4 p-2 border-2 border-gray-400 rounded-md"
                     />
                   </div>
