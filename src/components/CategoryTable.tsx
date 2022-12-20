@@ -2,34 +2,30 @@ import React, { Fragment, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { trpc } from "../utils/trpc";
 
-export default function ProductTable() {
-  const { data: products } = trpc.product.getAll.useQuery();
-  const updateProduct = trpc.product.update.useMutation();
-  const createProduct = trpc.product.create.useMutation();
+export default function CategoryTable() {
+  const { data: categories } = trpc.category.getAll.useQuery();
+  const updateCategory = trpc.category.update.useMutation();
+  const createCategory = trpc.category.create.useMutation();
   const [isOpen, setIsOpen] = useState(false);
   const [mod,setMod] = useState("");
   function closeModal(e:any) {
     setIsOpen(false)
     if(e?.target?.name==="save"){
       if (mod.split("-")[1]==="new"){
-        createProduct.mutate({
-          productImage:String((document.getElementById("image-url") as HTMLInputElement).value),
-          productDescription:String((document.getElementById("product-description") as HTMLInputElement).value),
-          productName:String((document.getElementById("product-name")as HTMLInputElement).value),
-          productPrice:Number((document.getElementById("product-price")as HTMLInputElement).value),
-          productCategory:Number((document.getElementById("category")as HTMLInputElement).value),
-          productStatus:Number((document.getElementById("status")as HTMLInputElement).value)
+        createCategory.mutate({
+          categoryImage:String((document.getElementById("image-url") as HTMLInputElement).value),
+          categoryDescription:String((document.getElementById("category-description") as HTMLInputElement).value),
+          categoryName:String((document.getElementById("category-name")as HTMLInputElement).value),
+          categoryStatus:Number((document.getElementById("status")as HTMLInputElement).value)
         })
       }else{
-        updateProduct.mutate(
+        updateCategory.mutate(
           {
             id:Number(mod.split("-")[1]),
-            productImage:String((document.getElementById("image-url") as HTMLInputElement).value),
-            productDescription:String((document.getElementById("product-description") as HTMLInputElement).value),
-            productName:String((document.getElementById("product-name")as HTMLInputElement).value),
-            productPrice:Number((document.getElementById("product-price")as HTMLInputElement).value),
-            productCategory:Number((document.getElementById("category")as HTMLInputElement).value),
-            productStatus:Number((document.getElementById("status")as HTMLInputElement).value)
+            categoryImage:String((document.getElementById("image-url") as HTMLInputElement).value),
+            categoryDescription:String((document.getElementById("category-description") as HTMLInputElement).value),
+            categoryName:String((document.getElementById("category-name")as HTMLInputElement).value),
+            categoryStatus:Number((document.getElementById("status")as HTMLInputElement).value)
           }
         );
       }
@@ -76,7 +72,7 @@ export default function ProductTable() {
                   >
                     Edit
                   </Dialog.Title>
-                  <ProductDetail pid={Number(mod.split("-")[1]!=="new"?mod.split("-")[1]:"0")} />
+                  <CategoryDetail pid={Number(mod.split("-")[1]!=="new"?mod.split("-")[1]:"0")} />
 
 
                   <div className="mt-4">
@@ -105,20 +101,20 @@ export default function ProductTable() {
       </Transition>
       <div className="sm:flex sm:items-center">
         <div className="sm:flex-auto">
-          <h1 className="text-xl font-semibold text-gray-900">Add or Update product</h1>
+          <h1 className="text-xl font-semibold text-gray-900">Add or Update category</h1>
           <p className="mt-2 text-sm text-gray-700">
-            Add a new product to your store. You can add a product manually or import products from a CSV.
+            Add a new category to your store. You can add a category manually or import categorys from a CSV.
           </p>
         </div>
         <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
           <button
             onClick={openModal}
-            name={"product-new"}
-            id={"product-new"}
+            name={"category-new"}
+            id={"category-new"}
             type="button"
             className="inline-flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:w-auto"
           >
-            Add Product
+            Add category
           </button>
         </div>
       </div>
@@ -133,19 +129,10 @@ export default function ProductTable() {
                     Id
                   </th>
                   <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                    Product Name
-                  </th>
-                  <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                    Price
-                  </th>
-                  <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                    Category
+                    category Name
                   </th>
                   <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
                     Status
-                  </th>
-                  <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                    Date
                   </th>
                   <th scope="col" className="relative py-3.5 pl-3 pr-4 sm:pr-6">
                     <span className="sr-only">Edit</span>
@@ -153,19 +140,16 @@ export default function ProductTable() {
                 </tr>
                 </thead>
                 <tbody className="bg-white">
-                {products?.map((product, productIdx) => (
-                  <tr key={Number(product.id)} className={productIdx % 2 === 0 ? undefined : 'bg-gray-50'}>
+                {categories?.map((category, categoryIdx) => (
+                  <tr key={Number(category.id)} className={categoryIdx % 2 === 0 ? undefined : 'bg-gray-50'}>
                     <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
-                      {Number(product.id)}
+                      {Number(category.id)}
                     </td>
-                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{product.productName}</td>
-                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{product.productPrice}</td>
-                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{product.productCategory}</td>
-                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{product.productStatus?"active":"inactive"}</td>
-                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{String(product.productCreated?.toLocaleDateString("en-US"))}</td>
+                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{category.productCategoryName}</td>
+                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{category.productCategoryStat?"active":"inactive"}</td>
                     <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
                       <button
-                        id={`product-${product.id}`}
+                        id={`category-${category.id}`}
                         onClick={openModal}
                         type="button"
                         className="rounded-md bg-white font-medium text-purple-600 hover:text-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2"
@@ -173,7 +157,7 @@ export default function ProductTable() {
                         Edit
                       </button>
                       {/*<a href="#" className="text-indigo-600 hover:text-indigo-900">
-                        Edit<span className="sr-only">, {product.name}</span>
+                        Edit<span className="sr-only">, {category.name}</span>
                       </a>*/}
                     </td>
                   </tr>
@@ -187,33 +171,33 @@ export default function ProductTable() {
     </div>
   )
 }
-const ProductDetail: React.FC<{ pid:number }> = ({pid}) => {
-  const {data:productData }= trpc.product.getOne.useQuery(pid?pid:2);
-  const [imageURL,setImageURL] = useState(productData?.productImage??"/img/placeholders/592x592.png");
+const CategoryDetail: React.FC<{ pid:number }> = ({pid}) => {
+  const {data:categoryData }= trpc.category.getOne.useQuery(pid?pid:2);
+  const [imageURL,setImageURL] = useState(categoryData?.productCategoryImg??"/img/placeholders/592x592.png");
   return (
     <div className="grid grid-cols-1 gap-y-6 pt-8 sm:grid-cols-6 sm:gap-x-6">
       <div className="sm:col-span-6">
-        <h2 className="text-xl font-medium text-blue-gray-900">Product Information</h2>
+        <h2 className="text-xl font-medium text-blue-gray-900">Category Information</h2>
         {/*<p className="mt-1 text-sm text-blue-gray-500">
-                        Edit the product information.
+                        Edit the category information.
                       </p>*/}
       </div>
       <div className="sm:col-span-6">
         <img
           src={imageURL}
-          alt={"product"}
+          alt={"category"}
           className="h-full w-full object-cover object-center"
         />
       </div>
       <div className="sm:col-span-6">
-        <label htmlFor="product-name" className="block text-sm font-medium text-blue-gray-900">
-          Product Name
+        <label htmlFor="category-name" className="block text-sm font-medium text-blue-gray-900">
+          category Name
         </label>
         <input
           type="text"
-          name="product-name"
-          id="product-name"
-          defaultValue={productData?.productName??""}
+          name="category-name"
+          id="category-name"
+          defaultValue={categoryData?.productCategoryName??""}
           className="mt-1 block w-full rounded-md border-blue-gray-300 text-blue-gray-900 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
         />
       </div>
@@ -224,42 +208,13 @@ const ProductDetail: React.FC<{ pid:number }> = ({pid}) => {
         </label>
         <input
           onChange={(e) => setImageURL(e.target.value)}
-          defaultValue={productData?.productImage??"/img/placeholders/592x592.png"}
+          defaultValue={categoryData?.productCategoryImg??"/img/placeholders/592x592.png"}
           type="text"
           name="image-url"
           id="image-url"
           className="mt-1 block w-full rounded-md border-blue-gray-300 text-blue-gray-900 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
         />
       </div>
-      <div className="sm:col-span-6">
-        <label htmlFor="product-price" className="block text-sm font-medium text-blue-gray-900">
-          Price
-        </label>
-        <input
-          defaultValue={productData?.productPrice??""}
-          type="text"
-          name="product-price"
-          id="product-price"
-          className="mt-1 block w-full rounded-md border-blue-gray-300 text-blue-gray-900 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-        />
-      </div>
-      <div className="sm:col-span-3">
-        <label htmlFor="category" className="block text-sm font-medium text-blue-gray-900">
-          Category
-        </label>
-        <select
-          id="category"
-          name="category"
-          autoComplete="category-name"
-          className="mt-1 block w-full rounded-md border-blue-gray-300 text-blue-gray-900 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-        >
-          <option />
-          <option value={1} selected={productData?.productCategory===1}>Woman</option>
-          <option value={2} selected={productData?.productCategory===2}>Man</option>
-          <option value={3} selected={productData?.productCategory===3}>Bag</option>
-        </select>
-      </div>
-
       <div className="sm:col-span-3">
         <label htmlFor="status" className="block text-sm font-medium text-blue-gray-900">
           status
@@ -270,20 +225,20 @@ const ProductDetail: React.FC<{ pid:number }> = ({pid}) => {
           autoComplete="status"
           className="mt-1 block w-full rounded-md border-blue-gray-300 text-blue-gray-900 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
         >
-          <option value={0} selected={productData?.productStatus===0}>inactive</option>
-          <option value={1} selected={productData?.productStatus===1}>active</option>
+          <option value={0} selected={categoryData?.productCategoryStat===0}>inactive</option>
+          <option value={1} selected={categoryData?.productCategoryStat===1}>active</option>
         </select>
       </div>
       <div className="sm:col-span-6">
-        <label htmlFor="product-description" className="block text-sm font-medium text-blue-gray-900">
+        <label htmlFor="category-description" className="block text-sm font-medium text-blue-gray-900">
           Description
         </label>
         <div className="mt-1">
           <input
             type="text"
-            name="product-description"
-            id="product-description"
-            defaultValue={productData?.productDescription??"<p></p>"}
+            name="category-description"
+            id="category-description"
+            defaultValue={categoryData?.productCategoryDesc??""}
             className="mt-1 block w-full rounded-md border-blue-gray-300 text-blue-gray-900 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
           />
           {/*<textarea

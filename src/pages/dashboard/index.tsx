@@ -11,6 +11,7 @@ import ProductTable from "../../components/ProductTable";
 import SubnavDashboard from "../../components/SubnavDashboard";
 import NavbarDashboard from "../../components/NavbarDashboard";
 import {navigationDashboard} from "../../components/SiteConfig";
+import CategoryTable from "../../components/CategoryTable";
 
 export default function Dashboard() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
@@ -179,7 +180,10 @@ export default function Dashboard() {
                     <form className="divide-y-blue-gray-200 mt-6 space-y-8 divide-y">
                       <div className="grid grid-cols-1 gap-y-6 sm:grid-cols-6 sm:gap-x-6">
                         <div className="sm:col-span-6">
-                        <ProductTable  />
+                          <ProductTable  />
+                        </div>
+                        <div className="sm:col-span-6">
+                          <CategoryTable />
                         </div>
 
                         <div className="sm:col-span-6">
