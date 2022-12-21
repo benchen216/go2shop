@@ -5,6 +5,7 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import Script from 'next/script'
 import { trpc } from "../utils/trpc";
+import { useRouter } from 'next/router'
 
 const deliveryMethods = [
   { id: 1, title: 'Standard', turnaround: '4–10 business days', price: '$5.00' },
@@ -41,6 +42,7 @@ export default function Checkout() {
   const [tax, setTax] = useState(0);
   const [grandTotal, setGrandTotal] = useState(0);
   const trpcCheckout = trpc.order.checkout.useMutation();
+  const router = useRouter()
   const handleRemoveProduct = (e:any) => {
     e.preventDefault()
     const id = e.target.id.split('-')[2];
@@ -115,9 +117,9 @@ export default function Checkout() {
       }).then(
          (res) => {
           console.log(res);
-          //localStorage.removeItem("cart");
+          localStorage.removeItem("cart");
           alert("訂單已送出");
-          //window.location.href = "/";
+          router.push("/user/history");
         }
       );
     });
