@@ -1,11 +1,12 @@
 import {
+  ArchiveBoxIcon,
   BanknotesIcon,
   BellIcon,
   BookmarkSquareIcon,
   CogIcon,
   FireIcon,
   HomeIcon,
-  InboxIcon, KeyIcon, MagnifyingGlassCircleIcon, PhotoIcon, SquaresPlusIcon,
+  InboxIcon, KeyIcon, MagnifyingGlassCircleIcon, PhotoIcon, ReceiptPercentIcon, SquaresPlusIcon,
   UserIcon
 } from "@heroicons/react/24/outline";
 
@@ -17,6 +18,13 @@ export const navigationDashboard = [
   { name: 'Profile', href: '/user', icon: UserIcon },
 ]
 export const subNavigationDashboard = [
+  {
+    name: 'Products',
+    description: 'Quis viverra netus donec ut auctor fringilla facilisis. Nunc sit donec cursus sit quis et.',
+    href: '/dashboard/products',
+    icon: ArchiveBoxIcon,
+    current: false,
+  },
   {
     name: 'Account',
     description: 'Ullamcorper id at suspendisse nec id volutpat vestibulum enim. Interdum blandit.',
@@ -34,36 +42,45 @@ export const subNavigationDashboard = [
   {
     name: 'Security',
     description: 'Semper accumsan massa vel volutpat massa. Non turpis ut nulla aliquet turpis.',
-    href: '#',
+    href: '/dashboard/security',
     icon: KeyIcon,
     current: false,
   },
   {
     name: 'Appearance',
     description: 'Magna nulla id sed ornare ipsum eget. Massa eget porttitor suscipit consequat.',
-    href: '#',
+    href: '/dashboard/appearance',
     icon: PhotoIcon,
     current: false,
   },
   {
     name: 'Billing',
     description: 'Orci aliquam arcu egestas turpis cursus. Lectus faucibus netus dui auctor mauris.',
-    href: '#',
+    href: '/dashboard/billing',
     icon: BanknotesIcon,
     current: false,
   },
   {
     name: 'Integrations',
     description: 'Nisi, elit volutpat odio urna quis arcu faucibus dui. Mauris adipiscing pellentesque.',
-    href: '#',
+    href: '/dashboard/integrations',
     icon: SquaresPlusIcon,
     current: false,
   },
   {
     name: 'Additional Resources',
     description: 'Quis viverra netus donec ut auctor fringilla facilisis. Nunc sit donec cursus sit quis et.',
-    href: '#',
+    href: '/dashboard/additional-resources',
     icon: MagnifyingGlassCircleIcon,
     current: false,
   },
+  {
+    name: 'Report',
+    description: 'Quis viverra netus donec ut auctor fringilla facilisis. Nunc sit donec cursus sit quis et.',
+    href: '/dashboard/report',
+    icon: ReceiptPercentIcon,
+    current: false,
+  },
+
+
 ]

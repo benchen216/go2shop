@@ -5,15 +5,11 @@ function classNames(...classes: string[]) {
 }
 import { subNavigationDashboard } from "./SiteConfig";
 import Link from "next/link";
-export default function SubnavDashboard() {
+
+
+const SubnavDashboard: React.FC<{pathname: string | string[] | undefined}> = ({pathname}) =>{
   const [TabOpen, setTab] = React.useState()
-  useEffect(
-    () => {
-      //setTab(window.location.pathname.replace("/en", "").split("?")[0] === "");
-      //(window.location.pathname.includes(item.href)??false)
-      console.log("")
-    },[]
-  )
+
   return (
     <nav
       aria-label="Sections"
@@ -27,11 +23,12 @@ export default function SubnavDashboard() {
           <Link
             key={item.name}
             href={item.href}
-            className={classNames(
-                item.current? 'bg-blue-50 bg-opacity-50' : 'hover:bg-blue-50 hover:bg-opacity-50',
+            className={
+            classNames(
+                item.name.toLowerCase()==pathname? 'bg-blue-50 bg-opacity-50' : 'hover:bg-blue-50 hover:bg-opacity-50',
               'flex p-6 border-b border-blue-gray-200'
             )}
-            aria-current={item.current ? 'page' : undefined}
+            aria-current={item.name.toLowerCase()==pathname ? 'page' : undefined}
           >
             <item.icon className="-mt-0.5 h-6 w-6 flex-shrink-0 text-blue-gray-400" aria-hidden="true" />
             <div className="ml-3 text-sm">
@@ -43,3 +40,4 @@ export default function SubnavDashboard() {
       </div>
     </nav>);
 }
+export default SubnavDashboard;
