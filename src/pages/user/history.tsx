@@ -25,6 +25,7 @@ const orders = [
 const tabs = [
   { name: 'Settings', href: '/user', current: false },
   { name: 'History', href: '/user/history', current: true },
+  { name: 'Dashboard', href: '/dashboard', current: false },
 ]
 function classNames(...classes:string[]) {
   return classes.filter(Boolean).join(' ')
