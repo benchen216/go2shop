@@ -3,6 +3,7 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import Link from "next/link";
 import  { useEffect,useState } from "react";
+import { useRouter } from "next/router";
 
 type cartItem = {
   id: number
@@ -15,6 +16,7 @@ type cartItem = {
   imageSrc: string
   imageAlt: string
   leadTime: string
+  quantity: number
 
 }
 
@@ -36,7 +38,7 @@ function classNames(...classes:string[]) {
 }
 
 export default function Cart() {
-
+  const router = useRouter()
   const [cart, setCart] = useState<cartItem[]>([]);
   const [total, setTotal] = useState(0);
   const [shipping, setShipping] = useState(5);
@@ -49,17 +51,38 @@ export default function Cart() {
     setCart(cart.filter((item) => item.id !== Number(id)));
     localStorage.setItem("cart", JSON.stringify(cart.filter((item) => item.id !== Number(id))));
   }
+  const handleUpdateProduct = (e:any) => {
+    //e.preventDefault()
+    const id = e.target.id.split('-')[2];
+    const value = e.target.value;
+    const newCart = cart.map((item) => {
+      if(item.id === Number(id)) {
+        item.quantity = Number(value);
+      }
+      return item;
+    })
+    setCart(newCart);
+    console.log("newCart",newCart)
+    localStorage.setItem("cart", JSON.stringify(newCart));
+    calculateTotal();
+    //router.reload()
+  }
+  const calculateTotal = () => {
+    const newtotal = cart.reduce((acc, item) => acc + (item.price * item.quantity), 0);
+    setTotal(newtotal);
+    setGrandTotal(newtotal + shipping + tax);
+  }
   useEffect(() => {
     if(localStorage.getItem("cart")){
       // 取得購物車資料 json 要存到const變數在使用
       const cart2 = JSON.parse(localStorage.getItem("cart") || "");
-      console.log(cart2);
+      console.log("cart2",cart2);
       setCart( cart2)
       setTotal(0);
       let total2 = 0;
       //記得set 不能放在foreach裡面不然會少東西
-      cart2.forEach((item: { price: number; }) => {
-        total2+= item.price;
+      cart2.forEach((item: { price: number;quantity:number }) => {
+        total2+= item.price*item.quantity;
       });
       setTotal(total2);
       setGrandTotal(total2+shipping+tax);
@@ -77,7 +100,7 @@ export default function Cart() {
       <main className="mx-auto max-w-2xl px-4 pt-16 pb-24 sm:px-6 lg:max-w-7xl lg:px-8">
         <h1 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Shopping Cart</h1>
 
-        <form className="mt-12 lg:grid lg:grid-cols-12 lg:items-start lg:gap-x-12 xl:gap-x-16">
+        <form className="mt-12 lg:grid lg:grid-cols-12 lg:items-start lg:gap-x-12 xl:gap-x-16" >
           <section aria-labelledby="cart-heading" className="lg:col-span-7">
             <h2 id="cart-heading" className="sr-only">
               Items in your shopping cart
@@ -116,22 +139,24 @@ export default function Cart() {
                       </div>
 
                       <div className="mt-4 sm:mt-0 sm:pr-9">
-                        <label htmlFor={`quantity-${productIdx}`} className="sr-only">
+                        <label htmlFor={`update-quantity-${product.id}-${productIdx}`} className="sr-only">
                           Quantity, {product.name}
                         </label>
                         <select
-                          id={`quantity-${productIdx}`}
-                          name={`quantity-${productIdx}`}
+                          onChange={handleUpdateProduct}
+                          id={`update-quantity-${product.id}-${productIdx}`}
+                          name={`update-quantity-${product.id}-${productIdx}`}
+                          value={product.quantity}
                           className="max-w-full rounded-md border border-gray-300 py-1.5 text-left text-base font-medium leading-5 text-gray-700 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm"
                         >
-                          <option value={1}>1</option>
-                          <option value={2}>2</option>
-                          <option value={3}>3</option>
-                          <option value={4}>4</option>
-                          <option value={5}>5</option>
-                          <option value={6}>6</option>
-                          <option value={7}>7</option>
-                          <option value={8}>8</option>
+                          <option value={1} >1</option>
+                          <option value={2} >2</option>
+                          <option value={3} >3</option>
+                          <option value={4} >4</option>
+                          <option value={5} >5</option>
+                          <option value={6} >6</option>
+                          <option value={7} >7</option>
+                          <option value={8} >8</option>
                         </select>
 
                         <div className="absolute top-0 right-0">
@@ -200,14 +225,19 @@ export default function Cart() {
             </dl>
 
             <div className="mt-6">
-              <Link href={"/checkout"}>
+              <a href={"/checkout"}  >
               <button
+                onClick={(e:any) => {
+                  e.preventDefault()
+                  router.push("/checkout")
+                }
+                }
                 type="submit"
                 className="w-full rounded-md border border-transparent bg-indigo-600 py-3 px-4 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50"
               >
                 Checkout
               </button>
-              </Link>
+              </a>
             </div>
           </section>
         </form>

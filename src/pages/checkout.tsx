@@ -8,37 +8,37 @@ import { trpc } from "../utils/trpc";
 import { useRouter } from 'next/router'
 
 const deliveryMethods = [
-  { id: 1, title: 'Standard', turnaround: '4–10 business days', price: '$5.00' },
-  { id: 2, title: 'Express', turnaround: '2–5 business days', price: '$16.00' },
+  { id: 1, title: 'Standard', turnaround: '4–10 business days', price: 5 },
+  { id: 2, title: 'Express', turnaround: '2–5 business days', price: 16 },
 ]
 const paymentMethods = [
   { id: 'credit-card', title: 'Credit card' },
   { id: 'paypal', title: 'PayPal' },
   { id: 'etransfer', title: 'eTransfer' },
 ]
-const products = [
-  {
-    id: 1,
-    title: 'Basic Tee',
-    href: '#',
-    price: '$32.00',
-    color: 'Black',
-    size: 'Large',
-    imageSrc: 'https://tailwindui.com/img/ecommerce-images/checkout-page-02-product-01.jpg',
-    imageAlt: "Front of men's Basic Tee in black.",
-    quantity: 1,
-  },
-  // More products...
-]
+type cartItem = {
+  id: number
+  name: string
+  href: string
+  price: number
+  color: string
+  inStock: boolean
+  size: string
+  imageSrc: string
+  imageAlt: string
+  leadTime: string
+  quantity: number
+
+}
+
 function classNames(...classes:string[]) {
   return classes.filter(Boolean).join(' ')
 }
 
 export default function Checkout() {
   const [selectedDeliveryMethod, setSelectedDeliveryMethod] = useState(deliveryMethods[0])
-  const [cart, setCart] = useState(products);
+  const [cart, setCart] = useState<cartItem[]>([]);
   const [total, setTotal] = useState(0);
-  const [shipping, setShipping] = useState(5);
   const [tax, setTax] = useState(0);
   const [grandTotal, setGrandTotal] = useState(0);
   const trpcCheckout = trpc.order.checkout.useMutation();
@@ -49,7 +49,24 @@ export default function Checkout() {
     setCart(cart.filter((item) => item.id !== Number(id)));
     localStorage.setItem("cart", JSON.stringify(cart.filter((item) => item.id !== Number(id))));
   }
-
+  const handleUpdateProduct = (e:any) => {
+    const id = e.target.id.split('-')[2];
+    const value = e.target.value;
+    const newCart = cart.map((item) => {
+      if(item.id === Number(id)) {
+        item.quantity = Number(value);
+      }
+      return item;
+    })
+    setCart(newCart);
+    localStorage.setItem("cart", JSON.stringify(newCart));
+    calculateTotal();
+  }
+  const calculateTotal = () => {
+    const newtotal = cart.reduce((acc, item) => acc + (item.price * item.quantity), 0);
+    setTotal(newtotal);
+    setGrandTotal(newtotal + (selectedDeliveryMethod?.price??0) + tax);
+  }
   useEffect(() => {
     if(localStorage.getItem("cart")){
       // 取得購物車資料 json 要存到const變數在使用
@@ -59,18 +76,15 @@ export default function Checkout() {
       setTotal(0);
       let total2 = 0;
       //記得set 不能放在foreach裡面不然會少東西
-      cart2.forEach((item: { price: number; }) => {
-        total2+= item.price;
+      cart2.forEach((item: { price: number;quantity:number }) => {
+        total2+= item.price*item.quantity;
       });
       setTotal(total2);
-      setGrandTotal(total2+shipping+tax);
-      console.log(cart2)
+      setGrandTotal(total2+(selectedDeliveryMethod?.price??0)+tax);
     }else{
 
     }
-    console.log(cart)
-
-  },[])
+  },[selectedDeliveryMethod])
   function handleCheckout(e: any) {
     e.preventDefault()
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -82,28 +96,16 @@ export default function Checkout() {
       }
       const prime = result.card.prime;
       trpcCheckout.mutateAsync({
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        //@ts-ignore
-        name: (document.getElementById("first-name") as HTMLInputElement).value ??""+" "+(document.getElementById("last-name") as HTMLInputElement).value ??"",
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        //@ts-ignore
-        phone: (document.getElementById("phone") as HTMLInputElement).value ?? "",
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        //@ts-ignore
-        email: (document.getElementById("email-address") as HTMLInputElement).value ?? "",
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        //@ts-ignore
-        address: (document.getElementById("address") as HTMLInputElement).value ?? "",
+        name: (document.getElementById("first-name") as HTMLInputElement).value +" "+(document.getElementById("last-cname") as HTMLInputElement).value,
+        phone: (document.getElementById("phone") as HTMLInputElement).value,
+        email: (document.getElementById("email-address") as HTMLInputElement).value,
+        address: (document.getElementById("address") as HTMLInputElement).value,
         prime: prime,
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        //@ts-ignore
         total: total,
-        shipping: shipping,
+        shipping: (selectedDeliveryMethod?.price??0),
         payment:"credit-card",
         cart:
           cart.map(
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            //@ts-ignore
             (item: { id: number; name: string; price: number; color: string; size: string; quantity: number;imageSrc:string; }) => ({
               id: item.id,
               name: item.name,
@@ -212,15 +214,15 @@ export default function Checkout() {
                   </div>
 
                   <div>
-                    <label htmlFor="last-name" className="block text-sm font-medium text-gray-700">
+                    <label htmlFor="last-cname" className="block text-sm font-medium text-gray-700">
                       Last name
                     </label>
                     <div className="mt-1">
                       <input
                         type="text"
-                        id="last-name"
-                        name="last-name"
-                        autoComplete="family-name"
+                        id="last-cname"
+                        name="last-cname"
+                        autoComplete="last-cname"
                         className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                       />
                     </div>
@@ -255,7 +257,7 @@ export default function Checkout() {
                     </div>
                   </div>
 
-                  <div className="sm:col-span-2">
+                  {/*<div className="sm:col-span-2">
                     <label htmlFor="apartment" className="block text-sm font-medium text-gray-700">
                       Apartment, suite, etc.
                     </label>
@@ -267,7 +269,7 @@ export default function Checkout() {
                         className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                       />
                     </div>
-                  </div>
+                  </div>*/}
 
                   <div>
                     <label htmlFor="city" className="block text-sm font-medium text-gray-700">
@@ -303,7 +305,7 @@ export default function Checkout() {
                     </div>
                   </div>
 
-                  <div>
+                  {/*<div>
                     <label htmlFor="region" className="block text-sm font-medium text-gray-700">
                       State / Province
                     </label>
@@ -331,7 +333,7 @@ export default function Checkout() {
                         className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                       />
                     </div>
-                  </div>
+                  </div>*/}
 
                   <div className="sm:col-span-2">
                     <label htmlFor="phone" className="block text-sm font-medium text-gray-700">
@@ -351,7 +353,7 @@ export default function Checkout() {
               </div>
 
               <div className="mt-10 border-t border-gray-200 pt-10">
-                <RadioGroup value={selectedDeliveryMethod} onChange={setSelectedDeliveryMethod}>
+                <RadioGroup value={selectedDeliveryMethod} onChange={setSelectedDeliveryMethod} >
                   <RadioGroup.Label className="text-lg font-medium text-gray-900">Delivery method</RadioGroup.Label>
 
                   <div className="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
@@ -381,7 +383,7 @@ export default function Checkout() {
                                   {deliveryMethod.turnaround}
                                 </RadioGroup.Description>
                                 <RadioGroup.Description as="span" className="mt-6 text-sm font-medium text-gray-900">
-                                  {deliveryMethod.price}
+                                  {"$"+deliveryMethod.price}
                                 </RadioGroup.Description>
                               </span>
                             </span>
@@ -527,7 +529,7 @@ export default function Checkout() {
               <div className="mt-4 rounded-lg border border-gray-200 bg-white shadow-sm">
                 <h3 className="sr-only">Items in your cart</h3>
                 <ul role="list" className="divide-y divide-gray-200">
-                  {cart.map((product) => (
+                  {cart.map((product,productIdx) => (
                     <li key={product.id} className="flex py-6 px-4 sm:px-6">
                       <div className="flex-shrink-0">
                         <img src={product.imageSrc} alt={product.imageAlt} className="w-20 rounded-md" />
@@ -538,7 +540,7 @@ export default function Checkout() {
                           <div className="min-w-0 flex-1">
                             <h4 className="text-sm">
                               <a href={product.href} className="font-medium text-gray-700 hover:text-gray-800">
-                                {product.title}
+                                {product.name}
                               </a>
                             </h4>
                             <p className="mt-1 text-sm text-gray-500">{product.color}</p>
@@ -565,8 +567,10 @@ export default function Checkout() {
                               Quantity
                             </label>
                             <select
-                              id="quantity"
-                              name="quantity"
+                              onChange={handleUpdateProduct}
+                              id={`update-quantity-${product.id}-${productIdx}`}
+                              name={`update-quantity-${product.id}-${productIdx}`}
+                              value={product.quantity}
                               className="rounded-md border border-gray-300 text-left text-base font-medium text-gray-700 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm"
                             >
                               <option value={1}>1</option>
@@ -591,7 +595,7 @@ export default function Checkout() {
                   </div>
                   <div className="flex items-center justify-between">
                     <dt className="text-sm">Shipping</dt>
-                    <dd className="text-sm font-medium text-gray-900">{"$"+shipping}</dd>
+                    <dd className="text-sm font-medium text-gray-900">{"$"+(selectedDeliveryMethod?.price??0)}</dd>
                   </div>
                   {/*<div className="flex items-center justify-between">
                     <dt className="text-sm">Taxes</dt>
