@@ -4,41 +4,20 @@ import Footer from "../components/Footer";
 import Link from "next/link";
 import  { useEffect,useState } from "react";
 
-const products = [
-  {
-    id: 1,
-    name: 'Basic Tee',
-    href: '#',
-    price: 32.00,
-    color: 'Sienna',
-    inStock: true,
-    size: 'Large',
-    imageSrc: 'https://tailwindui.com/img/ecommerce-images/shopping-cart-page-01-product-01.jpg',
-    imageAlt: "Front of men's Basic Tee in sienna.",
-  },
-  {
-    id: 2,
-    name: 'Basic Tee',
-    href: '#',
-    price: 32.00,
-    color: 'Black',
-    inStock: false,
-    leadTime: '3–4 weeks',
-    size: 'Large',
-    imageSrc: 'https://tailwindui.com/img/ecommerce-images/shopping-cart-page-01-product-02.jpg',
-    imageAlt: "Front of men's Basic Tee in black.",
-  },
-  /*{
-    id: 3,
-    name: 'Nomad Tumbler',
-    href: '#',
-    price: '$35.00',
-    color: 'White',
-    inStock: true,
-    imageSrc: 'https://tailwindui.com/img/ecommerce-images/shopping-cart-page-01-product-03.jpg',
-    imageAlt: 'Insulated bottle with white base and black snap lid.',
-  },*/
-]
+type cartItem = {
+  id: number
+  name: string
+  href: string
+  price: number
+  color: string
+  inStock: boolean
+  size: string
+  imageSrc: string
+  imageAlt: string
+  leadTime: string
+
+}
+
 const relatedProducts = [
   {
     id: 1,
@@ -57,11 +36,13 @@ function classNames(...classes:string[]) {
 }
 
 export default function Cart() {
-  const [cart, setCart] = useState(products);
+
+  const [cart, setCart] = useState<cartItem[]>([]);
   const [total, setTotal] = useState(0);
   const [shipping, setShipping] = useState(5);
   const [tax, setTax] = useState(0);
   const [grandTotal, setGrandTotal] = useState(0);
+
   const handleRemoveProduct = (e:any) => {
     e.preventDefault()
     const id = e.target.id.split('-')[2];
