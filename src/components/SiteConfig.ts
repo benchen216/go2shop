@@ -10,11 +10,11 @@ import {
 } from "@heroicons/react/24/outline";
 
 export const navigationDashboard = [
-  { name: 'Home', href: '#', icon: HomeIcon },
+  { name: 'Home', href: '/', icon: HomeIcon },
   { name: 'Trending', href: '#', icon: FireIcon },
   { name: 'Bookmarks', href: '#', icon: BookmarkSquareIcon },
   { name: 'Messages', href: '#', icon: InboxIcon },
-  { name: 'Profile', href: '#', icon: UserIcon },
+  { name: 'Profile', href: '/user', icon: UserIcon },
 ]
 export const subNavigationDashboard = [
   {

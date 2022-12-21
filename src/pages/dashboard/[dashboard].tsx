@@ -14,9 +14,12 @@ import {navigationDashboard} from "../../components/SiteConfig";
 import CategoryTable from "../../components/CategoryTable";
 import OrderTable from "../../components/OrderTable";
 import SiteSettingTable from "../../components/SiteSettingTable";
+import { useRouter } from "next/router";
 
 export default function Dashboard() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const router = useRouter()
+  const { dashboard } = router.query
   return (
     <>
       <div className="flex h-full">

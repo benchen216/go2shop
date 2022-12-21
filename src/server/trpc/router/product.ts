@@ -72,7 +72,8 @@ export const productRouter = router({
     { cursor: z.number().nullish(),
       limit: z.number().nullish()}).nullish())
     .query(({ ctx, input }) => {
-      if (input?.cursor === null) {
+      console.log(input);
+      if (input?.cursor === null||input === undefined) {
         return ctx.prisma.product.findMany({
           take: input?.limit ?? 6,
         });
