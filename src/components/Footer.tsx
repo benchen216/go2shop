@@ -1,30 +1,6 @@
-const footerNavigation = {
-  products: [
-    { name: 'Bags', href: '#' },
-    { name: 'Tees', href: '#' },
-    { name: 'Objects', href: '#' },
-    { name: 'Home Goods', href: '#' },
-    { name: 'Accessories', href: '#' },
-  ],
-  company: [
-    { name: 'Who we are', href: '#' },
-    { name: 'Sustainability', href: '#' },
-    { name: 'Press', href: '#' },
-    { name: 'Careers', href: '#' },
-    { name: 'Terms & Conditions', href: '#' },
-    { name: 'Privacy', href: '#' },
-  ],
-  customerService: [
-    { name: 'Contact', href: '#' },
-    { name: 'Shipping', href: '#' },
-    { name: 'Returns', href: '#' },
-    { name: 'Warranty', href: '#' },
-    { name: 'Secure Payments', href: '#' },
-    { name: 'FAQ', href: '#' },
-    { name: 'Find a store', href: '#' },
-  ],
-}
+import {footerNavigation,companyName,companyLogo} from './SiteConfig'
 export default function Footer(){
+  const thisYear=new Date().getFullYear();
   return (
     <footer aria-labelledby="footer-heading" className="bg-gray-50">
       <h2 id="footer-heading" className="sr-only">
@@ -36,9 +12,9 @@ export default function Footer(){
             {/* Image section */}
             <div className="col-span-1 md:col-span-2 lg:col-start-1 lg:row-start-1">
               <img
-                src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
+                src={companyLogo}
                 alt=""
-                className="h-8 w-auto"
+                className="h-12 w-auto"
               />
             </div>
 
@@ -113,7 +89,7 @@ export default function Footer(){
         </div>
 
         <div className="border-t border-gray-100 py-10 text-center">
-          <p className="text-sm text-gray-500">&copy; 2021 Your Company, Inc. All rights reserved.</p>
+          <p className="text-sm text-gray-500">&copy; {thisYear} {companyName}, Inc. All rights reserved.</p>
         </div>
       </div>
     </footer>

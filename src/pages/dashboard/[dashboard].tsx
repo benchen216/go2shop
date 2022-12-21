@@ -10,14 +10,16 @@ import { useSession } from "next-auth/react";
 import ProductTable from "../../components/ProductTable";
 import SubnavDashboard from "../../components/SubnavDashboard";
 import NavbarDashboard from "../../components/NavbarDashboard";
-import {navigationDashboard} from "../../components/SiteConfig";
+import { companyLogo, companyName, navigationDashboard } from "../../components/SiteConfig";
 import CategoryTable from "../../components/CategoryTable";
 import OrderTable from "../../components/OrderTable";
 import SiteSettingTable from "../../components/SiteSettingTable";
 import { useRouter } from "next/router";
 import ReportPage from "../../components/ReportPage";
+import ProfileSetting from "../../components/PofileSetting";
 
 export default function Dashboard() {
+  const { data: sessionData } = useSession();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const router = useRouter()
   const { dashboard } = router.query
@@ -44,7 +46,7 @@ export default function Dashboard() {
               leaveFrom="opacity-100"
               leaveTo="opacity-0"
             >
-              <div className="fixed inset-0 bg-blue-gray-600 bg-opacity-75" />
+              <div className="fixed inset-0 bg-purple-gray-600 bg-opacity-75" />
             </Transition.Child>
 
             <div className="fixed inset-0 z-40 flex">
@@ -82,8 +84,8 @@ export default function Dashboard() {
                     <div className="flex flex-shrink-0 items-center px-4">
                       <img
                         className="h-8 w-auto"
-                        src="https://tailwindui.com/img/logos/mark.svg?color=blue&shade=600"
-                        alt="Your Company"
+                        src={companyLogo}
+                        alt={companyName}
                       />
                     </div>
                     <nav aria-label="Sidebar" className="mt-5">
@@ -92,10 +94,10 @@ export default function Dashboard() {
                           <a
                             key={item.name}
                             href={item.href}
-                            className="group flex items-center rounded-md p-2 text-base font-medium text-blue-gray-600 hover:bg-blue-gray-50 hover:text-blue-gray-900"
+                            className="group flex items-center rounded-md p-2 text-base font-medium text-purple-gray-600 hover:bg-purple-gray-50 hover:text-purple-gray-900"
                           >
                             <item.icon
-                              className="mr-4 h-6 w-6 text-blue-gray-400 group-hover:text-blue-gray-500"
+                              className="mr-4 h-6 w-6 text-purple-gray-400 group-hover:text-purple-gray-500"
                               aria-hidden="true"
                             />
                             {item.name}
@@ -104,21 +106,21 @@ export default function Dashboard() {
                       </div>
                     </nav>
                   </div>
-                  <div className="flex flex-shrink-0 border-t border-blue-gray-200 p-4">
+                  <div className="flex flex-shrink-0 border-t border-purple-gray-200 p-4">
                     <a href="#" className="group block flex-shrink-0">
                       <div className="flex items-center">
                         <div>
                           <img
                             className="inline-block h-10 w-10 rounded-full"
-                            src="https://images.unsplash.com/photo-1550525811-e5869dd03032?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2.5&w=256&h=256&q=80"
+                            src={sessionData?.user?.image||"/img/avatar.svg"}
                             alt=""
                           />
                         </div>
                         <div className="ml-3">
-                          <p className="text-base font-medium text-blue-gray-700 group-hover:text-blue-gray-900">
+                          <p className="text-base font-medium text-purple-gray-700 group-hover:text-purple-gray-900">
                             Lisa Marie
                           </p>
-                          <p className="text-sm font-medium text-blue-gray-500 group-hover:text-blue-gray-700">
+                          <p className="text-sm font-medium text-purple-gray-500 group-hover:text-purple-gray-700">
                             Account Settings
                           </p>
                         </div>
@@ -138,18 +140,18 @@ export default function Dashboard() {
         <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
           {/* Mobile top navigation */}
           <div className="lg:hidden">
-            <div className="flex items-center justify-between bg-blue-600 py-2 px-4 sm:px-6">
-              <div>
+            <div className="flex items-center justify-between bg-purple-600 py-2 px-4 sm:px-6">
+              <div className="bg-white">
                 <img
-                  className="h-8 w-auto"
-                  src="https://tailwindui.com/img/logos/mark.svg?color=white"
-                  alt="Your Company"
+                  className="h-12 w-auto"
+                  src={companyLogo}
+                  alt={companyName}
                 />
               </div>
               <div>
                 <button
                   type="button"
-                  className="-mr-3 inline-flex h-12 w-12 items-center justify-center rounded-md bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
+                  className="-mr-3 inline-flex h-12 w-12 items-center justify-center rounded-md bg-purple-600 text-white hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
                   onClick={() => setMobileMenuOpen(true)}
                 >
                   <span className="sr-only">Open sidebar</span>
@@ -162,13 +164,13 @@ export default function Dashboard() {
           <main className="flex flex-1 overflow-hidden">
             <div className="flex flex-1 flex-col overflow-y-auto xl:overflow-hidden">
               {/* Breadcrumb */}
-              <nav aria-label="Breadcrumb" className="border-b border-blue-gray-200 bg-white xl:hidden">
+              <nav aria-label="Breadcrumb" className="border-b border-purple-gray-200 bg-white xl:hidden">
                 <div className="mx-auto flex max-w-3xl items-start py-3 px-4 sm:px-6 lg:px-8">
                   <a
                     href="#"
-                    className="-ml-1 inline-flex items-center space-x-3 text-sm font-medium text-blue-gray-900"
+                    className="-ml-1 inline-flex items-center space-x-3 text-sm font-medium text-purple-gray-900"
                   >
-                    <ChevronLeftIcon className="h-5 w-5 text-blue-gray-400" aria-hidden="true" />
+                    <ChevronLeftIcon className="h-5 w-5 text-purple-gray-400" aria-hidden="true" />
                     <span>Settings</span>
                   </a>
                 </div>
@@ -182,8 +184,8 @@ export default function Dashboard() {
                 <div className="flex-1 xl:overflow-y-auto">
 
                   <div className="mx-auto max-w-3xl py-10 px-4 sm:px-6 lg:py-12 lg:px-0">
-                    <h1 className="text-3xl font-bold tracking-tight text-blue-gray-900">{dashboard}</h1>
-                    <form className="divide-y-blue-gray-200 mt-6 space-y-8 divide-y">
+                    <h1 className="text-3xl font-bold tracking-tight text-purple-gray-900">{dashboard}</h1>
+                    <form className="divide-y-purple-gray-200 mt-6 space-y-8 divide-y">
                       <div className="grid grid-cols-1 gap-y-6 sm:grid-cols-6 sm:gap-x-6">
                         <DashboardSwitch/>
 
@@ -212,14 +214,17 @@ const DashboardSwitch = () => {
           <div className="sm:col-span-6">
             <CategoryTable />
           </div>
+        </>
+      case 'account':
+        return <><ProfileSetting/></>
+      case 'report':
+        return <><ReportPage/></>
+      case 'billing':
+        return <>
           <div className="sm:col-span-6">
             <OrderTable />
           </div>
         </>
-      case 'profile':
-        return <><ProfileSetting/></>
-      case 'report':
-        return <><ReportPage/></>
       default:
         return <></>
     }
@@ -236,14 +241,14 @@ const ProfileSetting3= () => {
     <>
       <div className="grid grid-cols-1 gap-y-6 pt-8 sm:grid-cols-6 sm:gap-x-6">
         <div className="sm:col-span-6">
-          <h2 className="text-xl font-medium text-blue-gray-900">Personal Information</h2>
-          <p className="mt-1 text-sm text-blue-gray-500">
+          <h2 className="text-xl font-medium text-purple-gray-900">Personal Information</h2>
+          <p className="mt-1 text-sm text-purple-gray-500">
             This information will be displayed publicly so be careful what you share.
           </p>
         </div>
 
         <div className="sm:col-span-3">
-          <label htmlFor="email-address" className="block text-sm font-medium text-blue-gray-900">
+          <label htmlFor="email-address" className="block text-sm font-medium text-purple-gray-900">
             Email address
           </label>
           <input
@@ -251,12 +256,12 @@ const ProfileSetting3= () => {
             name="email-address"
             id="email-address"
             autoComplete="email"
-            className="mt-1 block w-full rounded-md border-blue-gray-300 text-blue-gray-900 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+            className="mt-1 block w-full rounded-md border-purple-gray-300 text-purple-gray-900 shadow-sm focus:border-purple-500 focus:ring-purple-500 sm:text-sm"
           />
         </div>
 
         <div className="sm:col-span-3">
-          <label htmlFor="phone-number" className="block text-sm font-medium text-blue-gray-900">
+          <label htmlFor="phone-number" className="block text-sm font-medium text-purple-gray-900">
             Phone number
           </label>
           <input
@@ -264,19 +269,19 @@ const ProfileSetting3= () => {
             name="phone-number"
             id="phone-number"
             autoComplete="tel"
-            className="mt-1 block w-full rounded-md border-blue-gray-300 text-blue-gray-900 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+            className="mt-1 block w-full rounded-md border-purple-gray-300 text-purple-gray-900 shadow-sm focus:border-purple-500 focus:ring-purple-500 sm:text-sm"
           />
         </div>
 
         <div className="sm:col-span-3">
-          <label htmlFor="country" className="block text-sm font-medium text-blue-gray-900">
+          <label htmlFor="country" className="block text-sm font-medium text-purple-gray-900">
             Country
           </label>
           <select
             id="country"
             name="country"
             autoComplete="country-name"
-            className="mt-1 block w-full rounded-md border-blue-gray-300 text-blue-gray-900 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+            className="mt-1 block w-full rounded-md border-purple-gray-300 text-purple-gray-900 shadow-sm focus:border-purple-500 focus:ring-purple-500 sm:text-sm"
           >
             <option />
             <option>United States</option>
@@ -286,122 +291,22 @@ const ProfileSetting3= () => {
         </div>
 
         <div className="sm:col-span-3">
-          <label htmlFor="language" className="block text-sm font-medium text-blue-gray-900">
+          <label htmlFor="language" className="block text-sm font-medium text-purple-gray-900">
             Language
           </label>
           <input
             type="text"
             name="language"
             id="language"
-            className="mt-1 block w-full rounded-md border-blue-gray-300 text-blue-gray-900 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+            className="mt-1 block w-full rounded-md border-purple-gray-300 text-purple-gray-900 shadow-sm focus:border-purple-500 focus:ring-purple-500 sm:text-sm"
           />
         </div>
 
-        <p className="text-sm text-blue-gray-500 sm:col-span-6">
+        <p className="text-sm text-purple-gray-500 sm:col-span-6">
           This account was created on{' '}
           <time dateTime="2017-01-05T20:35:40">January 5, 2017, 8:35:40 PM</time>.
         </p>
       </div>
       </>)
 }
-const ProfileSetting= () => {
-  return (
-    <>
-      <div className="sm:col-span-6">
-        <label htmlFor="username" className="block text-sm font-medium text-blue-gray-900">
-          Username
-        </label>
-        <div className="mt-1 flex rounded-md shadow-sm">
-                            <span className="inline-flex items-center rounded-l-md border border-r-0 border-blue-gray-300 bg-blue-gray-50 px-3 text-blue-gray-500 sm:text-sm">
-                              workcation.com/
-                            </span>
-          <input
-            type="text"
-            name="username"
-            id="username"
-            autoComplete="username"
-            defaultValue="lisamarie"
-            className="block w-full min-w-0 flex-1 rounded-none rounded-r-md border-blue-gray-300 text-blue-gray-900 focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-          />
-        </div>
-      </div>
 
-      <div className="sm:col-span-6">
-        <label htmlFor="photo" className="block text-sm font-medium text-blue-gray-900">
-          Photo
-        </label>
-        <div className="mt-1 flex items-center">
-          <img
-            className="inline-block h-12 w-12 rounded-full"
-            src="https://images.unsplash.com/photo-1550525811-e5869dd03032?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2.5&w=256&h=256&q=80"
-            alt=""
-          />
-          <div className="ml-4 flex">
-            <div className="relative flex cursor-pointer items-center rounded-md border border-blue-gray-300 bg-white py-2 px-3 shadow-sm focus-within:outline-none focus-within:ring-2 focus-within:ring-blue-500 focus-within:ring-offset-2 focus-within:ring-offset-blue-gray-50 hover:bg-blue-gray-50">
-              <label
-                htmlFor="user-photo"
-                className="pointer-events-none relative text-sm font-medium text-blue-gray-900"
-              >
-                <span>Change</span>
-                <span className="sr-only"> user photo</span>
-              </label>
-              <input
-                id="user-photo"
-                name="user-photo"
-                type="file"
-                className="absolute inset-0 h-full w-full cursor-pointer rounded-md border-gray-300 opacity-0"
-              />
-            </div>
-            <button
-              type="button"
-              className="ml-3 rounded-md border border-transparent bg-transparent py-2 px-3 text-sm font-medium text-blue-gray-900 hover:text-blue-gray-700 focus:border-blue-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-blue-gray-50"
-            >
-              Remove
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <div className="sm:col-span-6">
-        <label htmlFor="description" className="block text-sm font-medium text-blue-gray-900">
-          Description
-        </label>
-        <div className="mt-1">
-                            <textarea
-                              id="description"
-                              name="description"
-                              rows={4}
-                              className="block w-full rounded-md border-blue-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-                              defaultValue={''}
-                            />
-        </div>
-        <p className="mt-3 text-sm text-blue-gray-500">
-          Brief description for your profile. URLs are hyperlinked.
-        </p>
-      </div>
-
-      <div className="sm:col-span-6">
-        <label htmlFor="url" className="block text-sm font-medium text-blue-gray-900">
-          URL
-        </label>
-        <input
-          type="text"
-          name="url"
-          id="url"
-          className="mt-1 block w-full rounded-md border-blue-gray-300 text-blue-gray-900 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-        />
-      </div>
-    </>)
-}
-const BillingSetting= () => {
-  return (
-    <>
-
-      </>)
-}
-const AppearanceSetting= () => {
-  return (
-    <>
-
-    </>)
-}

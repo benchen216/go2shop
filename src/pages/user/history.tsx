@@ -2,30 +2,10 @@ import  Footer from '../../components/Footer'
 import Navbar from "../../components/Navbar";
 import Link from "next/link";
 import {trpc} from "../../utils/trpc";
-const orders = [
-  {
-    orderId: 'WU88191111',
-    date: 'January 22, 2021',
-    datetime: '2021-01-22',
-    invoiceHref: '#',
-    total: '$238.00',
-    detail: [
-      {
-        id: 1,
-        name: 'Machined Pen and Pencil Set',
-        href: '#',
-        price: '$70.00',
-        status: 'Delivered Jan 25, 2021',
-        image: 'https://tailwindui.com/img/ecommerce-images/order-history-page-02-product-01.jpg',
-        imageAlt: 'Detail of mechanical pencil tip with machined black steel shaft and chrome lead tip.',
-      },
-    ],
-  },
-]
 const tabs = [
   { name: 'Settings', href: '/user', current: false },
   { name: 'History', href: '/user/history', current: true },
-  { name: 'Dashboard', href: '/dashboard/product', current: false },
+  { name: 'Dashboard', href: '/dashboard/products', current: false },
 ]
 function classNames(...classes:string[]) {
   return classes.filter(Boolean).join(' ')
@@ -114,7 +94,7 @@ export default function History() {
                                   </div>
                                   <div className="flex justify-between pt-6 font-medium text-gray-900 sm:block sm:pt-0">
                                     <dt>Total amount</dt>
-                                    <dd className="sm:mt-1">{order.total}</dd>
+                                    <dd className="sm:mt-1">{"$"+order.total}</dd>
                                   </div>
                                 </dl>
                                 <a
@@ -158,11 +138,11 @@ export default function History() {
                                         />
                                         <div>
                                           <div className="font-medium text-gray-900">{product.name}</div>
-                                          <div className="mt-1 sm:hidden">{product.price}</div>
+                                          <div className="mt-1 sm:hidden">{"$"+product.price}</div>
                                         </div>
                                       </div>
                                     </td>
-                                    <td className="hidden py-6 pr-8 sm:table-cell">{product.price}</td>
+                                    <td className="hidden py-6 pr-8 sm:table-cell">{"$"+product.price}</td>
                                     <td className="hidden py-6 pr-8 sm:table-cell">{product.status}</td>
                                     <td className="whitespace-nowrap py-6 text-right font-medium">
                                       <a href={product.href} className="text-indigo-600">
