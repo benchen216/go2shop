@@ -1,6 +1,7 @@
 import { z } from "zod";
 import fetch from "node-fetch";
 import { protectedProcedure, router } from "../trpc";
+import { env } from "../../../env/server.mjs";
 
 export const  orderRouter  = router({
   checkout: protectedProcedure
@@ -27,7 +28,7 @@ export const  orderRouter  = router({
     }))
     .mutation(async ({ctx, input }) => {
       const now = new Date();
-      const number = '' +now.getFullYear().toString().slice(2,4)+ now.getMonth() + now.getDate() + (now.getTime()%(24*60*60*1000)) + Math.floor(Math.random()*10);
+      const orderId = '' +now.getFullYear().toString().slice(2,4)+ now.getMonth() + now.getDate() + (now.getTime()%(24*60*60*1000)) + Math.floor(Math.random()*10);
       const postData = {
         'prime': input.prime,
         'partner_key':
@@ -60,7 +61,7 @@ export const  orderRouter  = router({
         if (data.status === 0) {
           const order = ctx.prisma.order.create({
             data: {
-              orderId: number,
+              orderId: orderId,
               prime: input.prime,
               name: input.name,
               phone: input.phone,
@@ -76,6 +77,15 @@ export const  orderRouter  = router({
           order.then(
             (res) => {
               console.log(res);
+              //fetch("https://api.mailgun.net/v3/sandboxd1b3b0b3b8e64a8e9b1f1b8b8b8b8b8b.mailgun.org/messages",)
+              fetch("https://notify-api.line.me/api/notify", {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/x-www-form-urlencoded',
+                  'Authorization':'Bearer ' +env.LINE_NOTIFY_CLIENT_ID,
+                },
+                body: encodeURIComponent("message")+"="+ encodeURIComponent('\n訂單編號:'+String(orderId)+'已成立\n訂單總金額:'+String(input.total)+'\n收件人:'+String(input.name)+'\n收件地址:'+String(input.address)+'\n聯絡電話:'+String(input.phone)+'\n電子信箱:'+String(input.email)+'\n付款方式:'+String(input.payment)+'\n運費:'+String(input.shipping))
+              })
               return { result: "success" };
             }
           ).catch(
