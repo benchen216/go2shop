@@ -42,13 +42,13 @@ export const subNavigationDashboard = [
     icon: BellIcon,
     current: false,
   },
-  {
+  /*{
     name: 'Security',
     description: 'Semper accumsan massa vel volutpat massa. Non turpis ut nulla aliquet turpis.',
     href: '/dashboard/security',
     icon: KeyIcon,
     current: false,
-  },
+  },*/
   {
     name: 'Appearance',
     description: 'Magna nulla id sed ornare ipsum eget. Massa eget porttitor suscipit consequat.',
@@ -63,20 +63,20 @@ export const subNavigationDashboard = [
     icon: BanknotesIcon,
     current: false,
   },
-  {
+/*  {
     name: 'Integrations',
     description: 'Nisi, elit volutpat odio urna quis arcu faucibus dui. Mauris adipiscing pellentesque.',
     href: '/dashboard/integrations',
     icon: SquaresPlusIcon,
     current: false,
-  },
-  {
+  },*/
+/*  {
     name: 'Additional Resources',
     description: 'Quis viverra netus donec ut auctor fringilla facilisis. Nunc sit donec cursus sit quis et.',
     href: '/dashboard/additional-resources',
     icon: MagnifyingGlassCircleIcon,
     current: false,
-  },
+  },*/
   {
     name: 'Report',
     description: 'Quis viverra netus donec ut auctor fringilla facilisis. Nunc sit donec cursus sit quis et.',

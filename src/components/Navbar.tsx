@@ -8,6 +8,7 @@ import Link from "next/link";
 import Hero from "./Hero";
 import Image from "next/image";
 import { companyLogo,navigation } from "./SiteConfig";
+import ChatWindow from "./ChatWindow";
 function classNames(...classes:string[]) {
   return classes.filter(Boolean).join(' ')
 }
@@ -340,6 +341,7 @@ const Navbar: React.FC = () =>  {
     </nav>
         {isHome?<Hero/>:<></> }
       </header>
+<ChatWindow/>
     </>
   );
 }

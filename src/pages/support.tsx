@@ -1,6 +1,7 @@
 import { LifebuoyIcon, NewspaperIcon, PhoneIcon } from '@heroicons/react/24/outline'
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import React from "react";
 
 const supportLinks = [
   {
