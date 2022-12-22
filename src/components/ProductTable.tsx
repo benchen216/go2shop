@@ -1,6 +1,10 @@
 import React, { Fragment, useEffect, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { trpc } from "../utils/trpc";
+const statusStyles = ['bg-gray-100 text-gray-800','bg-green-100 text-green-800','bg-yellow-100 text-yellow-800',]
+function classNames(...classes: string[]) {
+  return classes.filter(Boolean).join(' ')
+}
 
 export default function ProductTable() {
   const { data: products } = trpc.product.getAll.useQuery();
@@ -161,7 +165,17 @@ export default function ProductTable() {
                     <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{product.productName}</td>
                     <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{product.productPrice}</td>
                     <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{product.productCategory}</td>
-                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{product.productStatus?"active":"inactive"}</td>
+                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                      <span
+                        className={classNames(
+                          statusStyles[product?.productStatus]??"",
+                          'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium capitalize'
+                        )}
+                      >
+                                  {product.productStatus?"active":"inactive"}
+                                </span>
+
+                    </td>
                     <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{String(product.productCreated?.toLocaleDateString("en-US"))}</td>
                     <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
                       <button
@@ -189,6 +203,7 @@ export default function ProductTable() {
 }
 const ProductDetail: React.FC<{ pid:number }> = ({pid}) => {
   const {data:productData }= trpc.product.getOne.useQuery(pid?pid:2);
+  const {data:categoryData }= trpc.category.getAll.useQuery();
   const [imageURL,setImageURL] = useState(productData?.productImage??"/img/placeholders/592x592.png");
   useEffect(
     () => {
@@ -253,15 +268,18 @@ const ProductDetail: React.FC<{ pid:number }> = ({pid}) => {
           Category
         </label>
         <select
+          //value={productData?.productCategory}
           id="category"
           name="category"
           autoComplete="category-name"
           className="mt-1 block w-full rounded-md border-blue-gray-300 text-blue-gray-900 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
         >
-          <option />
-          <option value={1} selected={productData?.productCategory===1}>Woman</option>
-          <option value={2} selected={productData?.productCategory===2}>Man</option>
-          <option value={3} selected={productData?.productCategory===3}>Bag</option>
+          {categoryData?.map((category) => (
+            <option key={category.id} selected={productData?.productCategory===category.id}>{category.productCategoryName}</option>
+          ))}
+          {/*<option value={1} >Woman</option>
+          <option value={2}>Man</option>
+          <option value={3} >Bag</option>*/}
         </select>
       </div>
 

@@ -1,7 +1,10 @@
 import React, { Fragment, useEffect, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { trpc } from "../utils/trpc";
-
+const statusStyles = ['bg-gray-100 text-gray-800','bg-green-100 text-green-800','bg-yellow-100 text-yellow-800',]
+function classNames(...classes: string[]) {
+  return classes.filter(Boolean).join(' ')
+}
 export default function CategoryTable() {
   const { data: categories } = trpc.category.getAll.useQuery();
   const updateCategory = trpc.category.update.useMutation();
@@ -146,7 +149,17 @@ export default function CategoryTable() {
                       {Number(category.id)}
                     </td>
                     <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{category.productCategoryName}</td>
-                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{category.productCategoryStat?"active":"inactive"}</td>
+                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+
+                      <span
+                        className={classNames(
+                          statusStyles[category?.productCategoryStat??0]??"",
+                          'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium capitalize'
+                        )}
+                      >
+                                  {category.productCategoryStat?"active":"inactive"}
+                                </span>
+                    </td>
                     <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
                       <button
                         id={`category-${category.id}`}

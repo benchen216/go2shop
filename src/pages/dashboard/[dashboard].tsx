@@ -17,6 +17,7 @@ import SiteSettingTable from "../../components/SiteSettingTable";
 import { useRouter } from "next/router";
 import ReportPage from "../../components/ReportPage";
 import ProfileSetting from "../../components/PofileSetting";
+import AppearanceSetting from "../../components/AppearanceSetting";
 
 export default function Dashboard() {
   const { data: sessionData } = useSession();
@@ -225,6 +226,8 @@ const DashboardSwitch = () => {
             <OrderTable />
           </div>
         </>
+      case 'appearance':
+        return <AppearanceSetting/>
       default:
         return <></>
     }
