@@ -10,6 +10,8 @@ import {
   UserIcon
 } from "@heroicons/react/24/outline";
 export const companyName="Go2Shop";
+/*const {data:companyName2}=trpc.company.getOne.useQuery(1);
+export const companyName=companyName2?.name;*/
 export const companyLogo="/img/logo.png";
 export const navigationDashboard = [
   { name: 'Home', href: '/', icon: HomeIcon },

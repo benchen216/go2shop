@@ -27,6 +27,11 @@ const Navbar: React.FC = () =>  {
 
   return (
     <>
+      <style global jsx>{`
+        .self-control-nav {
+          //background-color: blanchedalmond !important
+        }
+    `}</style>
       <Transition.Root show={open} as={Fragment}>
         <Dialog as="div" className="relative z-40 lg:hidden" onClose={setOpen}>
           <Transition.Child
@@ -156,7 +161,7 @@ const Navbar: React.FC = () =>  {
         </Dialog>
       </Transition.Root>
       <header className="relative bg-white">
-    <nav aria-label="Top" className="relative z-20 bg-white bg-opacity-90 backdrop-blur-xl backdrop-filter">
+    <nav aria-label="Top" className="self-control-nav relative z-20 bg-white bg-opacity-90 backdrop-blur-xl backdrop-filter">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center">
           <button

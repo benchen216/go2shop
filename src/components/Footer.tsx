@@ -1,8 +1,15 @@
 import {footerNavigation,companyName,companyLogo} from './SiteConfig'
+import React from "react";
 export default function Footer(){
   const thisYear=new Date().getFullYear();
+  const footerColor = "blanchedalmond";
   return (
-    <footer aria-labelledby="footer-heading" className="bg-gray-50">
+    <footer aria-labelledby="footer-heading" className="self-control-footer bg-gray-50">
+      <style global jsx>{`
+        .self-control-footer {
+          //background-color: ${footerColor} !important
+        }
+    `}</style>
       <h2 id="footer-heading" className="sr-only">
         Footer
       </h2>

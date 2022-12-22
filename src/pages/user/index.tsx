@@ -2,9 +2,11 @@ import  Footer from '../../components/Footer'
 import Navbar from "../../components/Navbar";
 import Link from "next/link";
 import { Dialog, Transition } from '@headlessui/react'
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { signIn, useSession } from "next-auth/react";
 import { trpc } from "../../utils/trpc";
+import { useRouter } from "next/router";
+
 
 
 const tabs = [
@@ -19,7 +21,8 @@ function classNames(...classes:string[]) {
 const Profile:React.FC= ()=> {
   const [isOpen, setIsOpen] = useState(false)
   const { data: sessionData } = useSession();
-  const [mod,setMod] = useState();
+  const [mod,setMod] = useState<string>();
+  const router = useRouter();
   //const [userData, setUserData] = useState();
   // {
   //   name:null,
@@ -34,20 +37,20 @@ const Profile:React.FC= ()=> {
     if(e?.target?.name==="save"){
 
       // TODO: fix this
-      updateu.mutateAsync(
+      updateu.mutate(
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         {[mod]: document.getElementById("input-form")?.value}
-      );
-      window.location.reload();
+      )
+      router.reload();
     }
+
   }
   function openModal(e: any) {
     console.log(e.target.id);
     setIsOpen(true)
     setMod(e.target.id);
   }
-
   // useEffect(() => {
   //   const {data:data} = trpc.user.userDetail.useQuery();
   //   setUserData(data);
@@ -251,6 +254,22 @@ const Profile:React.FC= ()=> {
                           <span className="ml-4 flex-shrink-0">
                                   <button
                                     id={"userPhone"}
+                                    onClick={openModal}
+                                    type="button"
+                                    className="rounded-md bg-white font-medium text-purple-600 hover:text-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2"
+                                  >
+                                    Update
+                                  </button>
+                                </span>
+                        </dd>
+                      </div>
+                      <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:border-b sm:border-gray-200 sm:py-5">
+                        <dt className="text-sm font-medium text-gray-500">Address</dt>
+                        <dd className="mt-1 flex text-sm text-gray-900 sm:col-span-2 sm:mt-0">
+                          <span className="flex-grow">{userData?.userAddress}</span>
+                          <span className="ml-4 flex-shrink-0">
+                                  <button
+                                    id={"userAddress"}
                                     onClick={openModal}
                                     type="button"
                                     className="rounded-md bg-white font-medium text-purple-600 hover:text-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2"

@@ -16,7 +16,27 @@ async function main() {
       roleName: 'buyer',
     },
   })
-
+  await prisma.productCategory.create({
+    data: {
+      productCategoryName: 'Woman',
+    },
+    })
+  await prisma.business.create(
+    {
+      data: {
+        name: 'default',
+      }
+    }
+  )
+  await prisma.user.create(
+    {
+      data: {
+        email: 'admin@ben2.win',
+        userRole: 1,
+        businessId: 1,
+      }
+    }
+  )
 }
 main()
   .then(async () => {
