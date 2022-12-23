@@ -133,7 +133,7 @@ const ChatWindow:React.FC=()=> {
               {/*<!-- end chat input action -->*/}
 
               <div className="w-full mx-2">
-                <input className="w-full rounded-full border border-gray-200" type="text" value="" placeholder="Aa"
+                <input className="w-full rounded-full border border-gray-200" type="text" value="" placeholder="Aa" onChange={(e)=>{console.log(e.target.value)}}
                        autoFocus />
               </div>
 

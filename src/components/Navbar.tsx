@@ -24,14 +24,14 @@ const Navbar: React.FC = () =>  {
     setHome(window.location.pathname.replace("/en", "").replace("#","").split("?")[0] === "");
     setCartTotal(JSON.parse(localStorage.getItem("cart")??"[]").length)
   }, []);
-
+  const {data: styledata} = trpc.style.getOne.useQuery();
 
   return (
     <>
       <style global jsx>{`
-        .self-control-nav {
-          //background-color: blanchedalmond !important
-        }
+        ${
+        styledata?.rawcss
+      }
     `}</style>
       <Transition.Root show={open} as={Fragment}>
         <Dialog as="div" className="relative z-40 lg:hidden" onClose={setOpen}>

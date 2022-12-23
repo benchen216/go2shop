@@ -239,4 +239,5 @@ model Style {
     id          Int  @id @default(autoincrement())
     name        String?
     detail      Json?
+    rawcss      String? @db.Text
     }
