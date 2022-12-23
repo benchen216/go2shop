@@ -23,6 +23,7 @@
     "@trpc/react-query": "^10.0.0",
     "@trpc/server": "^10.0.0",
     "formidable": "^2.1.1",
+    "isomorphic-unfetch": "^3.1.0",
     "next": "13.0.2",
     "next-auth": "4.17.0",
     "node-fetch": "^3.3.0",
@@ -33,6 +34,8 @@
     "react-hook-form": "^7.40.0",
     "react-infinite-scroll-component": "^6.1.0",
     "react-plotly.js": "^2.6.0",
+    "socket.io": "^4.5.4",
+    "socket.io-client": "^4.5.4",
     "superjson": "1.9.1",
     "zod": "^3.18.0"
   },

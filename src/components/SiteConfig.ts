@@ -15,9 +15,9 @@ export const companyName=companyName2?.name;*/
 export const companyLogo="/img/logo.png";
 export const navigationDashboard = [
   { name: 'Home', href: '/', icon: HomeIcon },
-  { name: 'Trending', href: '#', icon: FireIcon },
-  { name: 'Bookmarks', href: '#', icon: BookmarkSquareIcon },
-  { name: 'Messages', href: '#', icon: InboxIcon },
+  // { name: 'Trending', href: '#', icon: FireIcon },
+  // { name: 'Bookmarks', href: '#', icon: BookmarkSquareIcon },
+  { name: 'Messages', href: '/message', icon: InboxIcon },
   { name: 'Profile', href: '/user', icon: UserIcon },
 ]
 export const subNavigationDashboard = [
@@ -89,26 +89,27 @@ export const footerNavigation = {
   products: [
     { name: 'Bags', href: '#' },
     { name: 'Tees', href: '#' },
-    { name: 'Objects', href: '#' },
-    { name: 'Home Goods', href: '#' },
-    { name: 'Accessories', href: '#' },
+    // { name: 'Objects', href: '#' },
+    // { name: 'Home Goods', href: '#' },
+    // { name: 'Accessories', href: '#' },
   ],
   company: [
-    { name: 'Who we are', href: '#' },
-    { name: 'Sustainability', href: '#' },
-    { name: 'Press', href: '#' },
-    { name: 'Careers', href: '#' },
-    { name: 'Terms & Conditions', href: '#' },
-    { name: 'Privacy', href: '#' },
+    { name: 'Who we are', href: '/support' },
+    { name: 'Find a store', href: '/map' },
+    // { name: 'Sustainability', href: '#' },
+    // { name: 'Press', href: '#' },
+    // { name: 'Careers', href: '#' },
+    // { name: 'Terms & Conditions', href: '#' },
+    // { name: 'Privacy', href: '#' },
   ],
   customerService: [
-    { name: 'Contact', href: '/Contact' },
-    { name: 'Shipping', href: '#' },
-    { name: 'Returns', href: '#' },
-    { name: 'Warranty', href: '#' },
-    { name: 'Secure Payments', href: '#' },
+    { name: 'Contact', href: '/contact' },
+    // { name: 'Shipping', href: '#' },
+    // { name: 'Returns', href: '#' },
+    // { name: 'Warranty', href: '#' },
+    // { name: 'Secure Payments', href: '#' },
     { name: 'FAQ', href: '/FAQ' },
-    { name: 'Find a store', href: '#' },
+    // { name: 'Find a store', href: '#' },
   ],
 }
 

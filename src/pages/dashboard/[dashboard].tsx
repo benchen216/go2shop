@@ -13,7 +13,6 @@ import NavbarDashboard from "../../components/NavbarDashboard";
 import { companyLogo, companyName, navigationDashboard } from "../../components/SiteConfig";
 import CategoryTable from "../../components/CategoryTable";
 import OrderTable from "../../components/OrderTable";
-import SiteSettingTable from "../../components/SiteSettingTable";
 import { useRouter } from "next/router";
 import ReportPage from "../../components/ReportPage";
 import ProfileSetting from "../../components/PofileSetting";
