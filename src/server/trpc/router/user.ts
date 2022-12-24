@@ -55,4 +55,19 @@ export const userRouter = router({
       });
       return user;
     }),
+  getAll: protectedProcedure.query(({ ctx }) => {
+    return ctx.prisma.user.findMany();
+  } ),
+  getOne: publicProcedure.input(z.number()).query(({ ctx, input }) => {
+    return ctx.prisma.user.findUnique({
+      where: {
+        id: input ?? 1,
+      },
+      select: {
+        id: true,
+        name: true,
+        image: true,
+      }
+    });
+  } ),
 });

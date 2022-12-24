@@ -1,12 +1,52 @@
-import React, { useState } from "react";
 import { ChatBubbleBottomCenterIcon, PhoneArrowDownLeftIcon } from "@heroicons/react/20/solid";
 import { useSession } from "next-auth/react";
+import { DefaultEventsMap } from '@socket.io/component-emitter';
+import React, { useEffect, useState } from "react";
+import io, { Socket } from "Socket.IO-client";
+
+let socket: Socket<DefaultEventsMap, DefaultEventsMap>;
 //<{isOpen:boolean,}>
+type ChatMessage = {
+  id: number;
+  message: string;
+  isSender: boolean;
+  //uid: number;
+  //roomid: number;
+}
 const ChatWindow:React.FC=()=> {
-  const{data:userData}=useSession();
+  const [chatmsgs, setChatmsgs] = useState<ChatMessage[]>([]);
+  const { data: session } = useSession();
+
+
+  useEffect(() => {
+    if(session){
+      socketInitializer()
+      console.log(session)
+      console.log("init xxxx")
+    }
+  }, [session?.user?.id])
+
+  const socketInitializer = async () => {
+    await fetch('/api/socket');
+    socket = io()
+
+    socket.on('connect', () => {
+      socket.emit('join-room',session?.user?.id)
+      console.log('connected')
+    })
+    socket.on('receive-msg', msg => {
+
+      console.log("receive-msg",msg)
+      console.log("chatmsgs",chatmsgs)
+      setChatmsgs(chatmsgs =>chatmsgs.concat([msg]))
+      console.log("chatmsgs2",chatmsgs)
+    })
+    socket.on('disconnect', () => {
+      console.log('disconnected')
+    })
+  }
+
   const [isOpen, setIsOpen] = useState(false);
-  const userImage= userData?.user?.image??"/images/user.png";
-  const userName= userData?.user?.name??"user";
   return (
     <div className={"fixed z-30"}>
       <div className={"fixed z-20 right-5 bottom-5  bg-blue-500  rounded-full h-16 w-16 hover:bg-blue-600 "+(isOpen?"hidden":"")} onClick={
@@ -48,7 +88,7 @@ const ChatWindow:React.FC=()=> {
                 <button className="inline-flex hover:bg-indigo-50 rounded-full p-2" type="button" onClick={()=>{setIsOpen(false)}}>
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24"
                        stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
                   </svg>
                 </button>
               </div>
@@ -56,67 +96,10 @@ const ChatWindow:React.FC=()=> {
             </div>
 
             <div className="flex-1 px-4 py-4 overflow-y-auto">
-              {/*{!--chat message --}*/}
+              {chatmsgs.map(({id,isSender,message},index)=>{
+                return (isSender?<SenderMsg msg={message} key={index} />:<ReceiverMsg msg={message} key={index}/>)
+              })}
 
-              <div className="flex items-center mb-4">
-                <div className="flex-none flex flex-col items-center space-y-1 mr-4">
-                  <img className="rounded-full w-10 h-10"
-                       src="https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" />
-                  <a href="#" className="block text-xs hover:underline">John Doe</a>
-                </div>
-                <div className="flex-1 bg-indigo-400 text-white p-2 rounded-lg mb-2 relative">
-                  <div>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</div>
-
-                  {/*<!-- arrow -->*/}
-                  <div
-                    className="absolute left-0 top-1/2 transform -translate-x-1/2 rotate-45 w-2 h-2 bg-indigo-400"></div>
-                  {/*<!-- end arrow -->*/}
-                </div>
-              </div>
-
-              {/*<!-- end chat message -->*/}
-
-              {/*<!-- chat message -->*/}
-
-              <div className="flex items-center flex-row-reverse mb-4">
-                <div className="flex-none flex flex-col items-center space-y-1 ml-4">
-                  <img className="rounded-full w-10 h-10"
-                       src={userImage} />
-                  <a href="#" className="block text-xs hover:underline">{userName}</a>
-                </div>
-                <div className="flex-1 bg-indigo-100 text-gray-800 p-2 rounded-lg mb-2 relative">
-                  <div>Lorem ipsum dolor sit amet, consectetur adipisicing elit.Lorem ipsum dolor sit amet, consectetur
-                    adipisicing elit.
-                  </div>
-
-                  {/*<!-- arrow -->*/}
-                  <div
-                    className="absolute right-0 top-1/2 transform translate-x-1/2 rotate-45 w-2 h-2 bg-indigo-100"></div>
-                  {/*<!-- end arrow -->*/}
-                </div>
-              </div>
-
-              {/*<!-- end chat message -->*/}
-
-              {/*<!-- chat message -->*/}
-
-              <div className="flex items-center mb-4">
-                <div className="flex-none flex flex-col items-center space-y-1 mr-4">
-                  <img className="rounded-full w-10 h-10"
-                       src="https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" />
-                  <a href="#" className="block text-xs hover:underline">John Doe</a>
-                </div>
-                <div className="flex-1 bg-indigo-400 text-white p-2 rounded-lg mb-2 relative">
-                  <div>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</div>
-
-                  {/*<!-- arrow -->*/}
-                  <div
-                    className="absolute left-0 top-1/2 transform -translate-x-1/2 rotate-45 w-2 h-2 bg-indigo-400"></div>
-                  {/*<!-- end arrow -->*/}
-                </div>
-              </div>
-
-              {/*<!-- end chat message -->*/}
             </div>
 
             <div className="flex items-center border-t p-2">
@@ -125,7 +108,7 @@ const ChatWindow:React.FC=()=> {
                 <button className="inline-flex hover:bg-indigo-50 rounded-full p-2" type="button">
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24"
                        stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
                           d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                   </svg>
                 </button>
@@ -133,14 +116,14 @@ const ChatWindow:React.FC=()=> {
               {/*<!-- end chat input action -->*/}
 
               <div className="w-full mx-2">
-                <input className="w-full rounded-full border border-gray-200" type="text" value="" placeholder="Aa" onChange={(e)=>{console.log(e.target.value)}}
+                <input id={"chat-message"} className="w-full rounded-full border border-gray-200" type="text"  placeholder="Aa" onChange={(e)=>{console.log("")}}
                        autoFocus />
               </div>
 
               {/*<!-- chat send action -->*/}
 
               <div>
-                <button className="inline-flex hover:bg-indigo-50 rounded-full p-2" type="button">
+                <button className="inline-flex hover:bg-indigo-50 rounded-full p-2" type="button" onClick={()=>{console.log("dddd");socket.emit('send-message',{id:2,isSender:false,message:(document.getElementById("chat-message")as HTMLInputElement).value })}}>
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24"
                        stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -167,3 +150,47 @@ const ChatWindow:React.FC=()=> {
   )
 }
 export default ChatWindow;
+const SenderMsg:React.FC<{msg:string}> = ({msg}) => {
+  return(
+    <div className="flex items-center mb-4">
+      <div className="flex-none flex flex-col items-center space-y-1 mr-4">
+        <img className="rounded-full w-10 h-10"
+             src="https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" />
+        <a href="#" className="block text-xs hover:underline">John Doe</a>
+      </div>
+      <div className="flex-1 bg-indigo-400 text-white p-2 rounded-lg mb-2 relative">
+        <div>{msg}</div>
+
+        {/*<!-- arrow -->*/}
+        <div
+          className="absolute left-0 top-1/2 transform -translate-x-1/2 rotate-45 w-2 h-2 bg-indigo-400"></div>
+        {/*<!-- end arrow -->*/}
+      </div>
+    </div>
+  )
+}
+const ReceiverMsg:React.FC<{msg:string}> = ({msg}) => {
+  const{data:userData}=useSession();
+  const userImage= userData?.user?.image??"/images/user.png";
+  const userName= userData?.user?.name??"user";
+  return (
+    <div className="flex items-center flex-row-reverse mb-4">
+      <div className="flex-none flex flex-col items-center space-y-1 ml-4">
+        <img className="rounded-full w-10 h-10"
+             src={userImage} />
+        <a href="#" className="block text-xs hover:underline">{userName}</a>
+      </div>
+      <div className="flex-1 bg-indigo-100 text-gray-800 p-2 rounded-lg mb-2 relative">
+        <div>
+          {msg}
+        </div>
+
+        {/*<!-- arrow -->*/}
+        <div
+          className="absolute right-0 top-1/2 transform translate-x-1/2 rotate-45 w-2 h-2 bg-indigo-100"></div>
+        {/*<!-- end arrow -->*/}
+      </div>
+    </div>
+  )
+}
+export {ReceiverMsg,SenderMsg};
