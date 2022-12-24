@@ -75,6 +75,8 @@ model Product {
   ProductImages       ProductImages[]
   ProductDetails      ProductDetails[]
   ProductColor        ProductColor[]
+  ProductBrand        ProductBrand?    @relation(fields: [productBrandId], references: [id])
+  productBrandId      Int?
 
   @@index([productCategory], map: "Product_ProductCategory_id_fk")
 }
@@ -110,6 +112,22 @@ model ProductCategory {
   productCategoryCrtdBy Int?
   productCategoryUpdtBy Int?
   Product               Product[]
+}
+
+model ProductBrand {
+  id                 Int       @id @default(autoincrement())
+  productBrandName   String
+  productBrandLabel  String?
+  productBrandDesc   String?
+  productBrandImg    String?
+  productBrandStat   Int?
+  productBrandCrtd   DateTime  @default(now())
+  productBrandUpdt   DateTime  @updatedAt
+  productBrandDelt   DateTime?
+  productBrandDeltBy Int?
+  productBrandCrtdBy Int?
+  productBrandUpdtBy Int?
+  Product            Product[]
 }
 
 model Role {
@@ -202,22 +220,22 @@ model Business {
 }
 
 model Order {
-  id       BigInt    @id @default(autoincrement()) @db.UnsignedBigInt
-  orderId  String    @unique
-  detail   Json?
-  time     DateTime  @default(now())
-  total    Int       @default(0)
-  shipping Int       @default(0)
-  userId   Int
-  prime    String
-  name     String
-  phone    String
-  email    String
-  address  String
-  payment  String
-  invoiceHref String @default("#")
-  user     User      @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Order_User_id_fk")
-  status   Int?
+  id          BigInt   @id @default(autoincrement()) @db.UnsignedBigInt
+  orderId     String   @unique
+  detail      Json?
+  time        DateTime @default(now())
+  total       Int      @default(0)
+  shipping    Int      @default(0)
+  userId      Int
+  prime       String
+  name        String
+  phone       String
+  email       String
+  address     String
+  payment     String
+  invoiceHref String   @default("#")
+  user        User     @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Order_User_id_fk")
+  status      Int?
 }
 
 model ProductVariant {
@@ -235,9 +253,10 @@ model ProductColor {
   productId     BigInt  @db.UnsignedBigInt
   product       Product @relation(fields: [productId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "ProductColor_Product_id_fk")
 }
+
 model Style {
-    id          Int  @id @default(autoincrement())
-    name        String?
-    detail      Json?
-    rawcss      String? @db.Text
-    }
+  id     Int     @id @default(autoincrement())
+  name   String?
+  detail Json?
+  rawcss String? @db.Text
+}
