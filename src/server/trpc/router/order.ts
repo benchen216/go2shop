@@ -86,6 +86,30 @@ export const  orderRouter  = router({
                 },
                 body: encodeURIComponent("message")+"="+ encodeURIComponent('\n訂單編號:'+String(orderId)+'已成立\n訂單總金額:'+String(input.total)+'\n收件人:'+String(input.name)+'\n收件地址:'+String(input.address)+'\n聯絡電話:'+String(input.phone)+'\n電子信箱:'+String(input.email)+'\n付款方式:'+String(input.payment)+'\n運費:'+String(input.shipping))
               })
+              for(let i=0;i<input.cart.length;i++){
+                ctx.prisma.product.findUnique({
+                  where: {
+                    id: input?.cart[i]?.id
+                  },
+                  select: {
+                    productCategory: true,
+                    productPrice: true,
+                  }
+                }).then(
+                  (res) => {
+                    ctx.prisma.saleReport.create({
+                      data: {
+                        productId: input?.cart[i]?.id??1,
+                        quantity: Number(input?.cart[i]?.quantity),
+                        price: Number(res?.productPrice),
+                        total: Number(input?.cart[i]?.quantity)*Number(res?.productPrice),
+                      }
+                    }).catch((err) => {
+                      console.log(err);
+                    })
+                  }
+                )
+              }
               return { result: "success" };
             }
           ).catch(

@@ -71,12 +71,12 @@ model Product {
   rating              Int?
   productDescription  String?          @db.Text
   productDetails      Json?
+  brandId             Int?
   productCategorys    ProductCategory  @relation(fields: [productCategory], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Product_ProductCategory_id_fk")
   ProductImages       ProductImages[]
   ProductDetails      ProductDetails[]
   ProductColor        ProductColor[]
-  ProductBrand        ProductBrand?    @relation(fields: [productBrandId], references: [id])
-  productBrandId      Int?
+  Brand               Brand?           @relation(fields: [brandId], references: [id])
   SaleReport          SaleReport[]
 
   @@index([productCategory], map: "Product_ProductCategory_id_fk")
@@ -100,35 +100,37 @@ model ProductDetails {
 }
 
 model ProductCategory {
-  id                    Int       @id @default(autoincrement())
-  productCategoryName   String    @unique
+  id                    Int          @id @default(autoincrement())
+  productCategoryName   String       @unique
   productCategoryLabel  String?
   productCategoryDesc   String?
   productCategoryImg    String?
   productCategoryStat   Int?
-  productCategoryCrtd   DateTime  @default(now())
-  productCategoryUpdt   DateTime  @updatedAt
+  productCategoryCrtd   DateTime     @default(now())
+  productCategoryUpdt   DateTime     @updatedAt
   productCategoryDelt   DateTime?
   productCategoryDeltBy Int?
   productCategoryCrtdBy Int?
   productCategoryUpdtBy Int?
   Product               Product[]
+  SaleReport            SaleReport[]
 }
 
-model ProductBrand {
-  id                 Int       @id @default(autoincrement())
-  productBrandName   String
-  productBrandLabel  String?
-  productBrandDesc   String?
-  productBrandImg    String?
-  productBrandStat   Int?
-  productBrandCrtd   DateTime  @default(now())
-  productBrandUpdt   DateTime  @updatedAt
-  productBrandDelt   DateTime?
-  productBrandDeltBy Int?
-  productBrandCrtdBy Int?
-  productBrandUpdtBy Int?
-  Product            Product[]
+model Brand {
+  id         Int          @id @default(autoincrement())
+  name       String
+  label      String?
+  desc       String?
+  img        String?
+  stat       Int?
+  crtd       DateTime     @default(now())
+  updt       DateTime     @updatedAt
+  delt       DateTime?
+  deltBy     Int?
+  crtdBy     Int?
+  updtBy     Int?
+  Product    Product[]
+  SaleReport SaleReport[]
 }
 
 model Role {
@@ -263,11 +265,15 @@ model Style {
 }
 
 model SaleReport {
-  id        Int      @id @default(autoincrement())
-  productId BigInt   @db.UnsignedBigInt
-  quantity  Int
-  price     Int
-  total     Int
-  date      DateTime @default(now())
-  product   Product  @relation(fields: [productId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "SaleReport_Product_id_fk")
+  id              Int             @id @default(autoincrement())
+  productId       BigInt          @db.UnsignedBigInt
+  quantity        Int
+  price           Int
+  total           Int
+  categoryId      Int             @default(1)
+  brandId         Int             @default(1)
+  date            DateTime        @default(now())
+  product         Product         @relation(fields: [productId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "SaleReport_Product_id_fk")
+  productCategory ProductCategory @relation(fields: [categoryId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "SaleReport_ProductCategory_id_fk")
+  brand           Brand           @relation(fields: [brandId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "SaleReport_Brand_id_fk")
 }

@@ -7,6 +7,7 @@ import { orderRouter } from "./order";
 import { categoryRouter } from "./category";
 import { companyRouter } from "./company";
 import { styleRouter } from "./style";
+import { reportRouter } from "./report";
 
 export const appRouter = router({
   example: exampleRouter,
@@ -17,6 +18,7 @@ export const appRouter = router({
   category:categoryRouter,
   company: companyRouter,
   style: styleRouter,
+  report: reportRouter,
 });
 
 // export type definition of API

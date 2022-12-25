@@ -3,6 +3,7 @@ import React from 'react';
 import dynamic from "next/dynamic";
 const Plot = dynamic(() => import("react-plotly.js"), { ssr: false, })
 import {PlotParams} from 'react-plotly.js';
+import { trpc } from "../utils/trpc";
 const stats = [
   { name: 'Total Subscribers', stat: '71,897', previousStat: '70,946', change: '12%', changeType: 'increase' },
   { name: 'Avg. Open Rate', stat: '58.16%', previousStat: '56.14%', change: '2.02%', changeType: 'increase' },
@@ -14,7 +15,11 @@ function classNames(...classes: string[]) {
 }
 
 export default function ReportPage() {
+  const {data: report} = trpc.report.getReport.useQuery();
+  const {data: report2} = trpc.report.getCategoryReport.useQuery();
+  console.log("report",report);
   return (
+    <>
     <div className="sm:col-span-6">
       <h3 className="text-lg font-medium leading-6 text-gray-900">Last 30 days</h3>
       <dl className="mt-5 grid grid-cols-1 divide-y divide-gray-200 overflow-hidden rounded-lg bg-white shadow md:grid-cols-3 md:divide-y-0 md:divide-x">
@@ -52,17 +57,15 @@ export default function ReportPage() {
           </div>
         ))}
       </dl>
+    </div>
       <div className="sm:col-span-6">
 <Plot data={[
-  {
-    x: [1, 2, 3],
-    y: [2, 6, 3],
-    type: 'scatter',
-    mode: 'lines+markers',
-    marker: {color: 'red'},
-  },
-  {type: 'bar', x: [1, 2, 3], y: [2, 5, 3]},
-]} layout={{ title: 'A Fancy Plot'} }/>
-    </div></div>
+  {type: 'pie', values: report?.map((r)=>(r._sum.quantity)), labels: report?.map((r)=>(Number(r.productId))), name: 'Subscribers'},
+]} layout={{ title: 'pie chat 1 商品銷售比例'} }/>
+        <Plot data={[
+          {type: 'pie', values: report2?.map((r)=>(r._sum.quantity)), labels: report2?.map((r)=>(r.categoryId)), name: 'Subscribers'},
+        ]} layout={{ title: 'pie chat 2 商品類型銷售比例'} }/>
+
+    </div></>
   )
 }
