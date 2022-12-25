@@ -1,7 +1,7 @@
 import { useSession } from "next-auth/react";
 import { DefaultEventsMap } from '@socket.io/component-emitter';
 import React, { useEffect, useState } from "react";
-import io, { Socket } from "Socket.IO-client";
+import io, { Socket } from "socket.io-client";
 import { ReceiverMsg, SenderMsg } from "../../components/ChatWindow";
 import { useRouter } from "next/router";
 let socket: Socket<DefaultEventsMap, DefaultEventsMap>;

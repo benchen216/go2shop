@@ -1,4 +1,4 @@
-import { Server } from 'Socket.IO'
+import { Server } from 'socket.io'
 //<{id:number;isSender:boolean;message:string}[]>
 
 const UserList=<{ id: string; room: string;}[]>[]
