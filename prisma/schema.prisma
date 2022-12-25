@@ -77,6 +77,7 @@ model Product {
   ProductColor        ProductColor[]
   ProductBrand        ProductBrand?    @relation(fields: [productBrandId], references: [id])
   productBrandId      Int?
+  SaleReport          SaleReport[]
 
   @@index([productCategory], map: "Product_ProductCategory_id_fk")
 }
@@ -100,7 +101,7 @@ model ProductDetails {
 
 model ProductCategory {
   id                    Int       @id @default(autoincrement())
-  productCategoryName   String   @unique
+  productCategoryName   String    @unique
   productCategoryLabel  String?
   productCategoryDesc   String?
   productCategoryImg    String?
@@ -259,4 +260,14 @@ model Style {
   name   String?
   detail Json?
   rawcss String? @db.Text
+}
+
+model SaleReport {
+  id        Int      @id @default(autoincrement())
+  productId BigInt   @db.UnsignedBigInt
+  quantity  Int
+  price     Int
+  total     Int
+  date      DateTime @default(now())
+  product   Product  @relation(fields: [productId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "SaleReport_Product_id_fk")
 }
