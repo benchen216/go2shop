@@ -100,7 +100,7 @@ model ProductDetails {
 
 model ProductCategory {
   id                    Int       @id @default(autoincrement())
-  productCategoryName   String
+  productCategoryName   String   @unique
   productCategoryLabel  String?
   productCategoryDesc   String?
   productCategoryImg    String?

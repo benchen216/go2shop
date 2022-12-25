@@ -87,6 +87,32 @@ export const productRouter = router({
         });
       }
   }),
+  getOnePage2: publicProcedure.input(z.object(
+    { page: z.number(),
+      limit: z.number(),
+      category: z.string(),
+    },
+    ))
+    .query(async ({ ctx, input }) => {
+      console.log("page2",input);
+      const category = await ctx.prisma.productCategory.findUnique({
+        where: {
+          productCategoryName: input.category,
+        }
+      })
+      console.log(category);
+
+      return ctx.prisma.product.findMany({
+        where: {
+          productStatus: {
+            gt: -1,
+          },
+          productCategory: category?.id||undefined
+        },
+        take: input.limit,
+        skip: (input.page-1 ) * input.limit,
+      });
+      }),
   search: publicProcedure.input(z.object(
     { cursor: z.number().nullish(),keyword: z.string().nullish(),
       limit: z.number().nullish()}).nullish())
