@@ -275,7 +275,7 @@ const ProductDetail: React.FC<{ pid:number }> = ({pid}) => {
           className="mt-1 block w-full rounded-md border-blue-gray-300 text-blue-gray-900 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
         >
           {categoryData?.map((category) => (
-            <option key={category.id} selected={productData?.productCategory===category.id}>{category.productCategoryName}</option>
+            <option key={category.id} value={category.id} selected={productData?.productCategory===category.id}>{category.productCategoryName}</option>
           ))}
           {/*<option value={1} >Woman</option>
           <option value={2}>Man</option>
