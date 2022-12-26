@@ -2,13 +2,14 @@ import  Footer from '../components/Footer'
 import { useState } from 'react'
 import Navbar from "../components/Navbar";
 import Refund from "../components/Refund";
+import Link from "next/link";
 
 const favorites = [
   {
     id: 1,
     name: 'Black Basic Tee',
     price: '$32',
-    href: '#',
+    href: '/products/Bags',
     imageSrc: 'https://tailwindui.com/img/ecommerce-images/home-page-03-favorite-01.jpg',
     imageAlt: "Model wearing women's black cotton crewneck tee.",
   },
@@ -16,7 +17,7 @@ const favorites = [
     id: 2,
     name: 'Off-White Basic Tee',
     price: '$32',
-    href: '#',
+    href: '/products/Bags',
     imageSrc: 'https://tailwindui.com/img/ecommerce-images/home-page-03-favorite-02.jpg',
     imageAlt: "Model wearing women's off-white cotton crewneck tee.",
   },
@@ -24,20 +25,14 @@ const favorites = [
     id: 3,
     name: 'Mountains Artwork Tee',
     price: '$36',
-    href: '#',
+    href: '/products/Bags',
     imageSrc: 'https://tailwindui.com/img/ecommerce-images/home-page-03-favorite-03.jpg',
     imageAlt:
       "Model wearing women's burgundy red crewneck artwork tee with small white triangle overlapping larger black triangle.",
   },
 ]
 
-function classNames(...classes:string[]) {
-  return classes.filter(Boolean).join(' ')
-}
-
 export default function FrontStore() {
-  const [open, setOpen] = useState(false)
-
   return (
     <div className="bg-white">
       {/* Mobile menu */}
@@ -52,10 +47,10 @@ export default function FrontStore() {
               <h2 id="category-heading" className="text-2xl font-bold tracking-tight text-gray-900">
                 Shop by Category
               </h2>
-              <a href="#" className="hidden text-sm font-semibold text-indigo-600 hover:text-indigo-500 sm:block">
+              <Link href="/products/Bags" className="hidden text-sm font-semibold text-indigo-600 hover:text-indigo-500 sm:block">
                 Browse all categories
                 <span aria-hidden="true"> &rarr;</span>
-              </a>
+              </Link>
             </div>
 
             <div className="mt-6 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:grid-rows-2 sm:gap-x-6 lg:gap-8">
@@ -69,10 +64,10 @@ export default function FrontStore() {
                 <div className="flex items-end p-6">
                   <div>
                     <h3 className="font-semibold text-white">
-                      <a href="#">
+                      <Link href="/products/Bags">
                         <span className="absolute inset-0" />
                         New Arrivals
-                      </a>
+                      </Link>
                     </h3>
                     <p aria-hidden="true" className="mt-1 text-sm text-white">
                       Shop now
@@ -93,10 +88,10 @@ export default function FrontStore() {
                 <div className="flex items-end p-6 sm:absolute sm:inset-0">
                   <div>
                     <h3 className="font-semibold text-white">
-                      <a href="#">
+                      <Link href="/products/Bags">
                         <span className="absolute inset-0" />
                         Accessories
-                      </a>
+                      </Link>
                     </h3>
                     <p aria-hidden="true" className="mt-1 text-sm text-white">
                       Shop now
@@ -117,10 +112,10 @@ export default function FrontStore() {
                 <div className="flex items-end p-6 sm:absolute sm:inset-0">
                   <div>
                     <h3 className="font-semibold text-white">
-                      <a href="#">
+                      <Link href="/products/Bags">
                         <span className="absolute inset-0" />
                         Workspace
-                      </a>
+                      </Link>
                     </h3>
                     <p aria-hidden="true" className="mt-1 text-sm text-white">
                       Shop now
@@ -131,10 +126,10 @@ export default function FrontStore() {
             </div>
 
             <div className="mt-6 sm:hidden">
-              <a href="#" className="block text-sm font-semibold text-indigo-600 hover:text-indigo-500">
+              <Link href="/products/Bags" className="block text-sm font-semibold text-indigo-600 hover:text-indigo-500">
                 Browse all categories
                 <span aria-hidden="true"> &rarr;</span>
-              </a>
+              </Link>
             </div>
           </div>
         </section>
@@ -159,12 +154,12 @@ export default function FrontStore() {
                 us to focus on quality and reduce our impact. We&#39;re doing our best to delay the inevitable heat-death of
                 the universe.
               </p>
-              <a
-                href="#"
+              <Link
+                href="/products/Bags"
                 className="mt-8 block w-full rounded-md border border-transparent bg-white py-3 px-8 text-base font-medium text-gray-900 hover:bg-gray-100 sm:w-auto"
               >
                 Read our story
-              </a>
+              </Link>
             </div>
           </div>
         </section>
@@ -176,10 +171,10 @@ export default function FrontStore() {
               <h2 id="favorites-heading" className="text-2xl font-bold tracking-tight text-gray-900">
                 Our Favorites
               </h2>
-              <a href="#" className="hidden text-sm font-semibold text-indigo-600 hover:text-indigo-500 sm:block">
+              <Link href="/products/Bags" className="hidden text-sm font-semibold text-indigo-600 hover:text-indigo-500 sm:block">
                 Browse all favorites
                 <span aria-hidden="true"> &rarr;</span>
-              </a>
+              </Link>
             </div>
 
             <div className="mt-6 grid grid-cols-1 gap-y-10 sm:grid-cols-3 sm:gap-y-0 sm:gap-x-6 lg:gap-x-8">
@@ -193,10 +188,10 @@ export default function FrontStore() {
                     />
                   </div>
                   <h3 className="mt-4 text-base font-semibold text-gray-900">
-                    <a href={favorite.href}>
+                    <Link href={favorite.href}>
                       <span className="absolute inset-0" />
                       {favorite.name}
-                    </a>
+                    </Link>
                   </h3>
                   <p className="mt-1 text-sm text-gray-500">{favorite.price}</p>
                 </div>
@@ -204,7 +199,7 @@ export default function FrontStore() {
             </div>
 
             <div className="mt-6 sm:hidden">
-              <a href="#" className="block text-sm font-semibold text-indigo-600 hover:text-indigo-500">
+              <a href="/products/Bags" className="block text-sm font-semibold text-indigo-600 hover:text-indigo-500">
                 Browse all favorites
                 <span aria-hidden="true"> &rarr;</span>
               </a>
@@ -225,10 +220,10 @@ export default function FrontStore() {
                       Up to 50% off.
                     </h2>
                     <div className="mt-6 text-base">
-                      <a href="#" className="font-semibold text-white">
+                      <Link href="/products/Bags" className="font-semibold text-white">
                         Shop the sale
                         <span aria-hidden="true"> &rarr;</span>
-                      </a>
+                      </Link>
                     </div>
                   </div>
 

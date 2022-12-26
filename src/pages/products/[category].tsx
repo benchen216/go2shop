@@ -76,7 +76,7 @@ export default function Category() {
   const pageInt = parseInt((page??1) as string);
 
 
-  const { data:getAllProducts } = trpc.product.getOnePage2.useQuery({page: pageInt,limit: 6,category: category as string});
+  const { data:getAllProducts } = trpc.product.getOnePage2.useQuery({page: pageInt,limit: 8,category: category as string});
   console.log(getAllProducts);
   return (
     <div className="bg-gray-50">
