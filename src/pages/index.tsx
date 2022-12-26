@@ -1,5 +1,4 @@
 import  Footer from '../components/Footer'
-import { useState } from 'react'
 import Navbar from "../components/Navbar";
 import Refund from "../components/Refund";
 import Link from "next/link";
@@ -199,10 +198,10 @@ export default function FrontStore() {
             </div>
 
             <div className="mt-6 sm:hidden">
-              <a href="/products/Bags" className="block text-sm font-semibold text-indigo-600 hover:text-indigo-500">
+              <Link href="/products/Bags" className="block text-sm font-semibold text-indigo-600 hover:text-indigo-500">
                 Browse all favorites
                 <span aria-hidden="true"> &rarr;</span>
-              </a>
+              </Link>
             </div>
           </div>
         </section>

@@ -125,7 +125,7 @@ export const  orderRouter  = router({
       });
       //Todo: check cart items fit the product
     }),
-  getAll: protectedProcedure.query(async ({ctx, input}) => {
+  getAll: protectedProcedure.query(async ({ctx}) => {
     return await ctx.prisma.order.findMany({})
   }),
   getOne: protectedProcedure.input(z.number()).query(async ({ctx, input}) => {
@@ -148,7 +148,7 @@ export const  orderRouter  = router({
       }
     })
   }),
-  getHistory: protectedProcedure.query(async ({ctx, input}) => {
+  getHistory: protectedProcedure.query(async ({ctx}) => {
     return await ctx.prisma.order.findMany({
       where: {
         userId: Number(ctx.session.user.id)

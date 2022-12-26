@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 import { router, publicProcedure } from "../trpc";
-type Image = {
+/*type Image = {
   id: number
   src: string
   alt: string
@@ -19,7 +19,7 @@ type Product = {
   image: Image[]
   rating: number
   details: Detail
-}
+}*/
 export const productRouter = router({
   getAll: publicProcedure.query(({ ctx }) => {
     return ctx.prisma.product.findMany(
@@ -243,7 +243,7 @@ export const productRouter = router({
       },
     });
   }),
-  getAllCategory: publicProcedure.query(({ ctx, input }) => {
+  getAllCategory: publicProcedure.query(({ ctx }) => {
     return ctx.prisma.productCategory.findMany({
     });
   }),

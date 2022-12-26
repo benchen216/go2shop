@@ -24,7 +24,7 @@ export const userRouter = router({
     }),
   )
     .mutation(async ({ctx, input }) => {
-      const post = await ctx.prisma.user.update({
+      await ctx.prisma.user.update({
         where: {
           id: Number(ctx.session.user.id),
         },
