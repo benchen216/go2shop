@@ -1,8 +1,82 @@
-# Create T3 App
+<!-- PROJECT LOGO -->
+<br />
+<div align="center">
+    <h1> Shop2Go</h1>
+    <img src="https://app.ben2.win/img/logo.png" alt="Logo" width="200" height="200">
+  <p align="center">
+    A meaningful platform built to help creators to be seen and be supported in a friendly way!
+    <br />
+    <a href="https://app.ben2.win/"><strong>View Demo »</strong></a>
+    <br />
+    <br />
+    Demo Account
+    <br />
+     Login: Use social account to login
+    <br />
+     PasswordLess design
+    <br />
+  </p>
+</div>
 
-This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
+---
+# Go2Shop
 
-## What's next? How do I make an app with this?
+# Login
+![Login](https://app.ben2.win/img/login.png)
+
+# Home
+![Home](https://app.ben2.win/img/home.png)
+
+# Profile
+![Profile](https://app.ben2.win/img/profile.png)
+
+# Shop
+![Shop](https://app.ben2.win/img/shop.png)
+
+# Cart
+![Cart](https://app.ben2.win/img/cart.png)
+
+# Checkout
+![Checkout](https://app.ben2.win/img/checkout.png)
+
+# Order
+![Order](https://app.ben2.win/img/order.png)
+
+# Order Detail
+![Order Detail](https://app.ben2.win/img/order_detail.png)
+
+# Order History
+![Order History](https://app.ben2.win/img/order_history.png)
+
+# Dashboard
+![Dashboard](https://app.ben2.win/img/dashboard.png)
+
+# Dashboard Order
+![Dashboard Order](https://app.ben2.win/img/dashboard_order.png)
+
+# Dashboard Order Detail
+![Dashboard Order Detail](https://app.ben2.win/img/dashboard_order_detail.png)
+
+# Dashboard Product
+![Dashboard Product](https://app.ben2.win/img/dashboard_product.png)
+
+# Dashboard Product Detail
+![Dashboard Product Detail](https://app.ben2.win/img/dashboard_product_detail.png)
+
+# Dashboard Product Create
+![Dashboard Product Create](https://app.ben2.win/img/dashboard_product_create.png)
+
+# Dashboard Product Edit
+![Dashboard Product Edit](https://app.ben2.win/img/dashboard_product_edit.png)
+
+# Report
+![Report](https://app.ben2.win/img/report.png)
+
+# Apperance
+![Apperance](https://app.ben2.win/img/apperance.png)
+
+
+## Tech Stack
 
 We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
 
@@ -14,20 +88,12 @@ If you are not familiar with the different technologies used in this project, pl
 - [Tailwind CSS](https://tailwindcss.com)
 - [tRPC](https://trpc.io)
 
-## Learn More
-
-To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
-
-- [Documentation](https://create.t3.gg/)
-- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
-
-You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
 
 ## How do I deploy this?
 
 Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
 
-Prisma
+Prisma setup
 ```
 prisma push
 prisma generate

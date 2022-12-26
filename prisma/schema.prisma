@@ -2,8 +2,12 @@ generator client {
   provider = "prisma-client-js"
 }
 
+//datasource db {
+//  provider = "mysql"
+//  url      = env("DATABASE_URL")
+//}
 datasource db {
-  provider = "mysql"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -27,7 +31,7 @@ model Account {
 }
 
 model Discount {
-  id                  BigInt   @id @default(autoincrement()) @db.UnsignedBigInt
+  id                  BigInt   @id @default(autoincrement())
   discountStatus      Int
   discountType        Int
   discountValue       Int
@@ -36,15 +40,15 @@ model Discount {
   discountAmount      Int?
   discountCoverage    Int?     @default(0)
   discountCreated     DateTime @default(now())
-  discountCreatedBy   BigInt   @db.UnsignedBigInt
+  discountCreatedBy   BigInt
   discountDeleted     DateTime
-  discountDeletedBy   BigInt   @db.UnsignedBigInt
+  discountDeletedBy   BigInt
   discountDescription String
   discountEndDate     DateTime
   discountName        String
   discountStartDate   DateTime
   discountUpdated     DateTime
-  discountUpdatedBy   BigInt   @db.UnsignedBigInt
+  discountUpdatedBy   BigInt
 }
 
 model Example {
@@ -55,7 +59,7 @@ model Example {
 }
 
 model Product {
-  id                  BigInt           @id @default(autoincrement()) @db.UnsignedBigInt
+  id                  BigInt           @id @default(autoincrement())
   productName         String
   productPrice        Int
   productImage        String
@@ -72,19 +76,19 @@ model Product {
   productDescription  String?          @db.Text
   productDetails      Json?
   brandId             Int?
-  productCategorys    ProductCategory  @relation(fields: [productCategory], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Product_ProductCategory_id_fk")
+  productCategorys    ProductCategory  @relation(fields: [productCategory], references: [id], onDelete: NoAction, onUpdate: NoAction)
   ProductImages       ProductImages[]
   ProductDetails      ProductDetails[]
   ProductColor        ProductColor[]
   Brand               Brand?           @relation(fields: [brandId], references: [id])
   SaleReport          SaleReport[]
 
-  @@index([productCategory], map: "Product_ProductCategory_id_fk")
+  //  @@index([productCategory], map: "Product_ProductCategory_id_fk")
 }
 
 model ProductImages {
-  id        BigInt  @id @default(autoincrement()) @db.UnsignedBigInt
-  productId BigInt  @db.UnsignedBigInt
+  id        BigInt  @id @default(autoincrement())
+  productId BigInt
   name      String?
   src       String?
   alt       String?
@@ -92,8 +96,8 @@ model ProductImages {
 }
 
 model ProductDetails {
-  id        BigInt  @id @default(autoincrement()) @db.UnsignedBigInt
-  productId BigInt  @db.UnsignedBigInt
+  id        BigInt  @id @default(autoincrement())
+  productId BigInt
   name      String?
   items     Json?
   product   Product @relation(fields: [productId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "ProductDetails_Product_id_fk")
@@ -140,13 +144,13 @@ model Role {
 }
 
 model Session {
-  id           BigInt   @id @default(autoincrement()) @db.UnsignedBigInt
+  id           BigInt   @id @default(autoincrement())
   sessionToken String   @unique
   userId       Int
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@index([userId], map: "Session_userId_fkey")
+  //@@index([userId], map: "Session_userId_fkey")
 }
 
 model SiteSetting {
@@ -159,9 +163,9 @@ model SiteSetting {
   siteSettingCrtd   DateTime @default(now())
   siteSettingUpdt   DateTime
   siteSettingDelt   DateTime
-  siteSettingDeltBy BigInt   @db.UnsignedBigInt
-  siteSettingCrtdBy BigInt   @db.UnsignedBigInt
-  siteSettingUpdtBy BigInt   @db.UnsignedBigInt
+  siteSettingDeltBy BigInt
+  siteSettingCrtdBy BigInt
+  siteSettingUpdtBy BigInt
 
   @@index([siteSettingCrtdBy], map: "SiteSetting_siteSettingCrtdBy_fkey")
 }
@@ -197,15 +201,15 @@ model User {
   userStatus    Int       @default(1)
   userUpdated   DateTime  @updatedAt
   userRole      Int       @default(1)
-  businessId    BigInt?   @db.UnsignedBigInt
+  businessId    BigInt    @default(1)
   Account       Account[]
   Session       Session[]
-  Business      Business? @relation(fields: [businessId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "User_Business_id_fk")
+  Business      Business? @relation(fields: [businessId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   Role          Role      @relation(fields: [userRole], references: [id], onDelete: Cascade)
   Order         Order[]
 
-  @@index([userRole], map: "User_userRole_fkey")
-  @@index([businessId], map: "User_Business_id_fk")
+  // @@index([userRole], map: "User_userRole_fkey")
+  //@@index([businessId], map: "User_Business_id_fk")
 }
 
 model VerificationToken {
@@ -217,13 +221,13 @@ model VerificationToken {
 }
 
 model Business {
-  id   BigInt  @id @default(autoincrement()) @db.UnsignedBigInt
+  id   BigInt  @id @default(autoincrement())
   name String?
   User User[]
 }
 
 model Order {
-  id          BigInt   @id @default(autoincrement()) @db.UnsignedBigInt
+  id          BigInt   @id @default(autoincrement())
   orderId     String   @unique
   detail      Json?
   time        DateTime @default(now())
@@ -248,12 +252,12 @@ model ProductVariant {
 }
 
 model ProductColor {
-  id            BigInt  @id @default(autoincrement()) @db.UnsignedBigInt
+  id            BigInt  @id @default(autoincrement())
   name          String?
   bgColor       String?
   selectedColor String?
   image         String?
-  productId     BigInt  @db.UnsignedBigInt
+  productId     BigInt
   product       Product @relation(fields: [productId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "ProductColor_Product_id_fk")
 }
 
@@ -266,7 +270,7 @@ model Style {
 
 model SaleReport {
   id              Int             @id @default(autoincrement())
-  productId       BigInt          @db.UnsignedBigInt
+  productId       BigInt
   quantity        Int
   price           Int
   total           Int

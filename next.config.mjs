@@ -13,5 +13,6 @@ const config = {
     locales: ["en","zh-TW"],
     defaultLocale: "zh-TW",
   },
+  output: 'standalone',
 };
 export default config;
