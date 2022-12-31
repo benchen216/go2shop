@@ -64,6 +64,7 @@ If you are not familiar with the different technologies used in this project, pl
 - [Tailwind CSS](https://tailwindcss.com)
 - [tRPC](https://trpc.io)
 
+![Tech Stack](https://github.com/benchen216/go2shop/blob/main/screenshot/techstack.png)
 
 
 ## How do I deploy this?
