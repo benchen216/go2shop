@@ -64,7 +64,7 @@
 ![Dashboard Product Detail](https://app.ben2.win/img/dashboard_product_detail.png)
 
 # Dashboard Product Create
-![Dashboard Product Create](https://app.ben2.win/img/dashboard_product_create.png)
+![Dashboard Product Create](https://github.com/benchen216/go2shop/blob/main/screenshot/addproduct.png)
 
 # Dashboard Product Edit
 ![Dashboard Product Edit](https://app.ben2.win/img/dashboard_product_edit.png)
